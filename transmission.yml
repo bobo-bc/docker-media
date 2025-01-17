@@ -1,0 +1,36 @@
+services:
+  transmission-openvpn:
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 9091:9091
+    volumes:
+      - /mnt/nfs/data:/media
+      - /mnt/nfs/torrents:/data
+      - /mnt/docker-storage/tansmission:/config
+    environment:
+      - OPENVPN_PROVIDER=NordVPN
+      - OPENVPN_CONFIG=ca1688.nordvpn.com
+      - OPENVPN_USERNAME=Q3NWpTNyrchMgu5M6QvAg1kP
+      - OPENVPN_PASSWORD=k98seVLt2BNymPia2uwvyT9S
+      - LOCAL_NETWORK=10.0.0.0/24
+    logging:
+      driver: json-file
+      options:
+         max-size: 10m
+    image: haugene/transmission-openvpn
+    networks:
+      - traefik-public
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == node2
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.transmission.rule=Host(`transmission`)'
+        - 'traefik.http.services.transmission.loadbalancer.server.port=9091'
+        - 'traefik.http.routers.transmission.entrypoints=web'
+networks:
+  traefik-public:
+    external: true
