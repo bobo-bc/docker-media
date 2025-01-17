@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  tunnel:
+    image: cloudflare/cloudflared
+    command: tunnel run
+    deploy:
+      replicas: 2
+    networks:
+      - frontend-ntwk
+    environment:
+      - TUNNEL_TOKEN=eyJhIjoiYTc5N2EzZTAxYjZmM2NhYjU0MjQzNjkzMjdlYmViYjEiLCJ0IjoiYTU0ZjUwYmEtM2I3Yi>
+
+networks:
+    frontend-ntwk:
+      external: true
