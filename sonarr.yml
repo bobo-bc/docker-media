@@ -1,0 +1,27 @@
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Vancouver
+    ports:
+      - 8989:8989
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/docker-storage/sonarr:/config
+      - /mnt/nfs:/media
+    restart: unless-stopped
+    networks:
+      - traefik-public
+    deploy:
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.sonarr.rule=Host(`sonarr`)'
+        - 'traefik.http.services.sonarr.loadbalancer.server.port=8989'
+        - 'traefik.http.routers.sonarr.entrypoints=web'
+networks:
+  traefik-public:
+    external: true
+
+
