@@ -1,0 +1,29 @@
+services:
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Vancouver
+    volumes:
+      - /mnt/docker-storage/lidarr:/config
+      - /mnt/nfs:/media
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 8686:8686
+    restart: unless-stopped
+
+    networks:
+      - traefik-public
+    deploy:
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.lidarr.rule=Host(`lidarr`)'
+        - 'traefik.http.services.lidarr.loadbalancer.server.port=8686'
+        - 'traefik.http.routers.lidarr.entrypoints=web'
+networks:
+  traefik-public:
+    external: true
+
+
+
