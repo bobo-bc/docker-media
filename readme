@@ -1,1 +1,24 @@
 OK, this is my personal repository of docker compose files so I have a copy outside my ecosystem. 
+I have created a docker swarm for my homelab on proxmox. 
+my references are:
+https://rpi4cluster.com/docker-swarm-intro/
+https://community-scripts.github.io/ProxmoxVE/scripts
+https://github.com/dazeb/proxmox-dietpi-installer
+https://phoenixnap.com/kb/nfs-docker-volumes.
+
+steps outline.... will flush out later.
+1. install proxmox
+2. run post install helper script
+3. install pihole
+4. create fileserver (nfs). I used ct template
+5. create dietpi template
+6. create 3 clones of template with 4 gig ram, 32 gig drive and 50 gig added storage. 
+7. create runtipi from helper scripts. Mount NFS on /opt/runtipip/media. then install transmission and any other app you wish to configure. 
+8. follow rpi4cluster to create 3 master swarm, use 50 gig for glusterfs, use nfs for media storage
+9. install traefik then other yml files
+10. configure software
+
+seporately clone dieptpi template without 50 gig drive for homeassistant. 
+- I added tp-link, tuya for feit electric, hcas community so I could add meross.
+
+
