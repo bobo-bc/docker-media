@@ -1,0 +1,27 @@
+  GNU nano 7.2                                prowlarr.yml                                          
+services:
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Vancouver
+    volumes:
+      - /mnt/docker-storage/prowlarr:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
+    networks:
+      - traefik-public
+    deploy:
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.prowlarr.rule=Host(`prowlarr`)'
+        - 'traefik.http.services.prowlarr.loadbalancer.server.port=9696'
+        - 'traefik.http.routers.prowlarr.entrypoints=web'
+networks:
+  traefik-public:
+    external: true
+
+
