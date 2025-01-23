@@ -5,7 +5,6 @@ services:
     ports:
       - 9091:9091
     volumes:
-      - /mnt/nfs/data:/media
       - /mnt/nfs/torrents:/data
       - /mnt/docker-storage/tansmission:/config
     environment:
@@ -19,18 +18,3 @@ services:
       options:
          max-size: 10m
     image: haugene/transmission-openvpn
-    networks:
-      - traefik-public
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.hostname == node2
-      labels:
-        - 'traefik.enable=true'
-        - 'traefik.http.routers.transmission.rule=Host(`transmission`)'
-        - 'traefik.http.services.transmission.loadbalancer.server.port=9091'
-        - 'traefik.http.routers.transmission.entrypoints=web'
-networks:
-  traefik-public:
-    external: true
