@@ -10,7 +10,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /mnt/docker-storage/sonarr:/config
-      - /mnt/nfs:/media
+      - /mnt/nfs/data/tv:/tv
+      - /mnt/nfs/torrents:/data
     restart: unless-stopped
     networks:
       - traefik-public
