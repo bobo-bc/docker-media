@@ -6,9 +6,10 @@ services:
       - PGID=1000
       - TZ=America/Vancouver
     volumes:
-      - /mnt/docker-storage/readarr:/config
-      - /mnt/nfs:/media
       - /etc/localtime:/etc/localtime:ro
+      - /mnt/docker-storage/readarr:/config
+      - /mnt/nfs/data/books:/books
+      - /mnt/nfs/torrents:/data
     restart: unless-stopped
     ports:
       - 8787:8787
