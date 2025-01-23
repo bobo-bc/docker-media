@@ -10,8 +10,8 @@ services:
     environment:
       - OPENVPN_PROVIDER=NordVPN
       - OPENVPN_CONFIG=ca1688.nordvpn.com
-      - OPENVPN_USERNAME=Q3NWpTNyrchMgu5M6QvAg1kP
-      - OPENVPN_PASSWORD=k98seVLt2BNymPia2uwvyT9S
+      - OPENVPN_USERNAME=
+      - OPENVPN_PASSWORD=
       - LOCAL_NETWORK=10.0.0.0/24
     logging:
       driver: json-file
