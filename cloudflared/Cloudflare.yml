@@ -8,7 +8,9 @@ services:
     networks:
       - frontend-ntwk
     environment:
-      - TUNNEL_TOKEN=${token}
+      - TUNNEL_TOKEN=/run/secrets/tunneltoken
+     secrets:
+       - tunneltoken
 
 networks:
     frontend-ntwk:
