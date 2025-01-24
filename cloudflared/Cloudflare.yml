@@ -2,19 +2,13 @@ version: "3.9"
 services:
   tunnel:
     image: cloudflare/cloudflared
-   # command: -H unix:///var/run/docker.sock --admin-password-file '/run/secrets/tunneltoken
     command: tunnel run
     deploy:
       replicas: 2
     networks:
       - frontend-ntwk
     environment:
-      - TUNNEL_TOKEN=/run/secrets/tunneltoken
-    secrets:
-       - tunneltoken
-secrets:
-  tunneltoken:
-    external: true
+      - TUNNEL_TOKEN={{secrets.tunneltoken}}
 networks:
     frontend-ntwk:
       external: true
