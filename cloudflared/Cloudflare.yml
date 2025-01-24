@@ -11,7 +11,9 @@ services:
       - TUNNEL_TOKEN=/run/secrets/tunneltoken
      secrets:
        - tunneltoken
-
+secrets:
+  tunneltoken:
+    external: true
 networks:
     frontend-ntwk:
       external: true
