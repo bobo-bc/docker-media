@@ -10,7 +10,7 @@ services:
       - frontend-ntwk
     environment:
       - TUNNEL_TOKEN=tunneltoken
-     secrets:
+    secrets:
        - tunneltoken
 secrets:
   tunneltoken:
