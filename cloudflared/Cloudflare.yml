@@ -2,6 +2,7 @@ version: "3.9"
 services:
   tunnel:
     image: cloudflare/cloudflared
+    command: -H unix:///var/run/docker.sock --admin-password-file '/run/secrets/tunneltoken
     command: tunnel run
     deploy:
       replicas: 2
