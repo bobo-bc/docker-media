@@ -1,5 +1,21 @@
 ---
 services:
+  mysql:
+    image: mysql:latest
+    networks:
+      - backend-netwk
+    volumes:
+      - /mnt/docker-storage/piwigo/sql-data1:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${root_pswrd}
+      MYSQL_DATABASE: db
+      MYSQL_USER: piwigo
+      MYSQL_PASSWORD: ${pswrd}
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
   piwigo:
     image: lscr.io/linuxserver/piwigo:latest
     container_name: piwigo
@@ -15,12 +31,20 @@ services:
     restart: unless-stopped
     networks:
       - traefik-public
+      - backend-netwk
     deploy:
       labels:
         - 'traefik.enable=true'
         - 'traefik.http.routers.piwigo.rule=Host(`pics`)'
         - 'traefik.http.services.piwigo.loadbalancer.server.port=89'
         - 'traefik.http.routers.piwigo.entrypoints=web'
+    depends_on:
+      - mysql
+volumes:
+  sql-data1:
+      
 networks:
+  backend-netwk:
+    external: true
   traefik-public:
     external: true
