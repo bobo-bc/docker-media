@@ -1,0 +1,26 @@
+---
+services:
+  piwigo:
+    image: lscr.io/linuxserver/piwigo:latest
+    container_name: piwigo
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Vancouver
+    volumes:
+      - /mnt/docker-storage/piwigo:/config
+      - /mnt/nfs/data/gallery:/gallery
+    ports:
+      - 89:80
+    restart: unless-stopped
+    networks:
+      - traefik-public
+    deploy:
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.piwigo.rule=Host(`pics`)'
+        - 'traefik.http.services.piwigo.loadbalancer.server.port=89'
+        - 'traefik.http.routers.piwigo.entrypoints=web'
+networks:
+  traefik-public:
+    external: true
