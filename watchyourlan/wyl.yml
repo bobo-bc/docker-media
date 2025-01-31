@@ -9,7 +9,7 @@ services:
     environment:
       TZ: America/Vancouver              # required: needs your TZ for correct time
       IFACES: "eth0"  # required: 1 or more interface
-      HOST: "0.0.0.0"                   # optional, default: 0.0.0.0
+      HOST: "10.0.0.20"                   # optional, default: 0.0.0.0
       PORT: "8840"                      # optional, default: 8840
       TIMEOUT: "120"                    # optional, time in seconds, default: 120
       SHOUTRRR_URL: ""                  # optional, set url to notify
