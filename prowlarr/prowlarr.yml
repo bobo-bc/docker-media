@@ -22,7 +22,7 @@ services:
         - homepage.group=Servarr
         - homepage.name=Prowlarr
         - homepage.icon=prowlarr.png
-        - homepage.instance.internal.href=http://prowlarr
+        - homepage.instance.external.href=http://prowlarr
         - homepage.description=indexers
 networks:
   traefik-public:
