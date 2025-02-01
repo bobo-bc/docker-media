@@ -9,6 +9,7 @@ services:
     volumes:
       - /mnt/docker-storage/homepage:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /mnt/nfs:/mnt/nfs
     networks:
       - traefik-public
     deploy:
