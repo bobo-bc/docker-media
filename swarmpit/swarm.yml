@@ -32,7 +32,7 @@ services:
         - homepage.group=Servarr
         - homepage.name=Swarmpit
         - homepage.icon=swarmpit.png
-        - homepage.href=http://swarmpit:8086/
+        - homepage.href=http://swarmpit:888/
         - homepage.description=monitoring
 
   db:
