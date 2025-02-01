@@ -29,6 +29,11 @@ services:
         - "traefik.http.routers.plex.rule=Host(`plex`)"
         - "traefik.http.services.plex.loadbalancer.server.port=32400"
         - "traefik.enable=true"
+        - homepage.group=Servarr
+        - homepage.name=plex
+        - homepage.icon=plex.png
+        - homepage.href=http://plex
+        - homepage.description=viewer
 networks:
   traefik-public:
     external: true
