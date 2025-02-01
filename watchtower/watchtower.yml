@@ -8,4 +8,10 @@ services:
     deploy:
       placement:
         constraints: [node.hostname == node1]
+      labels:  
+        - homepage.group=Servarr
+        - homepage.name=watchtower
+        - homepage.icon=watchtower.png
+        - homepage.description=autoupdate docker
+
 
