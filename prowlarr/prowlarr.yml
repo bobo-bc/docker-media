@@ -22,7 +22,7 @@ services:
         - 'homepage.group=Servarr'
         - 'homepage.name=Prowlarr'
         - 'homepage.icon=prowlarr.png'
-        - 'homepage.http://prowlarr/'
+        - 'homepage.href=http://prowlarr/'
         - 'homepage.description=indexers'
 networks:
   traefik-public:
