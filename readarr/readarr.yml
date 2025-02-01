@@ -24,7 +24,7 @@ services:
         - homepage.group=Servarr
         - homepage.name=Readarr
         - homepage.icon=readarr.png
-        - homepage.instance.internal.href=http://readarr
+        - homepage.href=http://readarr/
         - homepage.description=books
 networks:
   traefik-public:
