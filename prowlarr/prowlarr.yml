@@ -19,6 +19,11 @@ services:
         - 'traefik.http.routers.prowlarr.rule=Host(`prowlarr`)'
         - 'traefik.http.services.prowlarr.loadbalancer.server.port=9696'
         - 'traefik.http.routers.prowlarr.entrypoints=web'
+        - homepage.group=Servarr
+        - homepage.name=Prowlarr
+        - homepage.icon=prowlarr.png
+        - homepage.instance.internal.href=http://prowlarr
+        - homepage.description=indexers
 networks:
   traefik-public:
     external: true
