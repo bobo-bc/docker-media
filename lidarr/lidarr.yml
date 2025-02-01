@@ -25,7 +25,7 @@ services:
         - homepage.group=Servarr
         - homepage.name=Lidarr
         - homepage.icon=lidarr.png
-        - homepage.instance.internal.href=http://liddarr
+        - homepage.href=http://lidarr
         - homepage.description=music
 networks:
   traefik-public:
