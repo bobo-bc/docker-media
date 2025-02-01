@@ -37,6 +37,11 @@ services:
 #      - --certificatesresolvers.myresolver.acme.email=mail@example.com
 #      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
 #      - --certificatesresolvers.myresolver.acme.tlschallenge=true
+        - homepage.group=Servarr
+        - homepage.name=Traefik
+        - homepage.icon=traefik.png
+        - homepage.href=http://traefik/
+        - homepage.description= proxy
     deploy:
       mode: global
       placement:
