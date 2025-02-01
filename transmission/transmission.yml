@@ -18,3 +18,13 @@ services:
       options:
          max-size: 10m
     image: haugene/transmission-openvpn
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.transmission.rule=Host(`transmission`)'
+      - 'traefik.http.services.transmission.loadbalancer.server.port=9091'
+      - 'traefik.http.routers.transmission.entrypoints=web'
+      - homepage.group=Servarr
+      - homepage.name=transmission
+      - homepage.icon=transmission.png
+      - homepage.href=http://transmission/
+      - homepage.description=downloader-vpn
