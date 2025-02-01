@@ -24,7 +24,7 @@ services:
         - homepage.group=Servarr
         - homepage.name=Sonarr
         - homepage.icon=sonarr.png
-        - homepage.href=http://sonarr/
+        - homepage.href=http://sonarr
         - homepage.description=Tv
 networks:
   traefik-public:
