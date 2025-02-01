@@ -17,6 +17,11 @@ services:
         - traefik.http.routers.homepage.rule=Host(`homepage`)
         - traefik.http.routers.homepage.entrypoints=web
         - traefik.http.services.homepage.loadbalancer.server.port=3000
+        - homepage.group=Servarr
+        - homepage.name=HomePage
+        - homepage.icon=homepage.png
+        - homepage.href=http://homepage
+        - homepage.description=dashboard
 networks:
   traefik-public:
     external: true
