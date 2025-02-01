@@ -24,7 +24,7 @@ services:
         - homepage.group=Servarr
         - homepage.name=Radarr
         - homepage.icon=radarr.png
-        - homepage.instance.internal.href=http://radarr
+        - homepage.href=http://radarr/
         - homepage.description=Movies
 networks:
   traefik-public:
