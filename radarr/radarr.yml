@@ -21,6 +21,11 @@ services:
         - 'traefik.http.routers.radarr.rule=Host(`radarr`)'
         - 'traefik.http.services.radarr.loadbalancer.server.port=7878'
         - 'traefik.http.routers.radarr.entrypoints=web'
+        - homepage.group=Servarr
+        - homepage.name=Radarr
+        - homepage.icon=Radarr.png
+        - homepage.instance.internal.href=http://radarr
+        - homepage.description=Movies
 networks:
   traefik-public:
     external: true
