@@ -24,7 +24,7 @@ services:
         - homepage.group=Servarr
         - homepage.name=Kavita
         - homepage.icon=kavita.png
-        - homepage.instance.internal.href=http://read
+        - homepage.href=http://read/
         - homepage.description=reader
 networks:
   traefik-public:
