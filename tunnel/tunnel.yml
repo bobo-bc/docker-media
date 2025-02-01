@@ -4,6 +4,11 @@ services:
     image: cloudflare/cloudflared
     command: tunnel run
     deploy:
+      labels:
+        - homepage.group=Servarr
+        - homepage.name=tunnel
+        - homepage.icon=cloudflared.png
+        - homepage.description=secure tunnel
       replicas: 2
     networks:
       - frontend-ntwk
