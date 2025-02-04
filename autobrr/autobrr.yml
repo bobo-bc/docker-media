@@ -15,7 +15,7 @@ services:
       - /mnt/docker-storage/autobrr:/config
     ports:
       - 7474:7474
-          networks:
+   networks:
       - traefik-public
     deploy:
       labels:
