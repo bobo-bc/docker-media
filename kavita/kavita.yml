@@ -6,10 +6,10 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=America/vancouver
+      - TZ=${TZ}
     volumes:
-      - /mnt/docker-storage/kavita:/config
-      - /mnt/nfs/data:/data #optional
+      - ${config}/kavita:/config
+      - ${media}:/data #optional
     ports:
       - 5000:5000
     restart: unless-stopped
