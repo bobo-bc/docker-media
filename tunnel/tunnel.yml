@@ -13,12 +13,7 @@ services:
     networks:
       - frontend-ntwk
     environment:
-      - TUNNEL_TOKEN=/run/secrets/tunneltoken
-    secrets:
-      - tunneltoken
-secrets:
-  tunneltoken:
-    external: true
+      - TUNNEL_TOKEN=${cftoken}
 networks:
     frontend-ntwk:
       external: true
