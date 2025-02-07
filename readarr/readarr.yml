@@ -2,14 +2,14 @@ services:
   readarr:
     image: lscr.io/linuxserver/readarr:develop
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Vancouver
+      - PUID=${PUID}
+      - PGID=$PGID}
+      - TZ=${TZ}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/docker-storage/readarr:/config
-      - /mnt/nfs/data/books:/books
-      - /mnt/nfs/torrents:/data
+      - ${config}/readarr:/config
+      - ${media}/books:/books
+      - ${data}:/data
     restart: unless-stopped
     ports:
       - 8787:8787
