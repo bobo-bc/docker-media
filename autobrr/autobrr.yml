@@ -13,6 +13,7 @@ services:
       - TZ=America/Vancouver
     volumes:
       - /mnt/docker-storage/autobrr:/config
+      - ${media}/tv:/tv
     ports:
       - 7474:7474
     networks:
