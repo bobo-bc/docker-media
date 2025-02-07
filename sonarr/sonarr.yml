@@ -2,16 +2,16 @@ services:
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Vancouver
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     ports:
       - 8989:8989
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/docker-storage/sonarr:/config
-      - /mnt/nfs/data/tv:/tv
-      - /mnt/nfs/torrents:/data
+      - ${config}/sonarr:/config
+      - ${media}/tv:/tv
+      - ${data}:/data
     restart: unless-stopped
     networks:
       - traefik-public
