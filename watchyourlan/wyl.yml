@@ -5,7 +5,7 @@ services:
     network_mode: "host"        
     restart: unless-stopped
     volumes:
-    - /mnt/docker-storage/wyl:/data/WatchYourLAN
+    - ${config}/wyl:/data/WatchYourLAN
     environment:
       TZ: ${TZ}             # required: needs your TZ for correct time
       IFACES: "eth0"  # required: 1 or more interface
