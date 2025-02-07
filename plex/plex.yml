@@ -15,13 +15,13 @@ services:
       - 32413:32413/udp
       - 32414:32414/udp
     environment:
-      ADVERTISE_IP: 'http://10.0.0.20:32400/'
-      PLEX_CLAIM: 'claim-JdvxqJH71jc1wYbJbh2L'
-      TZ: 'America/Vancouver'
+      ADVERTISE_IP: ${swarm_ip}:32400
+      PLEX_CLAIM: ${claim}
+      TZ: ${TZ}
     volumes:
-      - /mnt/docker-storage/plex:/config
-      - /mnt/docker-storage/plex/plex_transcode:/transcode
-      - /mnt/nfs/data:/data
+      - ${config}/plex:/config
+      - ${config}/plex/plex_transcode:/transcode
+      - ${media}:/data
     networks:
       - traefik-public
     deploy:
