@@ -4,12 +4,12 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=America/Vancouver
+      - TZ=${TZ}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/docker-storage/lidarr:/config
-      - /mnt/nfs/data/music:/music
-      - /mnt/nfs/torrents:/data
+      - ${config}/lidarr:/config
+      - ${media}/music:/music
+      - ${data}:/data
     ports:
       - 8686:8686
     restart: unless-stopped
