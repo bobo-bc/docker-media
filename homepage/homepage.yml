@@ -7,10 +7,8 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - /mnt/docker-storage/homepage:/app/config
+      - ${config}/homepage:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /mnt/nfs:/mnt/nfs
-      - /mnt/docker-storage:/mnt/docker-storage
     networks:
       - traefik-public
     deploy:
