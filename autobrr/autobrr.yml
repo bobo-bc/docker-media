@@ -10,9 +10,9 @@ services:
     #    max-size: ${DOCKERLOGGING_MAXSIZE}
     user: 1000:1000
     environment:
-      - TZ=America/Vancouver
+      - TZ=${TZ}
     volumes:
-      - /mnt/docker-storage/autobrr:/config
+      - ${config}/autobrr:/config
       - ${media}/tv:/tv
     ports:
       - 7474:7474
