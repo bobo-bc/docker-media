@@ -5,14 +5,14 @@ services:
     ports:
       - 9091:9091
     volumes:
-      - /mnt/nfs/torrents:/data
-      - /mnt/docker-storage/tansmission:/config
+      - ${data}:/data
+      - ${config}/tansmission:/config
     environment:
       - OPENVPN_PROVIDER=NordVPN
-      - OPENVPN_CONFIG=ca1688.nordvpn.com
-      - OPENVPN_USERNAME=
-      - OPENVPN_PASSWORD=
-      - LOCAL_NETWORK=10.0.0.0/24
+      - OPENVPN_CONFIG=${vpnconfig}
+      - OPENVPN_USERNAME=${vpnuser}
+      - OPENVPN_PASSWORD=${vpnpass}
+      - LOCAL_NETWORK=${local}
     logging:
       driver: json-file
       options:
