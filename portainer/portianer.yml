@@ -22,7 +22,7 @@ services:
       - "8000:8000"
     volumes:
       - type: bind
-        source: /mnt/docker-storage/portainer
+        source: ${config}/portainer
         target: /data
     networks:
       - portainer_agent_network
