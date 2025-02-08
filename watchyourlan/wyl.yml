@@ -20,7 +20,7 @@ services:
     deploy:
       labels:
         - 'traefik.enable=true'
-        - 'traefik.http.routers.wyl.rule=Host(`lan`)'
+        - 'traefik.http.routers.wyl.rule=Host(`wyl`)'
         - 'traefik.http.services.wyl.loadbalancer.server.port=8840'
         - 'traefik.http.routers.wyl.entrypoints=web'
 networks:
