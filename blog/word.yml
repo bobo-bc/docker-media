@@ -24,7 +24,7 @@ services:
       - frontend-ntwk
       - backend-ntwk
     volumes:
-      - ${config}/wordpress:/data
+      - ${config}/wordpress:/var/www/html
       - ${media}/files:/files
     environment:
       WORDPRESS_DB_HOST: mysql:3306
