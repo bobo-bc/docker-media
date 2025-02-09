@@ -9,23 +9,27 @@ services:
       database__connection__host: mysql.local
       database__connection__password: ${ghostpass}
       database__connection__user: mysqluserx
-      url: https:stevenfmeyer.me
+      url: http://blog
     ports:
      - 2368:2368
     volumes:
      - $(config}/ghost:/var/lib/ghost/content
     networks:
-     - backend
+     - traefik-public
     logging:
       driver: json-file
     deploy:
       replicas: 1
       labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.blog.rule=Host(`blog`)'
+        - 'traefik.http.services.blog.loadbalancer.server.port=2368'
+        - 'traefik.http.routers.blog.entrypoints=web'
         - 'homepage.group=Servarr'
         - 'homepage.name=ghost'
         - 'homepage.icon=ghost.png'
-        - 'homepage.href=https://stevenfmeyer.me/'
+        - 'homepage.href=http://blog/'
         - 'homepage.description=blog'
 networks:
-  backend:
+  traefik-public:
     external: true
