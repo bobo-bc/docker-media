@@ -38,9 +38,6 @@ services:
       MARIADB_ROOT_PASSWORD:: ${ghostpass}
     deploy:
       replicas: 1
-volumes:
-  content:
-
 networks:
   traefik-public:
     external: true
