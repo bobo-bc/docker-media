@@ -1,0 +1,31 @@
+
+version: '3.3'
+services:
+  ghost:
+    image: ghost:latest
+    environment:
+      database__client: mysql
+      database__connection__database: ghostdb
+      database__connection__host: mysql.local
+      database__connection__password: ${ghostpass}
+      database__connection__user: mysqluserx
+      url: https:stevenfmeyer.me
+    ports:
+     - 2368:2368
+    volumes:
+     - $(config}/ghost:/var/lib/ghost/content
+    networks:
+     - backend
+    logging:
+      driver: json-file
+    deploy:
+      replicas: 1
+      labels:
+        - 'homepage.group=Servarr'
+        - 'homepage.name=ghost'
+        - 'homepage.icon=ghost.png'
+        - 'homepage.href=https://stevenfmeyer.me/'
+        - 'homepage.description=blog'
+networks:
+  backend:
+    external: true
