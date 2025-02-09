@@ -6,7 +6,7 @@ services:
     environment:
       database__client: mysql
       database__connection__database: ghostdb
-      database__connection__host: mysql.local
+      database__connection__host: db
       database__connection__password: ${ghostpass}
       database__connection__user: mysqluserx
       url: http://blog
