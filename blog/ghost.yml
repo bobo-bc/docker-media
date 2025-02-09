@@ -35,7 +35,7 @@ services:
     volumes:
       - $config}/ghost/db:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ${ghostpass}
+      MARIADB_ROOT_PASSWORD:: ${ghostpass}
     deploy:
       replicas: 1
 volumes:
