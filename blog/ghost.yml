@@ -1,27 +1,23 @@
-
-version: '3.3'
+version: "3.4"
 services:
   ghost:
-    image: ghost:5-alpine
+    image: ghost:5
     environment:
-      database__client: mysql
-      database__connection__database: ghostdb
-      database__connection__host: db
-      database__connection__password: ${ghostpass}
-      database__connection__user: mysqluserx
       url: http://blog
-    ports:
-     - 2368:2368
+      database__client: mysql
+      database__connection__host: mysqldbhost
+      database__connection__user: root
+      database__connection__password: ${ghostpass}
+      database__connection__database: ghost
     volumes:
-     - ${config}/ghost:/var/lib/ghost/content
+      - content:/var/lib/ghost/content
     networks:
-     - traefik-public
-    logging:
-      driver: json-file
+      - traefik-public
+      - default
     deploy:
-      replicas: 1
       labels:
-        - 'traefik.enable=true'
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
         - 'traefik.http.routers.blog.rule=Host(`blog`)'
         - 'traefik.http.services.blog.loadbalancer.server.port=2368'
         - 'traefik.http.routers.blog.entrypoints=web'
@@ -30,13 +26,24 @@ services:
         - 'homepage.icon=ghost.png'
         - 'homepage.href=http://blog/'
         - 'homepage.description=blog'
+
   db:
     image: mysql:8.0
     restart: always
+    networks:
+      - default
+    volumes:
+      - data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${ghostpass}
-    volumes:
-      - ${config}/ghost/db:/var/lib/mysql
+    deploy:
+      replicas: 1
+volumes:
+  content:
+
 networks:
   traefik-public:
     external: true
+  default:
+    external: false
+
