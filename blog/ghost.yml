@@ -10,7 +10,7 @@ services:
       database__connection__password: ${ghostpass}
       database__connection__database: ghost
     volumes:
-      - content:/var/lib/ghost/content
+      - ${config}/ghost:/var/lib/ghost/content
     networks:
       - traefik-public
       - default
@@ -33,7 +33,7 @@ services:
     networks:
       - default
     volumes:
-      - data:/var/lib/mysql
+      - $config}/ghost/db:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${ghostpass}
     deploy:
