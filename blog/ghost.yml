@@ -2,7 +2,7 @@
 version: '3.3'
 services:
   ghost:
-    image: ghost:latest
+    image: ghost:5-alpine
     environment:
       database__client: mysql
       database__connection__database: ghostdb
