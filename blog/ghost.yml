@@ -28,7 +28,7 @@ services:
         - 'homepage.description=blog'
 
   db:
-    image: mysql:8.0
+    image: mariadb
     restart: always
     networks:
       - default
