@@ -30,6 +30,13 @@ services:
         - 'homepage.icon=ghost.png'
         - 'homepage.href=http://blog/'
         - 'homepage.description=blog'
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ghostpass}
+    volumes:
+      - ${config}/ghost/db:/var/lib/mysql
 networks:
   traefik-public:
     external: true
