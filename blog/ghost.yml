@@ -1,7 +1,5 @@
 version: '3.1'
-
 services:
-
   ghost:
     image: ghost:5-alpine
     restart: always
@@ -19,14 +17,14 @@ services:
       # contrary to the default mentioned in the linked documentation, this image defaults to NODE_ENV=production (so development mode needs to be explicitly specified if desired)
       #NODE_ENV: development
     volumes:
-       - /mnt/docker-storage/ghost:/var/lib/ghost/content
+      - /mnt/docker-storage/ghost:/var/lib/ghost/content
     networks:
-       - traefik-public
-       - default
-     deploy:
-       placement:
-         constraints:
-           - node.labels.blog == true
+      - traefik-public
+      - default
+    deploy:
+      placement:
+        constraints:
+          - node.labels.blog == true
 
   db:
     image: mysql:8.0
