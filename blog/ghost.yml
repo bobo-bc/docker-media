@@ -42,10 +42,8 @@ services:
           - node.labels.blog == true 
 volumes:
   content:
-
-
 networks:
-  backend-net:
+  traefik-public:
     external: true
-  frontend-net:
-    external: true
+  default:
+    external: false
