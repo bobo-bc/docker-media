@@ -1,7 +1,13 @@
-version: "3.4"
 services:
   ghost:
     image: ghost:5
+    ports:
+      - "2368:2368"
+    networks:
+      - traefik-public
+      - default
+    volumes:
+      - content:/var/lib/ghost/content
     environment:
       url: https://stevenfmeyer.me
       database__client: mysql
@@ -9,22 +15,21 @@ services:
       database__connection__user: root
       database__connection__password: supersecurep4sswo0rdhereCanBeRpelaceByYOu
       database__connection__database: ghost
-    volumes:
-      - content:/var/lib/ghost/content
-    networks:
-      - traefik-public
-      - default
     deploy:
       placement:
         constraints:
           - node.labels.blog == true
       labels:
-        - traefik.enable=true
-        - traefik.docker.network=traefik-public
-        - traefik.constraint-label=traefik-public
-        - traefik.http.routers.blog.rule=Host(steven}
-        - traefik.http.routers.blog.entrypoints=http
-
+        - homepage.group=Servarr
+        - homepage.name=Ghost
+        - homepage.icon=ghost.png
+        - homepage.href=http://stevenfmeyer.me
+        - homepage.description=blog
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - mysql
   db:
     image: mysql:8.0
     restart: always
@@ -38,12 +43,9 @@ services:
       placement:
         constraints:
           - node.labels.blog == true 
-volumes:
-  content:
 
 networks:
-  traefik-public:
+  backend-net:
     external: true
-  default:
-    external: false
-
+  frontend-net:
+    external: true
