@@ -20,6 +20,13 @@ services:
       #NODE_ENV: development
     volumes:
       - /mnt/docker-storage/ghost:/var/lib/ghost/content
+   networks:
+      - traefik-public
+      - default
+    deploy:
+      placement:
+        constraints:
+          - node.labels.blog == true
 
   db:
     image: mysql:8.0
@@ -28,5 +35,15 @@ services:
       MYSQL_ROOT_PASSWORD: example
     volumes:
       - /mnt/docker-storage/ghost/db:/var/lib/mysql
+   deploy:
+      placement:
+        constraints:
+          - node.labels.blog == true 
+
+  networks:
+  traefik-public:
+    external: true
+  default:
+    external: false
 
 
