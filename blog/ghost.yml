@@ -33,13 +33,16 @@ services:
     networks:
       - default
     volumes:
-      - data:/var/lib/mysql
+      - content:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: supersecurep4sswo0rdhereCanBeRpelaceByYOu
     deploy:
       placement:
         constraints:
           - node.labels.blog == true 
+volumes:
+  content:
+
 
 networks:
   backend-net:
