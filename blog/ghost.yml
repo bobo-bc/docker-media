@@ -19,14 +19,14 @@ services:
       # contrary to the default mentioned in the linked documentation, this image defaults to NODE_ENV=production (so development mode needs to be explicitly specified if desired)
       #NODE_ENV: development
     volumes:
-      - /mnt/docker-storage/ghost:/var/lib/ghost/content
-   networks:
-      - traefik-public
-      - default
-    deploy:
-      placement:
-        constraints:
-          - node.labels.blog == true
+       - /mnt/docker-storage/ghost:/var/lib/ghost/content
+    networks:
+       - traefik-public
+       - default
+     deploy:
+       placement:
+         constraints:
+           - node.labels.blog == true
 
   db:
     image: mysql:8.0
@@ -34,16 +34,15 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: example
     volumes:
-      - /mnt/docker-storage/ghost/db:/var/lib/mysql
-   deploy:
-      placement:
-        constraints:
-          - node.labels.blog == true 
-
-  networks:
-  traefik-public:
-    external: true
-  default:
-    external: false
+       - /mnt/docker-storage/ghost/db:/var/lib/mysql
+    deploy:
+       placement:
+         constraints:
+           - node.labels.blog == true 
+networks:
+ traefik-public:
+   external: true
+ default:
+   external: false
 
 
