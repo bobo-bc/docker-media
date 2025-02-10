@@ -1,43 +1,45 @@
 version: "3.4"
 services:
-
-  mysql:
-    image: mysql:latest
-    networks:
-      - default
-    volumes:
-      - ${config}/ghost/sql-data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ${groot_pswrd}
-      MYSQL_DATABASE: ghost
-      MYSQL_USER: ghost
-      MYSQL_PASSWORD: ${gpswrd}
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-
   ghost:
     image: ghost:5
     environment:
-      url: http://blog
+      url: https://stevenfmeyer.me
       database__client: mysql
-      database__connection__host: mysql:3306
-      database__connection__user: ghost
-      database__connection__password: ${gpswrd}
+      database__connection__host: mysqldbhost
+      database__connection__user: root
+      database__connection__password: supersecurep4sswo0rdhereCanBeRpelaceByYOu
       database__connection__database: ghost
     volumes:
-      - ${config}/ghost:/var/lib/ghost/content
+      - content:/var/lib/ghost/content
     networks:
       - traefik-public
       - default
     deploy:
+      placement:
+        constraints:
+          - node.labels.blog == true
       labels:
-        - 'homepage.group=Servarr'
-        - 'homepage.name=ghost'
-        - 'homepage.icon=ghost.png'
-        - 'homepage.href=http://blog/'
-        - 'homepage.description=blog'
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.blog.rule=Host(steven}
+        - traefik.http.routers.blog.entrypoints=http
+
+  db:
+    image: mysql:8.0
+    restart: always
+    networks:
+      - default
+    volumes:
+      - data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: supersecurep4sswo0rdhereCanBeRpelaceByYOu
+    deploy:
+      placement:
+        constraints:
+          - node.labels.blog == true 
+volumes:
+  content:
 
 networks:
   traefik-public:
