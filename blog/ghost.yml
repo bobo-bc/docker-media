@@ -26,13 +26,10 @@ services:
         - homepage.href=http://stevenfmeyer.me
         - homepage.description=blog
       replicas: 1
-      restart_policy:
-        condition: on-failure
     depends_on:
       - mysql
   db:
     image: mysql:8.0
-    restart: always
     networks:
       - default
     volumes:
