@@ -7,7 +7,7 @@ services:
       - traefik-public
       - default
     volumes:
-      - content:/var/lib/ghost/content
+      - /mnt/docker-storage/ghost:/var/lib/ghost/content
     environment:
       url: https://stevenfmeyer.me
       database__client: mysql
@@ -33,7 +33,7 @@ services:
     networks:
       - default
     volumes:
-      - content:/var/lib/mysql
+      - /mnt/docker-storage/ghost/db:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: supersecurep4sswo0rdhereCanBeRpelaceByYOu
     deploy:
