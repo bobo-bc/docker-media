@@ -29,10 +29,9 @@ spec:
         - containerPort: 80
           protocol: TCP
           name: hello-world
-
-          volumeMounts:
-            - name: nfs-vol
-              mountPath: /opt/nfs
+        volumeMounts:
+        - name: nfs-vol
+          mountPath: /opt/nfs
       volumes:
         - name: nfs-vol
           nfs:
