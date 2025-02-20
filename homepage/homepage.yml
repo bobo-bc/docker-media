@@ -5,7 +5,7 @@ services:
     image: ghcr.io/benphelps/homepage:latest
     container_name: homepage
     ports:
-      - 3000:3000
+      - 3005:3000
     volumes:
       - ${config}/homepage:/app/config
       - ${storage}:/storage
