@@ -3,7 +3,6 @@ services:
     image: amir20/dozzle:latest
     environment:
       - DOZZLE_MODE=swarm
-      - DOZZLE_REMOTE_AGENT=agent:7007
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
