@@ -7,11 +7,24 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - 8180:8080
+      - 8080:8080
     networks:
       - dozzle
+      - traefik-public
     deploy:
       mode: global
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.dozzle.rule=Host(`monitor`)'
+        - 'traefik.http.services.dozzle.loadbalancer.server.port=8080'
+        - 'traefik.http.routers.dozzle.entrypoints=web'
+        - homepage.group=Servarr
+        - homepage.name=Dozzle
+        - homepage.icon=dozzle.png
+        - homepage.href=http://monitor
+        - homepage.description=stats
 networks:
+  traefik-public:
+    external: true
   dozzle:
     driver: overlay
