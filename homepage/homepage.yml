@@ -18,7 +18,7 @@ services:
         - traefik.enable=true   #enable the use of traefik labels for routing.
         - traefik.http.routers.homepage.rule=Host(`homepage`)   #local dns setting
         - traefik.http.routers.homepage.entrypoints=web
-        - traefik.http.services.homepage.loadbalancer.server.port=3000   #tells Traefik which port to route to for this app.
+        - traefik.http.services.homepage.loadbalancer.server.port=3005   #tells Traefik which port to route to for this app.
        
         #homepage labels when autodiscovering docker swarm services.
         - homepage.group=Servarr
