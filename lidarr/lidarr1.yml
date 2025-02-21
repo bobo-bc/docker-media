@@ -29,6 +29,7 @@ services:
         - homepage.description=music
 volumes:
   data:
+    external: true
   torrents:
     external: true
 networks:
