@@ -30,6 +30,9 @@ services:
 volumes:
   data:
   torrents:
+    driver_opts:
+      o: "addr=10.0.0.11,nolock,soft,nfsvers=4"
+      device: ":/data"
 networks:
   traefik-public:
     external: true
