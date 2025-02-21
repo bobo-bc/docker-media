@@ -1,0 +1,37 @@
+services:
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    environment:
+      - PUID=${PUID}
+      - PGID=$PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${config}/lidarr:/config
+      - data/music:/music
+      - torrents:/data
+    ports:
+      - 8686:8686
+    restart: unless-stopped
+
+    networks:
+      - traefik-public
+    deploy:
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.lidarr.rule=Host(`lidarr`)'
+        - 'traefik.http.services.lidarr.loadbalancer.server.port=8686'
+        - 'traefik.http.routers.lidarr.entrypoints=web'
+        - homepage.group=Servarr
+        - homepage.name=Lidarr
+        - homepage.icon=lidarr.png
+        - homepage.href=http://lidarr
+        - homepage.description=music
+volumes:
+  data:
+  torrents:
+networks:
+  traefik-public:
+    external: true
+
+
