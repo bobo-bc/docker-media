@@ -7,7 +7,7 @@ services:
       labels:
         - homepage.group=Servarr
         - homepage.name=tunnel
-        - homepage.icon=cloudflared.png
+        - homepage.icon=cloudflare.png
         - homepage.description=secure tunnel
       replicas: 2
     networks:
