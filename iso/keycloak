@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  keycloak:
+    image: jboss/keycloak:latest
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: changeme
+      KEYCLOAK_HTTP_PORT: 8087
+      KEYCLOAK_HTTPS_PORT: 8443
+      KEYCLOAK_LOGLEVEL: INFO
+      DB_VENDOR: mysql
+      DB_ADDR: database.hl.local
+      DB_PORT: 3306
+      DB_DATABASE: keycloak_swarm
+      DB_USER: keycloak_swarm
+      DB_PASSWORD: changeme
+    networks:
+    - keycloak_net
+    ports:
+    - "8087:8080/tcp"		
+    - "8443:8443/tcp"
+    restart: unless-stopped
+    volumes:
+    - "/etc/hosts:/etc/hosts" ## poor man's DNS
+    - "/opt/keycloak/certs/:/etc/x509/https" ## map certificates to container
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        max_replicas_per_node: 1
+        constraints:
+          - node.role==master
+      resources:
+        limits:
+          cpus: '1.50'
+          memory: 1024M
+        reservations:
+          cpus: '0.05'
+          memory: 128M
+networks:
+  keycloak_net:
+    external: true
