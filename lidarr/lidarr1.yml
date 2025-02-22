@@ -34,7 +34,6 @@ volumes:
   torrents:
     external: true
   myvol1:
-    external: true
 networks:
   traefik-public:
     external: true
