@@ -18,25 +18,25 @@ services:
       - traefik-public
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-#      - letsencrypt:/letsencrypt
-      #- /var/log:/var/log
+      - letsencrypt:/letsencrypt
+      - /var/log:/var/log
     command:
       - --api.dashboard=true
       - --log.level=INFO
-      #- --log.filepath=/var/log/traefik.log
+      - --log.filepath=/var/log/traefik.log
       - --accesslog=true
-      #- --accesslog.filepath=/var/log/traefik-access.log
+      - --accesslog.filepath=/var/log/traefik-access.log
       - --providers.swarm.exposedByDefault=false
       - --providers.swarm.network=traefik-public
       - --entrypoints.web.address=:80
-#      - --entrypoints.web.http.redirections.entrypoint.to=websecure
-#      - --entryPoints.web.http.redirections.entrypoint.scheme=https
-#      - --entrypoints.websecure.address=:443
-#      - --entrypoints.websecure.asDefault=true
-#      - --entrypoints.websecure.http.tls.certresolver=myresolver
-#      - --certificatesresolvers.myresolver.acme.email=mail@example.com
-#      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
-#      - --certificatesresolvers.myresolver.acme.tlschallenge=true
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entryPoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.asDefault=true
+      - --entrypoints.websecure.http.tls.certresolver=myresolver
+      - --certificatesresolvers.myresolver.acme.email=stevenfmeyer.me
+      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.myresolver.acme.tlschallenge=true
     deploy:
       mode: global
       placement:
@@ -44,11 +44,11 @@ services:
           - node.role==manager
       labels:
         - traefik.enable=true
-        - traefik.http.routers.mydashboard.rule=Host(`traefik`)
+        - traefik.http.routers.mydashboard.rule=Host(`traefik.stevenfmeyer.me`)
         - traefik.http.routers.mydashboard.service=api@internal
-     #   - traefik.http.routers.mydashboard.middlewares=myauth
+        - traefik.http.routers.mydashboard.middlewares=myauth
         - traefik.http.services.mydashboard.loadbalancer.server.port=1337
-     #   - traefik.http.middlewares.myauth.basicauth.users=test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrq>
+        - traefik.http.middlewares.myauth.basicauth.users=test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrq>
         - homepage.group=Servarr
         - homepage.name=Traefik
         - homepage.icon=traefik.png
