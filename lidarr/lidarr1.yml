@@ -7,10 +7,10 @@ services:
       - TZ=${TZ}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${config}:/config
+      - ${config}/lidarr:/config
       - data:/music
       - torrents:/data
-      - gluster: /mnt/docker
+      - gluster/lidarr:/mnt/docker
     ports:
       - 8686:8686
     restart: unless-stopped
