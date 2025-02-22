@@ -7,7 +7,7 @@ services:
       - TZ=${TZ}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${config}/lidarr:/config
+      - gluster:/config
       - data:/music
       - torrents:/data
     ports:
@@ -32,6 +32,8 @@ volumes:
     external: true
   torrents:
     external: true
+  gluster:
+    external; true
 networks:
   traefik-public:
     external: true
