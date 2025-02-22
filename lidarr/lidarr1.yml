@@ -10,7 +10,7 @@ services:
       - ${config}/lidarr:/config
       - data:/music
       - torrents:/data
-      - gluster/lidarr:/mnt/docker
+      - gluster:/mnt/docker
     ports:
       - 8686:8686
     restart: unless-stopped
