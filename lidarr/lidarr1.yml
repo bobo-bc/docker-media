@@ -33,7 +33,7 @@ volumes:
   torrents:
     external: true
   gluster:
-    external; true
+    external: true
 networks:
   traefik-public:
     external: true
