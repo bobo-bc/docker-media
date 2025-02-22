@@ -10,7 +10,7 @@ services:
       - ${config}/lidarr:/config
       - data:/music
       - torrents:/data
-      - gluster:/mnt/docker
+      - myvol1:/mnt/docker
     ports:
       - 8686:8686
     restart: unless-stopped
@@ -33,7 +33,7 @@ volumes:
     external: true
   torrents:
     external: true
-  gluster:
+  myvol1:
     external: true
 networks:
   traefik-public:
