@@ -7,7 +7,7 @@ services:
       - /mnt/docker-storage/filebrowser/config.json:/etc/config.json
       - /mnt/docker-storage/filebrowser/database:/etc/database.db
     networks:
-      - traefik_public
+      - traefik-public
     deploy:
       labels:
         - traefik.enable=true   #enable the use of traefik labels for routing.
@@ -23,5 +23,5 @@ services:
         - homepage.description=filebrowser
 networks:
 networks:
-  traefik_public:
+  traefik-public:
     external: true
