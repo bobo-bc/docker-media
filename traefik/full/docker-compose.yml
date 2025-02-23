@@ -14,9 +14,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /mnt/docker-storage/traefik/letsencrypt:/letsencrypt  # Persistent storage for certificates
-      - mnt/docker-storage/traefik/certs:/etc/traefik/certs  # Mount the directory containing your Cloudflare certificates
-      - mnt/docker-storage/traefik/traefik.yml:/etc/traefik/traefik.yml  # Mount the custom traefik.yml config
-      - mnt/docker-storage/traefik/accessslogs:/var/log/traefik  # Mount host directory for logs
+      - /mnt/docker-storage/traefik/certs:/etc/traefik/certs  # Mount the directory containing your Cloudflare certificates
+      - /mnt/docker-storage/traefik/traefik.yml:/etc/traefik/traefik.yml  # Mount the custom traefik.yml config
+      - /mnt/docker-storage/traefik/accessslogs:/var/log/traefik  # Mount host directory for logs
     networks:
       - traefik-public
   
