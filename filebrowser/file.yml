@@ -2,10 +2,10 @@ services:
   app:
     image: filebrowser/filebrowser:latest
     volumes:
-      # Base scope of filebrowser access on your server:
-      - /mnt/docker-storage/filebrowser/config:/srv 
-      - /mnt/docker-storage/filebrowser/config.json:/etc/config.json
-      - /mnt/docker-storage/filebrowser/database:/etc/database.db
+      - /mnt/docker-storage/filebrowser/home:/srv #Change to match your directory
+      - /mnt/docker-storage/filebrowser/filebrowser.db:/database/filebrowser.db #Change to ma>
+      - /mnt/docker-storage/filebrowser/settings.json:/config/settings.json #Change to match >
+
     environment:
       - PUID=1000
       - PGID=1000
