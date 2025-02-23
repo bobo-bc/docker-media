@@ -23,24 +23,10 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /mnt/docker-storage/traefik/certs:/certificates
-    command:
-      - --api.dashboard=true
-      - --log.level=INFO
-      - --accesslog=true
-      - --providers.swarm.exposedByDefault=false
-      - --providers.swarm.network=traefik-public
-      - --entrypoints.web.address=:80
-      - --providers.swarm.exposedByDefault=false
-      - --providers.swarm.network=proxy
-      - --entrypoints.web.address=:80
-      - --entrypoints.web.http.redirections.entrypoint.to=websecure
-      - --entryPoints.web.http.redirections.entrypoint.scheme=https
-      - --entrypoints.websecure.address=:443
-      - --entrypoints.websecure.asDefault=true
-      - --entrypoints.websecure.http.tls.certresolver=myresolver
-      - --certificatesresolvers.myresolver.acme.email=stevenfmeyer@me.com
-      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
-      - --certificatesresolvers.myresolver.acme.tlschallenge=true
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/docker-storage/traefik/traefik.yml:/traefik.yml:ro
+      - /mnt/docker-storage/traefik/acme.json:/acme.json
+      - /mnt/docker-storage/traefik/config.yml:/config.ym
     deploy:
       mode: global
       placement:
