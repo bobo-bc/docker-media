@@ -1,0 +1,25 @@
+services:
+  traefik:
+    image: traefik:v3.2.3
+    container_name: TRAEFIK
+    command:
+      - "--configFile=/etc/traefik/traefik.yml"  # Point to the external traefik.yml
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080  # Web UI port
+    environment:
+      - CF_API_EMAIL=mycfemail@passmail.net
+      - CF_API_TOKEN=MYAPISTRING  # Cloudflare API Token
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letsencrypt:/letsencrypt  # Persistent storage for certificates
+      - ./certs:/etc/traefik/certs  # Mount the directory containing your Cloudflare certificates
+      - ./traefik.yml:/etc/traefik/traefik.yml  # Mount the custom traefik.yml config
+      - ./accessslogs:/var/log/traefik  # Mount host directory for logs
+    networks:
+      - traefik-public
+  
+networks:
+  traefik-public:  # Define the internal network
+    driver: bridge  # Default network driver
