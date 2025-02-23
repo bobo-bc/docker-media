@@ -9,8 +9,8 @@ services:
       - 443:443
       - 8080:8080  # Web UI port
     environment:
-      - CF_API_EMAIL=mycfemail@passmail.net
-      - CF_API_TOKEN=MYAPISTRING  # Cloudflare API Token
+      - CF_API_EMAIL=stevenfmeyer@me.com
+      - CF_API_TOKEN=${MYAPISTRING}  # Cloudflare API Token
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /mnt/docker-storage/traefik/letsencrypt:/letsencrypt  # Persistent storage for certificates
