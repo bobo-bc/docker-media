@@ -43,8 +43,8 @@ services:
       # Set up an insecure listener that redirects all traffic to TLS
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
-      - --entrypoints.web.http.redirections.entrypoint.to=websecure
-      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+  #    - --entrypoints.web.http.redirections.entrypoint.to=websecure
+  #    - --entrypoints.web.http.redirections.entrypoint.scheme=https
       # Set up the TLS configuration for our websecure listener
       - --entrypoints.websecure.http.tls=true
       - --entrypoints.websecure.http.tls.certResolver=letsencrypt
