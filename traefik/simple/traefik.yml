@@ -18,6 +18,7 @@ services:
       - traefik-public
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - letsencrypt:/letsencrypt
     command:
       - --api.dashboard=true
       - --log.level=INFO
@@ -25,6 +26,17 @@ services:
       - --providers.swarm.exposedByDefault=false
       - --providers.swarm.network=traefik-public
       - --entrypoints.web.address=:80
+      - --providers.swarm.exposedByDefault=false
+      - --providers.swarm.network=proxy
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entryPoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.asDefault=true
+      - --entrypoints.websecure.http.tls.certresolver=myresolver
+      - --certificatesresolvers.myresolver.acme.email=stevenfmeyer@me.com
+      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.myresolver.acme.tlschallenge=true
     deploy:
       mode: global
       placement:
@@ -32,7 +44,7 @@ services:
           - node.role==manager
       labels:
         - traefik.enable=true
-        - traefik.http.routers.mydashboard.rule=Host(`traefik`)
+        - traefik.http.routers.mydashboard.rule=Host(`traefik,traefik.stevenfmeyer.me`)
         - traefik.http.routers.mydashboard.service=api@internal
         - traefik.http.services.mydashboard.loadbalancer.server.port=1337
         - homepage.group=Servarr
@@ -56,4 +68,7 @@ services:
 networks:
   traefik-public:
     external: true
+volumes:
+  letsencrypt:
+    name: letsencrypt
 
