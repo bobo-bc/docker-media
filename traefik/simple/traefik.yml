@@ -18,7 +18,7 @@ services:
       - traefik-public
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - letsencrypt:/letsencrypt
+      - /mnt/docker-storage/traefik/certs:/certificates
     command:
       - --api.dashboard=true
       - --log.level=INFO
@@ -42,6 +42,10 @@ services:
       placement:
         constraints:
           - node.role==manager
+      environment:
+      # vars depend on your DNS provider
+        - CF_API_EMAIL=${CF_API_EMAIL}
+        - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
       labels:
         - traefik.enable=true
         - traefik.http.routers.mydashboard.rule=Host(`traefik,traefik.stevenfmeyer.me`)
