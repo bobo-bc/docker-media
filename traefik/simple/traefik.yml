@@ -24,9 +24,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /mnt/docker-storage/traefik/certs:/letsencrypt
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/docker-storage/traefik/traefik.yml:/traefik.yml:ro
-      - /mnt/docker-storage/traefik/acme.json:/acme.json
-      - /mnt/docker-storage/traefik/config.yml:/config.yml
+
     command:
       - "--log.level=DEBUG"
       - --providers.docker=true
