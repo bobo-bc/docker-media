@@ -22,11 +22,36 @@ services:
      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /mnt/docker-storage/traefik/certs:/certificates
+      - /mnt/docker-storage/traefik/certs:/letsencrypt
       - /etc/localtime:/etc/localtime:ro
       - /mnt/docker-storage/traefik/traefik.yml:/traefik.yml:ro
       - /mnt/docker-storage/traefik/acme.json:/acme.json
-      - /mnt/docker-storage/traefik/config.yml:/config.ym
+      - /mnt/docker-storage/traefik/config.yml:/config.yml
+    command:
+      - "--log.level=DEBUG"
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --api.dashboard=false
+      # Set up LetsEncrypt certificate resolver
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge=true
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
+      - --certificatesResolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+      - --certificatesResolvers.letsencrypt.acme.dnschallenge.delayBeforeCheck=20
+
+      - --certificatesresolvers.letsencrypt.acme.email=stevenfmeyer@me.com
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      # staging environment of LE, remove for real certs
+      - --certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      # Set up an insecure listener that redirects all traffic to TLS
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      # Set up the TLS configuration for our websecure listener
+      - --entrypoints.websecure.http.tls=true
+      - --entrypoints.websecure.http.tls.certResolver=letsencrypt
+      - --entrypoints.websecure.http.tls.domains[0].main=sub.domain.com
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.sub.domain.com
     deploy:
       mode: global
       placement:
