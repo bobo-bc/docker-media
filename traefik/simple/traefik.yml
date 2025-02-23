@@ -1,11 +1,10 @@
-version: '3'
+ersion: '3'
 
 services:
   traefik:
     image: traefik:v3.1
     hostname: '{{.Node.Hostname}}'
     ports:
-      # listen on host ports without ingress network
       - target: 80
         published: 80
         protocol: tcp
@@ -18,18 +17,13 @@ services:
       - traefik-public
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /etc/localtime:/etc/localtime:ro
-      - '/mnt/docker-storage/traefik/acme.json:/le/acme.json'
     command:
-      - --log.level=INFO
-      - --entrypoints.web.address=:80
-#      - --entrypoints.websecure.address=:443
-      - --providers.docker
-      - --providers.docker.exposedbydefault=false
-      - --providers.docker.swarmmode=true
-      - --providers.docker.network=traefik-public
-      - --api
       - --api.dashboard=true
+      - --log.level=INFO
+      - --accesslog=true
+      - --providers.swarm.exposedByDefault=false
+      - --providers.swarm.network=traefik-public
+      - --entrypoints.web.address=:80
     deploy:
       mode: global
       placement:
@@ -39,36 +33,18 @@ services:
         - traefik.enable=true
         - traefik.http.routers.mydashboard.rule=Host(`traefik`)
         - traefik.http.routers.mydashboard.service=api@internal
-        - traefik.http.services.mydashboard.loadbalancer.server.port=8081
-        - homepage.group=Servarr
-        - homepage.name=Traefik
-        - homepage.icon=traefik.png
-        - homepage.href=http://traefik/
-        - homepage.description= proxy
-
+        - traefik.http.services.mydashboard.loadbalancer.server.port=1337
   whoami:
     image: traefik/whoami:v1.10
     hostname: '{{.Node.Hostname}}'
     networks:
       - traefik-public
-    command:
-      - --port=8082 # Our service listens on 8082
     deploy:
+      mode: global
       labels:
-        - 'traefik.enable=true'
-        # Change the host url here
-        - 'traefik.http.routers.my-app.rule=Host(`whoami`)'
-        - 'traefik.http.services.my-app.loadbalancer.server.port=8082'
-#        - 'traefik.http.routers.my-app.middlewares=auth'
-        - 'traefik.http.routers.my-app.entrypoints=web'
-#        - 'traefik.http.routers.my-app.tls=true'
-#        - 'traefik.http.routers.my-app.tls.certresolver=leresolver'
-        # Change the password here
-#        - 'traefik.http.middlewares.auth.basicauth.users=admin:changeme' # user/password
-
-networks:
-  traefik-public:
-    external: true
+        - traefik.enable=true
+        - traefik.http.routers.whoami.rule=Host(`whoami`)
+        - traefik.http.services.whoami.loadbalancer.server.port=80
 
 networks:
   traefik-public:
