@@ -1,7 +1,7 @@
 services:
   traefik:
     image: traefik:v3.2.3
-    container_name: TRAEFIK
+    hostname: '{{.Node.Hostname}}'
     command:
       - "--configFile=/etc/traefik/traefik.yml"  # Point to the external traefik.yml
     ports:
@@ -22,4 +22,5 @@ services:
   
 networks:
   traefik-public:  # Define the internal network
-    driver: bridge  # Default network driver
+    external: true
+#    driver: bridge  # Default network driver
