@@ -41,7 +41,7 @@ services:
       mode: global
       placement:
         constraints:
-          - node.role==manager
+          - node.labels.main == true
       labels:
         - traefik.enable=true
         - traefik.http.routers.mydashboard.rule=Host(`traefik.stevenfmeyer.me`)
