@@ -28,12 +28,17 @@ services:
       mode: global
       placement:
         constraints:
-          - node.role==manager
+          - node.labels.main == true
       labels:
         - traefik.enable=true
         - traefik.http.routers.mydashboard.rule=Host(`traefik`)
         - traefik.http.routers.mydashboard.service=api@internal
         - traefik.http.services.mydashboard.loadbalancer.server.port=1337
+        - homepage.group=Servarr
+        - homepage.name=Traefik
+        - homepage.icon=traefik.png
+        - homepage.href=http://traefik/
+        - homepage.description= proxy
   whoami:
     image: traefik/whoami:v1.10
     hostname: '{{.Node.Hostname}}'
