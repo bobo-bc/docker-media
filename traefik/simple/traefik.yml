@@ -8,11 +8,6 @@ services:
       - target: 80
         published: 80
         protocol: tcp
-        mode: host
-      - target: 443
-        published: 443
-        protocol: tcp
-        mode: host
     networks:
       - traefik-public
     volumes:
@@ -28,7 +23,7 @@ services:
       mode: global
       placement:
         constraints:
-          - node.labels.main == true
+          - node.labels.main = true
       labels:
         - traefik.enable=true
         - traefik.http.routers.mydashboard.rule=Host(`traefik`)
