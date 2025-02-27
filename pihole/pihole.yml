@@ -13,8 +13,6 @@ services:
         published: 53
         protocol: udp
         mode: host
-      - 81:80
-
         mode: host
     environment:
       TZ: 'America/Vancouver'
