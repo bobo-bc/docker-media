@@ -14,8 +14,6 @@ services:
         - 'traefik.enable=true'
         - 'traefik.docker.network=traefik-public'
         - 'traefik.http.routers.pihole.rule=Host(`pihole`)'
-        - 'traefik.http.routers.pihole.tls=true'
-        - 'traefik.http.routers.pihole.tls.certresolver=myresolver'
         - 'traefik.http.services.pihole-srv.loadbalancer.server.port=80'
         - homepage.group=Servarr
         - homepage.name=PiHole
