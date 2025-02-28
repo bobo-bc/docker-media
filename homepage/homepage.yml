@@ -22,7 +22,7 @@ services:
         - homepage.group=Servarr
         - homepage.name=HomePage
         - homepage.icon=homepage.png
-        - homepage.href=http://homepage:3005
+        - homepage.href=http://homepage
         - homepage.description=dashboard
 networks:
   traefik-public:
