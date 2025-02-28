@@ -21,7 +21,7 @@ services:
         - homepage.group=Servarr
         - homepage.name=Dozzle
         - homepage.icon=https://developer.asustor.com/uploadIcons/0020_117518_1660879946_dozzle_256.png
-        - homepage.href=http://dozzle
+        - homepage.href=http://swarm:8083
         - homepage.description=stats
 networks:
   traefik-public:
