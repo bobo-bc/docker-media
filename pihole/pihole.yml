@@ -19,7 +19,7 @@ services:
         - 'traefik.http.services.pihole-srv.loadbalancer.server.port=81'
         - homepage.group=Servarr
         - homepage.name=PiHole
-        - homepage.icon=pihole.png
+        - homepage.icon=pi-hole.png
         - homepage.href=http://pihole
         - homepage.description=DNS
     ports:
