@@ -14,7 +14,7 @@ services:
       - 32413:32413/udp
       - 32414:32414/udp
     environment:
-  #    ADVERTISE_IP: ${swarm_ip}:32400
+      ADVERTISE_IP: ${swarm_ip}:32400
       PLEX_CLAIM: ${claim}
       TZ: ${TZ}
     volumes:
@@ -25,14 +25,14 @@ services:
       - traefik-public
     deploy:
       labels:
-        - "traefik.enable=true"
+        - "traefik.enable=false"
         - "traefik.http.routers.plex.rule=Host(`plexswarm`)"
         - 'traefik.http.routers.lidarr.entrypoints=web'
         - "traefik.http.services.plex.loadbalancer.server.port=32400"
         - homepage.group=Servarr
         - homepage.name=plex
         - homepage.icon=plex.png
-        - homepage.href=http://plexswarm
+        - homepage.href=http://swarm:32400/web
         - homepage.description=viewer
 networks:
   traefik-public:
