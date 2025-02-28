@@ -20,7 +20,7 @@ services:
         - homepage.group=Servarr
         - homepage.name=PiHole
         - homepage.icon=pi-hole.png
-        - homepage.href=http://pihole
+        - homepage.href=http://pihole/admin
         - homepage.description=DNS
     ports:
       - "53:53/tcp"
