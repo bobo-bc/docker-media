@@ -6,7 +6,7 @@ services:
       - 9091:9091
     volumes:
       - ${data}:/data
-      - ${config}/tansmission:/config
+      - ${config}/transmission:/config
     environment:
       - OPENVPN_PROVIDER=NordVPN
       - OPENVPN_CONFIG=${vpnconfig}
