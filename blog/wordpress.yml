@@ -1,0 +1,64 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:latest
+    networks:
+      - backend-ntwk
+    volumes:
+      - ${config}/wordpress/sql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD:  /run/secrets/wp_db_password
+    secrets:
+      - db_root_password
+      - wp_db_password
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  wordpress:
+    image: wordpress:latest
+    ports:
+      - "8080:80"
+    networks:
+      - frontend-ntwk
+      - backend-ntwk
+    volumes:
+      - ${config}/wordpress:/var/www/html
+      - ${media}/files:/files
+    environment:
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: /run/secrets/wp_db_password
+      WORDPRESS_DB_NAME: wordpress
+    secrets:
+      - wp_db_password
+    deploy:
+      labels:
+        - homepage.group=Servarr
+        - homepage.name=wordpress
+        - homepage.icon=wordpress.png
+        - homepage.href=https://stevenfmeyer.me
+        - homepage.description=blog
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - mysql
+secrets:
+   db_password:
+     file: wp_db_password.txt
+   db_root_password:
+     file: db_root_password.txt
+
+volumes:
+  sql-data:
+
+networks:
+  backend-ntwk:
+    external: true
+  frontend-ntwk:
+    external: true
