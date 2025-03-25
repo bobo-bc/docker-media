@@ -50,9 +50,9 @@ services:
       - mysql
 secrets:
    db_password:
-     file: db_password.txt
+     external: true
    db_root_password:
-     file: db_root_password.txt
+     external: true
 
 volumes:
   sql-data:
