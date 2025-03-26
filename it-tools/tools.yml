@@ -1,0 +1,27 @@
+version: "3.7"
+
+services:
+  homepage:
+    image: corentinth/it-tools:latest
+    container_name: It\T-Tools
+    ports:
+      - 8082:80
+    networks:
+      - traefik-public
+    deploy:
+      labels:
+        - traefik.enable=true   #enable the use of traefik labels for routing.
+        - traefik.http.routers.tools.rule=Host(`tools`)   #local dns setting
+        - traefik.http.routers.tools.entrypoints=web
+        - traefik.http.services.tools.loadbalancer.server.port=8082   #tells Traefik which port to route to for this app.
+       
+        #homepage labels when autodiscovering docker swarm services.
+        - homepage.group=Servarr
+        - homepage.name=IT-Tools
+        - homepage.icon=IT-Tools.png
+        - homepage.href=http://tools
+        - homepage.description=handy tools
+networks:
+  traefik-public:
+    external: true
+
