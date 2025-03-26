@@ -18,7 +18,7 @@ services:
         #homepage labels when autodiscovering docker swarm services.
         - homepage.group=Servarr
         - homepage.name=IT-Tools
-        - homepage.icon=bookstack.png
+        - homepage.icon=it-tools.svg
         - homepage.href=http://10.0.0.20:8082/
         - homepage.description=handy tools
 networks:
