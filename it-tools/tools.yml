@@ -18,8 +18,8 @@ services:
         #homepage labels when autodiscovering docker swarm services.
         - homepage.group=Servarr
         - homepage.name=IT-Tools
-        - homepage.icon=IT-Tools.png
-        - homepage.href=http://tools
+        - homepage.icon=bookstack.png
+        - homepage.href=http://10.0.0.20:8082/
         - homepage.description=handy tools
 networks:
   traefik-public:
