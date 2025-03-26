@@ -4,7 +4,7 @@ services:
   drawio:
     image: jgraph/drawio:latest
     ports:
-      - 8083:80
+      - 8086:80
     volumes:  
       - ${config}/drawio:/drawio/
     networks:
@@ -14,13 +14,13 @@ services:
         - traefik.enable=true   #enable the use of traefik labels for routing.
         - traefik.http.routers.drawio.rule=Host(`drawio`)   #local dns setting
         - traefik.http.routers.drawio.entrypoints=web
-        - traefik.http.services.drawio.loadbalancer.server.port=8083   #tells Traefik which port to route to for this app.
+        - traefik.http.services.drawio.loadbalancer.server.port=8086   #tells Traefik which port to route to for this app.
        
         #homepage labels when autodiscovering docker swarm services.
         - homepage.group=Servarr
         - homepage.name=drawio
         - homepage.icon=drawio.png
-        - homepage.href=http://10.0.0.20:8083/
+        - homepage.href=http://10.0.0.20:8086/
         - homepage.description=drawing tool
 networks:
   traefik-public:
