@@ -9,7 +9,7 @@ services:
         #homepage labels when autodiscovering docker swarm services.
         - homepage.group=Servarr
         - homepage.name=drawio
-        - homepage.icon=drawio.png
+        - homepage.icon=draw-io.svg
         - homepage.href=http://10.0.0.20:8086/
         - homepage.description=drawing tool
     networks:
