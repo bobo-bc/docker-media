@@ -49,10 +49,10 @@ services:
     networks:
       - wishthis
 secrets:
-  wishroot:
-    external: true
- wishpass:
-   external: true
+   wishroot:
+     external: true
+   wishpass:
+     external: true
 
 networks:
   wishthis:
