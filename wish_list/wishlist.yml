@@ -11,7 +11,7 @@ services:
       - ${config}/wish/data:/usr/src/app/data        # This is where the sqlite database will be stored
     environment:
       # ORIGIN: https://wishlist.example.com
-      ORIGIN: http://wishlist.stevenfmeyer.me # The URL your users will be connecting to
+      ORIGIN: http://10.0.0.20:3280 # The URL your users will be connecting to
       TOKEN_TIME: 72 # hours until signup and password reset tokens expire
     deploy:
       labels:
