@@ -17,7 +17,7 @@ services:
       labels:
         - homepage.group=Servarr
         - homepage.name=wish
-        - homepage.icon=https://raw.githubusercontent.com/wishthis/wishthis/develop/src/assets/img/logo-readme.svg
+        - homepage.icon=linkstack.png
         - homepage.href=http://10.0.0.20:3280
         - homepage.description=mylist
       replicas: 1
