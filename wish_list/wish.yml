@@ -12,7 +12,7 @@ services:
     volumes:
       - ${config}/wish/config.php:/var/www/html/src/config/config.php
     networks:
-      - wishthis
+      - traefik-public
     deploy:
       labels:
         - homepage.group=Servarr
@@ -47,7 +47,7 @@ services:
     ports:
       - 3306:3306
     networks:
-      - wishthis
+      - traefik-public
 secrets:
    wishroot:
      external: true
@@ -55,5 +55,5 @@ secrets:
      external: true
 
 networks:
-  wishthis:
+  traefik-public:
     external: true
