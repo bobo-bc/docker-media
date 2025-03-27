@@ -1,0 +1,23 @@
+services:
+  wishlist:
+    container_name: wishlist
+    image: ghcr.io/cmintey/wishlist:latest
+    ports:
+      - 3280:3280
+    volumes:
+      - ${config}/wish/uploads:/usr/src/app/uploads  # This is where user image uploads will be stored
+      - ${config}/wish/data:/usr/src/app/data        # This is where the sqlite database will be stored
+    environment:
+      # ORIGIN: https://wishlist.example.com
+      ORIGIN: http://10.0.0.20:3280 # The URL your users will be connecting to
+      TOKEN_TIME: 72 # hours until signup and password reset tokens expire
+    deploy:
+      labels:
+        - homepage.group=Servarr
+        - homepage.name=wish
+        - homepage.icon=https://raw.githubusercontent.com/wishthis/wishthis/develop/src/assets/img/logo-readme.svg
+        - homepage.href=https://wish
+        - homepage.description=mylist
+      replicas: 1
+      restart_policy:
+        condition: on-failure
