@@ -26,6 +26,7 @@ services:
         - homepage.icon=kavita.png
         - homepage.href=http://read/
         - homepage.description=reader
+        - homepage.weight=100
 networks:
   traefik-public:
     external: true
