@@ -16,7 +16,7 @@ services:
         - traefik.http.services.tools.loadbalancer.server.port=8082   #tells Traefik which port to route to for this app.
        
         #homepage labels when autodiscovering docker swarm services.
-        - homepage.group=Servarr
+        - homepage.group=Utilities
         - homepage.name=IT-Tools
         - homepage.icon=it-tools.svg
         - homepage.href=http://10.0.0.20:8082/
