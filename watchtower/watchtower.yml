@@ -9,7 +9,7 @@ services:
       placement:
         constraints: [node.hostname == node1]
       labels:  
-        - homepage.group=Servarr
+        - homepage.group="System Tools"
         - homepage.name=watchtower
         - homepage.icon=watchtower.png
         - homepage.description=autoupdate docker
