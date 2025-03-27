@@ -26,6 +26,7 @@ services:
         - homepage.icon=readarr.png
         - homepage.href=http://readarr/
         - homepage.description=books
+        - homepage.weight=3
 networks:
   traefik-public:
     external: true
