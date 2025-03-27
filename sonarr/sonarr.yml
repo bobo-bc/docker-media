@@ -21,7 +21,7 @@ services:
         - 'traefik.http.routers.sonarr.rule=Host(`sonarr`)'
         - 'traefik.http.services.sonarr.loadbalancer.server.port=8989'
         - 'traefik.http.routers.sonarr.entrypoints=web'
-        - homepage.group=Servarr
+        - homepage.group=Media
         - homepage.name=Sonarr
         - homepage.icon=sonarr.png
         - homepage.href=http://sonarr
