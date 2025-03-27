@@ -20,7 +20,7 @@ services:
         - traefik.http.services.homepage.loadbalancer.server.port=3000   #tells Traefik which port to route to for this app.
        
         #homepage labels when autodiscovering docker swarm services.
-        - homepage.group=Servarr
+        - homepage.group=Utilities
         - homepage.name=HomePage
         - homepage.icon=homepage.png
         - homepage.href=http://homepage
