@@ -60,7 +60,7 @@ services:
 #### docker swarm depoy instructions, labels for homepage presentation ####
     deploy:
       labels:
-        - homepage.group=Servarr
+        - homepage.group=Web
         - homepage.name=wordpress
         - homepage.icon=wordpress.png
         - homepage.href=https://stevenfmeyer.me
