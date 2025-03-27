@@ -21,6 +21,6 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
-  networks:
+networks:
   traefik-public:
     external: true
