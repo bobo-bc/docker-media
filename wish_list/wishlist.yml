@@ -15,7 +15,7 @@ services:
       TOKEN_TIME: 72 # hours until signup and password reset tokens expire
     deploy:
       labels:
-        - homepage.group=Servarr
+        - homepage.group=Productivity
         - homepage.name=wish
         - homepage.icon=linkstack.png
         - homepage.href=http://10.0.0.20:3280
