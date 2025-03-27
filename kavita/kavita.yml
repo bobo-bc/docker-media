@@ -21,7 +21,7 @@ services:
         - 'traefik.http.routers.kavita.rule=Host(`read`)'
         - 'traefik.http.services.kavita.loadbalancer.server.port=5000'
         - 'traefik.http.routers.kavita.entrypoints=web'
-        - homepage.group=Servarr
+        - homepage.group=Media
         - homepage.name=Kavita
         - homepage.icon=kavita.png
         - homepage.href=http://read/
