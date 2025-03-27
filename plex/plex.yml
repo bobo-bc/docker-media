@@ -34,6 +34,7 @@ services:
         - homepage.icon=plex.png
         - homepage.href=http://swarm:32400/web
         - homepage.description=viewer
+        - homepage.weight=100
 networks:
   traefik-public:
     external: true
