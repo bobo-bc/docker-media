@@ -4,6 +4,8 @@ services:
     image: ghcr.io/cmintey/wishlist:latest
     ports:
       - 3280:3280
+    networks:
+      - traefik-public
     volumes:
       - ${config}/wish/uploads:/usr/src/app/uploads  # This is where user image uploads will be stored
       - ${config}/wish/data:/usr/src/app/data        # This is where the sqlite database will be stored
@@ -21,3 +23,7 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+  
+networks:
+  traefik-public:
+    external: true
