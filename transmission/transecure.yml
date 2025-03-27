@@ -28,3 +28,4 @@ services:
       - homepage.icon=transmission.png
       - homepage.href=http://transmission/
       - homepage.description=downloader-vpn
+      - homepage.weight=5
