@@ -18,7 +18,7 @@ services:
         - 'traefik.http.routers.dozzle.rule=Host(`monitor`)'
         - 'traefik.http.services.dozzle.loadbalancer.server.port=8083'
         - 'traefik.http.routers.dozzle.entrypoints=web'
-        - homepage.group=Servarr
+        - homepage.group=Monitoring
         - homepage.name=Dozzle
         - homepage.icon=https://developer.asustor.com/uploadIcons/0020_117518_1660879946_dozzle_256.png
         - homepage.href=http://swarm:8083
