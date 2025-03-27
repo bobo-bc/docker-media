@@ -27,6 +27,7 @@ services:
         - homepage.icon=lidarr.png
         - homepage.href=http://lidarr
         - homepage.description=music
+        - homepage.weight=4
 networks:
   traefik-public:
     external: true
