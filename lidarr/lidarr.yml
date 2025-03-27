@@ -22,7 +22,7 @@ services:
         - 'traefik.http.routers.lidarr.rule=Host(`lidarr`)'
         - 'traefik.http.services.lidarr.loadbalancer.server.port=8686'
         - 'traefik.http.routers.lidarr.entrypoints=web'
-        - homepage.group=Servarr
+        - homepage.group=Media
         - homepage.name=Lidarr
         - homepage.icon=lidarr.png
         - homepage.href=http://lidarr
