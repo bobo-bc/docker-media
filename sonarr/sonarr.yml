@@ -26,6 +26,7 @@ services:
         - homepage.icon=sonarr.png
         - homepage.href=http://sonarr
         - homepage.description=Tv
+        - homepage.weight=200
 networks:
   traefik-public:
     external: true
