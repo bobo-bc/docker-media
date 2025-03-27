@@ -5,8 +5,6 @@ services:
     container_name: wishthis
     restart: unless-stopped
     image: hiob/wishthis:stable
-    environment:
-      - VIRTUAL_HOST=sub.domain.ext
     ports:
       - 8088:80
     volumes:
