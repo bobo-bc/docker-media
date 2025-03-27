@@ -29,7 +29,7 @@ services:
         constraints:
           - node.role == manager
       labels:    
-        - homepage.group=Servarr
+        - homepage.group="System Tools"
         - homepage.name=Swarmpit
         - homepage.icon=swarmpit.png
         - homepage.href=http://swarmpit:888/
