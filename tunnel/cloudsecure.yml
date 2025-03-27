@@ -5,7 +5,7 @@ services:
     command: tunnel run
     deploy:
       labels:
-        - homepage.group=Servarr
+        - homepage.group=Web
         - homepage.name=tunnel
         - homepage.icon=cloudflare.png
         - homepage.description=secure tunnel
