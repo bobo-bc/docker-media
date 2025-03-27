@@ -37,6 +37,11 @@ services:
     secrets:
       - wishroot
       - wishpass
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
     volumes:
       - ${config}/wish/data:/var/lib/mysql
     ports:
