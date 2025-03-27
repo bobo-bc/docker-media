@@ -24,6 +24,7 @@ services:
         - 'homepage.icon=prowlarr.png'
         - 'homepage.href=http://prowlarr/'
         - 'homepage.description=indexers'
+        - homepage.weight=6
 networks:
   traefik-public:
     external: true
