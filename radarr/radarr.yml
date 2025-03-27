@@ -26,6 +26,7 @@ services:
         - homepage.icon=radarr.png
         - homepage.href=http://radarr/
         - homepage.description=Movies
+        - homepage.weight=2
 networks:
   traefik-public:
     external: true
