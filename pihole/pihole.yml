@@ -19,7 +19,7 @@ services:
         - homepage.name=PiHole
         - homepage.icon=pi-hole.png
         - homepage.href=http://pihole/admin
-        - homepage.description=DNS
+        - homepage.description=DNS server
     ports:
       - "53:53/tcp"
       - "53:53/udp"
