@@ -8,7 +8,7 @@ services:
       labels:
         #homepage labels when autodiscovering docker swarm services.
         - homepage.group=Productivity
-        - homepage.name=drawio
+        - homepage.name=Drawio
         - homepage.icon=draw-io.svg
         - homepage.href=http://10.0.0.20:8086/
         - homepage.description=drawing tool
