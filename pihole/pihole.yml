@@ -2,9 +2,9 @@ services:
   pihole:
     image: pihole/pihole
     deploy:
-      replicas: 1
-      placement:
-        constraints: [node.hostname == node2]
+      replicas: 2
+#      placement:
+#        constraints: [node.hostname == node2]
       resources:
         reservations:
           memory: 128M
