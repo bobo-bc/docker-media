@@ -61,10 +61,10 @@ services:
     deploy:
       labels:
         - homepage.group=Productivity
-        - homepage.name=wordpress
+        - homepage.name=Wordpress
         - homepage.icon=wordpress.png
         - homepage.href=https://stevenfmeyer.me
-        - homepage.description=blog
+        - homepage.description=my personal blog
       replicas: 1
       restart_policy:
         condition: on-failure
