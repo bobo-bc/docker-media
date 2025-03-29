@@ -30,10 +30,10 @@ services:
         - 'traefik.http.routers.lidarr.entrypoints=web'
         - "traefik.http.services.plex.loadbalancer.server.port=32400"
         - homepage.group=Media
-        - homepage.name=plex
+        - homepage.name=Plex
         - homepage.icon=plex.png
         - homepage.href=http://swarm:32400/web
-        - homepage.description=viewer
+        - homepage.description=Media server
         - homepage.weight=100
 networks:
   traefik-public:
