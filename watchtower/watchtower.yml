@@ -10,7 +10,7 @@ services:
         constraints: [node.hostname == node1]
       labels:  
         - homepage.group=System Tools
-        - homepage.name=watchtower
+        - homepage.name=Watchtower
         - homepage.icon=watchtower.png
         - homepage.description=autoupdate docker
 
