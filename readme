@@ -1,5 +1,6 @@
-This is my personal repository of docker compose files so I have a copy outside my ecosystem. Using Portainer Business edition, I deploy via this repository.
-I have created a docker swarm for my homelab on proxmox. 
+This is my personal repository of docker compose files so I have a copy outside my ecosystem. Using Portainer Business edition, I deploy via this repository. Within portainer, I am leveraging secrets and environment variables. 
+I am using labels for both a simple traefik for local routing and homepage dashboard to auto populate the dashboard. 
+ 
 my references are:
 https://rpi4cluster.com/docker-swarm-intro/
 https://community-scripts.github.io/ProxmoxVE/scripts
