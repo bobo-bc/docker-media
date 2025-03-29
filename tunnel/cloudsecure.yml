@@ -6,9 +6,9 @@ services:
     deploy:
       labels:
         - homepage.group=Web
-        - homepage.name=tunnel
+        - homepage.name=Cloudflare tunnel
         - homepage.icon=cloudflare.png
-        - homepage.description=secure tunnel
+        - homepage.description=Secure tunnel
       replicas: 2
     networks:
       - frontend-ntwk
