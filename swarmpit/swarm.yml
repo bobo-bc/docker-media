@@ -9,7 +9,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
-      - 888:8080
+      - 8089:8080
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:888"]
       interval: 60s
@@ -32,7 +32,7 @@ services:
         - homepage.group=System Tools
         - homepage.name=Swarmpit
         - homepage.icon=swarmpit.png
-        - homepage.href=http://swarmpit:888/
+        - homepage.href=http://10.0.0.20:8089
         - homepage.description=monitoring
 
   db:
