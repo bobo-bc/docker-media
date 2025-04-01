@@ -25,11 +25,8 @@ services:
         reservations:
           cpus: '0.25'
           memory: 512M
-      placement:
-        constraints:
-          - node.role == manager
       labels:    
-        - homepage.group="System Tools"
+        - homepage.group=System Tools
         - homepage.name=Swarmpit
         - homepage.icon=swarmpit.png
         - homepage.href=http://swarmpit:888/
@@ -38,7 +35,7 @@ services:
   db:
     image: couchdb:2.3.0
     volumes:
-      - db-data:/opt/couchdb/data
+      - /mnt/docker-storage/swarmpit/db-data:/opt/couchdb/data
     networks:
       - net
     deploy:
@@ -53,7 +50,7 @@ services:
   influxdb:
     image: influxdb:1.8
     volumes:
-      - influx-data:/var/lib/influxdb
+      - /mnt/docker-storage/swarmpit/influx-data:/var/lib/influxdb
     networks:
       - net
     deploy:
