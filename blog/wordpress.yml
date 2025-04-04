@@ -31,18 +31,6 @@ services:
       restart_policy:
         condition: on-failure
         
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    restart: always
-    ports:
-      - "8080:80"
-    environment:
-      PMA_HOST: mysql:3306
-      PMA_USER: wordpress
-      PMA_PASSWORD: CRa35Jh9p5yJI2h
-    depends_on:
-       - mysql
 #### establish web instance #### 
   wordpress:
     image: wordpress:latest
