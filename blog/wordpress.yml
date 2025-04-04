@@ -44,7 +44,7 @@ services:
 
 #### define where web files are stored on persistent volume ####
     volumes:
-      - ${config}/word1:/var/www/html
+      - ${config}/word:/var/www/html
 
 #### docker secrets for password storage ####
     environment:
