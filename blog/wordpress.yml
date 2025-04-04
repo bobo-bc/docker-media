@@ -11,7 +11,7 @@ services:
 
 #### define where database is stored on persistent volume ####
     volumes:
-      - ${config}/word1/sql-data:/var/lib/mysql
+      - ${config}/word/sql-data:/var/lib/mysql
 
 #### docker secrets for passwords storage ####
     environment:
