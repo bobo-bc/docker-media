@@ -30,7 +30,19 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
-
+        
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: your_username
+      PMA_PASSWORD: your_password
+    depends_on:
+       - mysql
 #### establish web instance #### 
   wordpress:
     image: wordpress:latest
