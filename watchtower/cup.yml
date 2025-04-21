@@ -1,0 +1,32 @@
+---
+services:
+  cup:
+    image: ghcr.io/sergi0g/cup:latest
+    container_name: kavita
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${config}/cup:/config
+ #     - ${media}:/data #optional
+    ports:
+      - 8000:8000
+    restart: unless-stopped
+    networks:
+      - traefik-public
+    deploy:
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.cup.rule=Host(`read`)'
+        - 'traefik.http.services.cup.loadbalancer.server.port=8000'
+        - 'traefik.http.routers.cup.entrypoints=web'
+        - homepage.group=Media
+        - homepage.name=cup
+        - homepage.icon=cup.png
+        - homepage.href=http://cup/
+        - homepage.description=lists dockers available for update
+        - homepage.weight=100
+networks:
+  traefik-public:
+    external: true
