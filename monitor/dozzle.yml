@@ -4,7 +4,7 @@ services:
     environment:
       - DOZZLE_MODE=swarm
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - ${config}/dozzle:/config
     ports:
       - 8083:8080
@@ -15,14 +15,19 @@ services:
       mode: global
       labels:
         - 'traefik.enable=true'
-        - 'traefik.http.routers.dozzle.rule=Host(`monitor`)'
-        - 'traefik.http.services.dozzle.loadbalancer.server.port=8083'
+        - 'traefik.http.routers.dozzle.rule=Host(`monitor.example.com`)'
+        - 'traefik.http.services.dozzle.loadbalancer.server.port=8080'
         - 'traefik.http.routers.dozzle.entrypoints=web'
         - homepage.group=System Tools
         - homepage.name=Dozzle
         - homepage.icon=https://developer.asustor.com/uploadIcons/0020_117518_1660879946_dozzle_256.png
-        - homepage.href=http://swarm:8083
+        - homepage.href=http://monitor.example.com:8083
         - homepage.description=stats
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 networks:
   traefik-public:
     external: true
