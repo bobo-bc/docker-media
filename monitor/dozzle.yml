@@ -15,7 +15,7 @@ services:
       mode: global
       labels:
         - 'traefik.enable=true'
-        - 'traefik.http.routers.dozzle.rule=Host(`monitor.example.com`)'
+        - 'traefik.http.routers.dozzle.rule=Host(`monitor`)'
         - 'traefik.http.services.dozzle.loadbalancer.server.port=8080'
         - 'traefik.http.routers.dozzle.entrypoints=web'
         - homepage.group=System Tools
