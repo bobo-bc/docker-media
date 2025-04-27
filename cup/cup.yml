@@ -21,29 +21,29 @@ services:
         reservations:
           cpus: "0.25"
           memory: "128M"
- #   labels:
-#      - traefik.enable=false
-#      - traefik.http.routers.cup.rule=Host(`cup`)
-#      - traefik.http.services.cup.loadbalancer.server.port=8000
-#      - traefik.http.routers.cup.entrypoints=web
+    labels:
+      - traefik.enable=false
+      - traefik.http.routers.cup.rule=Host(`cup`)
+      - traefik.http.services.cup.loadbalancer.server.port=8000
+      - traefik.http.routers.cup.entrypoints=web
       # Homepage labels for Cup
-#      - homepage.group=Utilities
-#      - homepage.name=Cup
-#      - homepage.icon=/icons/cup-with-straw.png
-#      - homepage.href=http://swarm:8001
-#      - homepage.ping=http://swarm:8001
-#      - homepage.description=Checks for container updates
-#      - homepage.widget.type=customapi
-#      - homepage.widget.url=http://swarm:8001/api/v3/json
-#      - homepage.widget.mappings[0].label=Monitoring
-#      - homepage.widget.mappings[0].field.metrics=monitored_images
-#      - homepage.widget.mappings[0].format=number
-#      - homepage.widget.mappings[1].label=Up to date
-#      - homepage.widget.mappings[1].field.metrics=up_to_date
-#      - homepage.widget.mappings[1].format=number
-#      - homepage.widget.mappings[2].label=Updates
-#      - homepage.widget.mappings[2].field.metrics=updates_available
-#      - homepage.widget.mappings[2].format=number
+      - homepage.group=Utilities
+      - homepage.name=Cup
+      - homepage.icon=/icons/cup-with-straw.png
+      - homepage.href=http://swarm:8001
+      - homepage.ping=http://swarm:8001
+      - homepage.description=Checks for container updates
+      - homepage.widget.type=customapi
+      - homepage.widget.url=http://swarm:8001/api/v3/json
+      - homepage.widget.mappings[0].label=Monitoring
+      - homepage.widget.mappings[0].field.metrics=monitored_images
+      - homepage.widget.mappings[0].format=number
+      - homepage.widget.mappings[1].label=Up to date
+      - homepage.widget.mappings[1].field.metrics=up_to_date
+      - homepage.widget.mappings[1].format=number
+      - homepage.widget.mappings[2].label=Updates
+      - homepage.widget.mappings[2].field.metrics=updates_available
+      - homepage.widget.mappings[2].format=number
     command: serve
     ports:
       - "8001:8000"
