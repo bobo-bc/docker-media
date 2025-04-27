@@ -27,7 +27,7 @@ services:
       - traefik.http.services.cup.loadbalancer.server.port=8000
       - traefik.http.routers.cup.entrypoints=web
       # Homepage labels for Cup
-      - homepage.group=Utilities
+      - homepage.group=Media
       - homepage.name=Cup
       - homepage.icon=/icons/cup-with-straw.png
       - homepage.href=http://swarm:8001
