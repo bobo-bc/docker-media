@@ -27,6 +27,7 @@ services:
         - homepage.href=http://readarr/
         - homepage.description=books
         - homepage.weight=3
+        - com.centurylinklabs.watchtower.enable: "true"
 networks:
   traefik-public:
     external: true
