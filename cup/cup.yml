@@ -51,7 +51,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro # Read-only for better security
       - /mnt/docker-storage/cup/cup.json:/config/cup.json
     networks:
-      - traefik-public
+      - cup-net
     healthcheck:
       test: ["CMD", "curl", "-f", "http://10.0.0.20:8001/health"]
       interval: 30s
@@ -62,8 +62,8 @@ services:
     user: "0:0" # Use a non-root user for improved security
 
 networks:
-  traefik-public:
-    external: true
+  cup-net:
+    driver: overlay
 
 
 
