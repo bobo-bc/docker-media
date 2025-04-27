@@ -27,6 +27,7 @@ services:
         - homepage.href=http://radarr/
         - homepage.description=Movies
         - homepage.weight=2
+        - com.centurylinklabs.watchtower.enable: "true"
 networks:
   traefik-public:
     external: true
