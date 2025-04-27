@@ -25,6 +25,7 @@ services:
         - homepage.icon=homepage.png
         - homepage.href=http://homepage
         - homepage.description=dashboard
+        - com.centurylinklabs.watchtower.enable: "true"
 networks:
   traefik-public:
     external: true
