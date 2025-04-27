@@ -21,18 +21,18 @@ services:
         reservations:
           cpus: "0.25"
           memory: "128M"
-    labels:
-      - traefik.enable=false
-      - traefik.http.routers.cup.rule=Host(`cup`)
-      - traefik.http.services.cup.loadbalancer.server.port=8000
-      - traefik.http.routers.cup.entrypoints=web
+      labels:
+        - traefik.enable=false
+        - traefik.http.routers.cup.rule=Host(`cup`)
+        - traefik.http.services.cup.loadbalancer.server.port=8000
+        - traefik.http.routers.cup.entrypoints=web
       # Homepage labels for Cup
-      - homepage.group=Media
-      - homepage.name=Cup
-      - homepage.icon=cup-with-straw.png
-      - homepage.href=http://swarm:8001
-      - homepage.ping=http://swarm:8001
-      - homepage.description=Checks for container updates
+        - homepage.group=Media
+        - homepage.name=Cup
+        - homepage.icon=cup-with-straw.png
+        - homepage.href=http://swarm:8001
+        - homepage.ping=http://swarm:8001
+        - homepage.description=Checks for container updates
   #    - homepage.widget.type=customapi
   #    - homepage.widget.url=http://swarm:8001/api/v3/json
   #    - homepage.widget.mappings[0].label=Monitoring
