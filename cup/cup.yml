@@ -21,7 +21,7 @@ services:
         reservations:
           cpus: "0.25"
           memory: "128M"
-    labels:
+ #   labels:
 #      - traefik.enable=false
 #      - traefik.http.routers.cup.rule=Host(`cup`)
 #      - traefik.http.services.cup.loadbalancer.server.port=8000
