@@ -52,13 +52,13 @@ services:
       - /mnt/docker-storage/cup/cup.json:/config/cup.json
     networks:
       - cup-net
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://10.0.0.20:8001/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    environment:
-      CUP_SWARM_URL: "http://10.0.0.20:8001"
+ #   healthcheck:
+ #     test: ["CMD", "curl", "-f", "http://10.0.0.20:8001/health"]
+ #     interval: 30s
+ #     timeout: 10s
+ #     retries: 3
+ #   environment:
+ #     CUP_SWARM_URL: "http://10.0.0.20:8001"
     user: "0:0" # Use a non-root user for improved security
 
 networks:
