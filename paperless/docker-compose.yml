@@ -80,6 +80,7 @@ services:
       - homepage.icon=paperless.png
       - homepage.href=http://10.0.0.20:8005/
       - homepage.description=e-paper management tool
+      - com.centurylinklabs.watchtower.enable: "true"
 
   gotenberg:
     image: docker.io/gotenberg/gotenberg:8.7
