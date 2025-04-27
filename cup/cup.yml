@@ -4,12 +4,12 @@ services:
   cup:
     image: ghcr.io/sergi0g/cup:latest
     deploy:
-      mode: replicated
+#      mode: replicated
       replicas: 1
       update_config:
         parallelism: 1
         delay: 10s
-        failure_action: rollback
+  #      failure_action: rollback
       restart_policy:
         condition: on-failure
         delay: 5s
@@ -22,7 +22,7 @@ services:
           cpus: "0.25"
           memory: "128M"
     labels:
-      - traefik.enable=true
+      - traefik.enable=false
       - traefik.http.routers.cup.rule=Host(`cup`)
       - traefik.http.services.cup.loadbalancer.server.port=8000
       - traefik.http.routers.cup.entrypoints=web
