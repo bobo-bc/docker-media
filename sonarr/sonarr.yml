@@ -27,6 +27,7 @@ services:
         - homepage.href=http://sonarr
         - homepage.description=Tv
         - homepage.weight=1
+        - com.centurylinklabs.watchtower.enable: "true"
 networks:
   traefik-public:
     external: true
