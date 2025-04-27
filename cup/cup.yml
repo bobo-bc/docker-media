@@ -44,6 +44,7 @@ services:
         - homepage.widget.mappings[2].label=Updates
         - homepage.widget.mappings[2].field.metrics=updates_available
         - homepage.widget.mappings[2].format=number
+        - com.centurylinklabs.watchtower.enable: "true"
     command: serve
     ports:
       - "8001:8000"
