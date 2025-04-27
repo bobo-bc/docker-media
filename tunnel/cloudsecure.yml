@@ -9,6 +9,7 @@ services:
         - homepage.name=Cloudflare tunnel
         - homepage.icon=cloudflare.png
         - homepage.description=Secure tunnel
+        - com.centurylinklabs.watchtower.enable: "true"
       replicas: 2
     networks:
       - frontend-ntwk
