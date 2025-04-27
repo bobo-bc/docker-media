@@ -20,6 +20,7 @@ services:
         - homepage.icon=pi-hole.png
         - homepage.href=http://pihole/admin
         - homepage.description=DNS server
+        - com.centurylinklabs.watchtower.enable: "true"
     ports:
       - "53:53/tcp"
       - "53:53/udp"
