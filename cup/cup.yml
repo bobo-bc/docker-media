@@ -29,7 +29,7 @@ services:
       # Homepage labels for Cup
         - homepage.group=Media
         - homepage.name=Cup
-        - homepage.icon=cup-with-straw.png
+        - homepage.icon=/icons/cup-with-straw.png
         - homepage.href=http://swarm:8001
         - homepage.ping=http://swarm:8001
         - homepage.description=Checks for container updates
