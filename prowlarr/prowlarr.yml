@@ -25,6 +25,7 @@ services:
         - 'homepage.href=http://prowlarr/'
         - 'homepage.description=indexers'
         - homepage.weight=6
+        - com.centurylinklabs.watchtower.enable: "true"
 networks:
   traefik-public:
     external: true
