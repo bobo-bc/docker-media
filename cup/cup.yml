@@ -22,7 +22,7 @@ services:
           cpus: "0.25"
           memory: "128M"
       labels:
-        - traefik.enable=false
+        - traefik.enable=true
         - traefik.http.routers.cup.rule=Host(`cup`)
         - traefik.http.services.cup.loadbalancer.server.port=8000
         - traefik.http.routers.cup.entrypoints=web
