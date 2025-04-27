@@ -21,6 +21,7 @@ services:
         - homepage.icon=it-tools.svg
         - homepage.href=http://10.0.0.20:8082/
         - homepage.description=handy tools
+        - com.centurylinklabs.watchtower.enable: "true"
 networks:
   traefik-public:
     external: true
