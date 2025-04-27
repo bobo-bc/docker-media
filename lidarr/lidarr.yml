@@ -28,6 +28,7 @@ services:
         - homepage.href=http://lidarr
         - homepage.description=music
         - homepage.weight=4
+        - com.centurylinklabs.watchtower.enable: "true"
 networks:
   traefik-public:
     external: true
