@@ -8,11 +8,19 @@ services:
       update_config:
         parallelism: 1
         delay: 10s
+        failure_action: rollback
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "512M"
+        reservations:
+          cpus: "0.25"
+          memory: "128M"
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.cup.rule=Host(`read`)'
+      - 'traefik.http.routers.cup.rule=Host(`cup`)'
       - 'traefik.http.services.cup.loadbalancer.server.port=8000'
       - 'traefik.http.routers.cup.entrypoints=web'
       homepage.group: Utilities
@@ -37,14 +45,32 @@ services:
       - "8001:8000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./cup.json:/config/cup.json
+      - /mnt/docker-storage/cup/cup.json:/config/cup.json
     networks:
-      - cup-net
-    user: "0:0" # Adjust user and group IDs as needed
+      - traefik-public
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    user: "0:0" 
 
 networks:
-  cup-net:
-    driver: overlay
+  traefik-public:
+    external: true
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
