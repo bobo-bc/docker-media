@@ -23,7 +23,7 @@ services:
           memory: "128M"
     labels:
       - traefik.enable=true
-      - traefik.http.routers.cup.rule=Host(`cup.example.com`)
+      - traefik.http.routers.cup.rule=Host(`cup`)
       - traefik.http.services.cup.loadbalancer.server.port=8000
       - traefik.http.routers.cup.entrypoints=web
       # Homepage labels for Cup
