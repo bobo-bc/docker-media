@@ -70,7 +70,7 @@ networks:
     external: true
 
 secrets:
-  db_root_password:
-    file: /path/to/db_root_password.txt
-  db_password:
-    file: /path/to/db_password.txt
+   db_password:
+     external: true
+   db_root_password:
+     external: true
