@@ -1,9 +1,16 @@
-version: '3'
+version: '3.9'
 
 services:
   plex:
-    image: plexinc/pms-docker
-    restart: unless-stopped
+    image: plexinc/pms-docker:1.25.0 # Pin the version for stability
+    environment:
+      ADVERTISE_IP: ${swarm_ip}:32400
+      PLEX_CLAIM: ${claim}
+      TZ: ${TZ}
+    volumes:
+      - ${config}/plex:/config:rw
+      - ${config}/plex/plex_transcode:/transcode:rw
+      - ${media}:/data:ro
     ports:
       - 32400:32400/tcp
       - 8324:8324/tcp
@@ -13,19 +20,13 @@ services:
       - 32412:32412/udp
       - 32413:32413/udp
       - 32414:32414/udp
-    environment:
-      ADVERTISE_IP: ${swarm_ip}:32400
-      PLEX_CLAIM: ${claim}
-      TZ: ${TZ}
-    volumes:
-      - ${config}/plex:/config
-      - ${config}/plex/plex_transcode:/transcode
-      - ${media}:/data
     networks:
       - traefik-public
     deploy:
+      mode: replicated
+      replicas: 1 # Adjust as needed for scaling
       labels:
-        - "traefik.enable=false"
+        - "traefik.enable=true"
         - "traefik.http.routers.plex.rule=Host(`plexswarm`)"
         - 'traefik.http.routers.lidarr.entrypoints=web'
         - "traefik.http.services.plex.loadbalancer.server.port=32400"
@@ -35,11 +36,19 @@ services:
         - homepage.href=http://swarm:32400/web
         - homepage.description=Media server
         - homepage.weight=100
-        - com.centurylinklabs.watchtower.enable: "true"
+        - com.centurylinklabs.watchtower.enable="true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: "2G"
+        reservations:
+          cpus: "0.50"
+          memory: "1G"
+
 networks:
   traefik-public:
     external: true
-
-
-
-
