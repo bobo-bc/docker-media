@@ -8,9 +8,9 @@ services:
       replicas: 1 # Specify replicas for high availability
       restart_policy:
         condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 60s
+  #      delay: 5s
+  #      max_attempts: 3
+  #      window: 60s
       labels:
         # Traefik labels for routing
         - traefik.enable=true
@@ -24,10 +24,10 @@ services:
         - homepage.href=http://homepage.example.com
         - homepage.description=Dashboard
         - com.centurylinklabs.watchtower.enable="true"
-      resources:
-        limits:
-          cpus: "0.50"
-          memory: "256M"
+ #     resources:
+ #       limits:
+ #         cpus: "0.50"
+ #         memory: "256M"
    #     reservations:
    #       cpus: "0.25"
    #       memory: "128M"
