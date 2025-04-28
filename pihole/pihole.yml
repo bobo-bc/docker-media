@@ -24,7 +24,7 @@ services:
     ports:
       - "53:53/tcp"
       - "53:53/udp"
-      - "82:80/tcp"
+      - "85:80/tcp"
     environment:
       TZ: 'America/Vancouver'
       WEBPASSWORD: 'Hurts2p33'
