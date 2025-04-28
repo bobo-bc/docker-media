@@ -53,6 +53,9 @@ services:
       placement:
         constraints:
           - node.role == manager
+    depends_on:
+      - mysql
+
 
 networks:
   npm-db:
