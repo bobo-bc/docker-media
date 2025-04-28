@@ -42,5 +42,5 @@ networks:
 npm-db:
 name: npm-db
 attachable: true
-traefik-public
+traefik-public:
 external: true
