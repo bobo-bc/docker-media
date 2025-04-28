@@ -13,7 +13,8 @@ services:
       DB_MYSQL_PORT: 3306
       DB_MYSQL_USER: "npm"
       DB_MYSQL_NAME: "npm"
-      DB_MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      DB_MYSQL_PASSWORD: "StrongPassword@2024"
+    #DB_MYSQL_PASSWORD_FILE: /run/secrets/db_password
     secrets:
       - db_password
     volumes:
@@ -37,10 +38,12 @@ services:
     image: 'jc21/mariadb-aria:latest'
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+     # MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_ROOT_PASSWORD: "StrongPassword@2024" 
       MYSQL_DATABASE: 'npm'
       MYSQL_USER: 'npm'
-      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      DB_MYSQL_PASSWORD: "StrongPassword@2024"   
+   #   MYSQL_PASSWORD_FILE: /run/secrets/db_password
     secrets:
       - db_root_password
       - db_password
