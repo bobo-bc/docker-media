@@ -4,6 +4,13 @@ services:
     image: cloudflare/cloudflared
     command: tunnel run
     deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "256M"
+        reservations:
+          cpus: "0.25"
+          memory: "128M"
       labels:
         - homepage.group=Web
         - homepage.name=Cloudflare tunnel
@@ -14,7 +21,7 @@ services:
     networks:
       - frontend-ntwk
     environment:
-      - TUNNEL_TOKEN_FILE= /run/secrets/TUNNEL_TOKEN
+      - TUNNEL_TOKEN_FILE=/run/secrets/TUNNEL_TOKEN
     secrets:
       - TUNNEL-TOKEN
 
