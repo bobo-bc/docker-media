@@ -20,9 +20,10 @@ services:
       replicas: 1 # Increase replicas for high availability if supported
       labels:
         - 'traefik.enable=true'
-        - 'traefik.http.routers.kavita.rule=Host(`read`)' # Update domain
+        - 'traefik.http.routers.kavita.rule=Host(`read.stevenfmeyer.me, read`)' # Update domain
         - 'traefik.http.services.kavita.loadbalancer.server.port=5000'
-        - 'traefik.http.routers.kavita.entrypoints=web'
+        - 'traefik.http.routers.kavita.entrypoints=websecure'
+        - 'traefik.http.routers.kavita.tls.certresolver=myresolver'
         - homepage.group=Media
         - homepage.name=Kavita
         - homepage.icon=kavita.png
