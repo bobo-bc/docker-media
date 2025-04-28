@@ -7,12 +7,16 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.swarmMode=true"
       - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
       - "--certificatesresolvers.myresolver.acme.dnschallenge=true"
       - "--certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare"
       - "--certificatesresolvers.myresolver.acme.email=stevenfmeyer@me.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
+      - "80:80"   # HTTP
       - "443:443"
     secrets:
       - TUNNEL_TOKEN
@@ -27,6 +31,13 @@ services:
       placement:
         constraints:
           - node.role == manager
+      labels:
+         # Enable Traefik Dashboard
+         - "traefik.enable=true"
+         - "traefik.http.routers.dashboard.rule=Host(`traefik.local.stevenfmeyer.me`)"
+         - "traefik.http.routers.dashboard.service=api@internal"
+         - "traefik.http.routers.dashboard.entrypoints=websecure"
+         - "traefik.http.routers.dashboard.tls.certresolver=myresolver"
 secrets:
   TUNNEL_TOKEN:
     external: true
