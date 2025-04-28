@@ -16,8 +16,8 @@ services:
     secrets:
       - db_password
     volumes:
-      - /mnt/docker-storage/nmp:/data
-      - /mnt/docker-storage/nmp/lets:/etc/letsencrypt
+      - /mnt/docker-storage/npm:/data
+      - /mnt/docker-storage/npm/lets:/etc/letsencrypt
     networks:
       - npm-db
       - traefik-public
