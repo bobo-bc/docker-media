@@ -1,37 +1,48 @@
+version: "3.9"
+
 services:
   lidarr:
     image: lscr.io/linuxserver/lidarr:latest
     environment:
       - PUID=${PUID}
-      - PGID=$PGID}
+      - PGID=${PGID}
       - TZ=${TZ}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${config}/lidarr:/config
-      - ${media}/music:/music
-      - ${data}:/data
+      - ${config}/lidarr:/config:rw
+      - ${media}/music:/music:ro # Optional, ensure proper permissions
+      - ${data}:/data:rw
     ports:
-      - 8686:8686
-    restart: unless-stopped
-
+      - "8686:8686"
     networks:
       - traefik-public
     deploy:
+      mode: replicated
+      replicas: 1 # Increase replicas for high availability if supported
       labels:
         - 'traefik.enable=true'
-        - 'traefik.http.routers.lidarr.rule=Host(`lidarr`)'
+        - 'traefik.http.routers.lidarr.rule=Host(`lidarr`)' # Update domain
         - 'traefik.http.services.lidarr.loadbalancer.server.port=8686'
         - 'traefik.http.routers.lidarr.entrypoints=web'
         - homepage.group=Media
         - homepage.name=Lidarr
         - homepage.icon=lidarr.png
         - homepage.href=http://lidarr
-        - homepage.description=music
+        - homepage.description=Music
         - homepage.weight=4
-        - com.centurylinklabs.watchtower.enable: "true"
+        - com.centurylinklabs.watchtower.enable="true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "512M"
+        reservations:
+          cpus: "0.25"
+          memory: "128M"
 networks:
   traefik-public:
     external: true
-
-
 
