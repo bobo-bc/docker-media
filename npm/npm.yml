@@ -54,14 +54,6 @@ services:
         constraints:
           - node.role == manager
 
-volumes:
-  npm_data:
-    driver: local
-  npm_letsencrypt:
-    driver: local
-  npm_db_data:
-    driver: local
-
 networks:
   npm-db:
     name: npm-db
