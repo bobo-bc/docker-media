@@ -54,7 +54,7 @@ services:
         constraints:
           - node.role == manager
     depends_on:
-      - mysql
+      - db
 
 
 networks:
