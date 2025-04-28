@@ -1,33 +1,49 @@
----
+version: "3.9"
+
 services:
   kavita:
     image: lscr.io/linuxserver/kavita:latest
-    container_name: kavita
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${config}/kavita:/config
-      - ${media}:/data #optional
+      - ${config}/kavita:/config:rw
+      - ${media}:/data:rw # optional, ensure proper permissions
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
-      - 5000:5000
-    restart: unless-stopped
+      - "5000:5000"
     networks:
       - traefik-public
     deploy:
+      mode: replicated
+      replicas: 1 # Increase replicas for high availability if supported
       labels:
         - 'traefik.enable=true'
-        - 'traefik.http.routers.kavita.rule=Host(`read`)'
+        - 'traefik.http.routers.kavita.rule=Host(`read.example.com`)' # Update domain
         - 'traefik.http.services.kavita.loadbalancer.server.port=5000'
         - 'traefik.http.routers.kavita.entrypoints=web'
         - homepage.group=Media
         - homepage.name=Kavita
         - homepage.icon=kavita.png
-        - homepage.href=http://read/
-        - homepage.description=reader
+        - homepage.href=http://read.example.com/
+        - homepage.description=Reader
         - homepage.weight=100
-        - com.centurylinklabs.watchtower.enable: "true"
+        - com.centurylinklabs.watchtower.enable="true"
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "512M"
+        reservations:
+          cpus: "0.25"
+          memory: "128M"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
 networks:
   traefik-public:
     external: true
+
