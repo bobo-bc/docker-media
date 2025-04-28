@@ -8,9 +8,9 @@ services:
       replicas: 1 # Specify replicas for high availability
       restart_policy:
         condition: on-failure
-  #      delay: 5s
-  #      max_attempts: 3
-  #      window: 60s
+        delay: 5s
+        max_attempts: 3
+        window: 60s
       labels:
         # Traefik labels for routing
         - traefik.enable=true
@@ -24,18 +24,18 @@ services:
         - homepage.href=http://homepage.example.com
         - homepage.description=Dashboard
         - com.centurylinklabs.watchtower.enable="true"
- #     resources:
- #       limits:
- #         cpus: "0.50"
- #         memory: "256M"
-   #     reservations:
-   #       cpus: "0.25"
-   #       memory: "128M"
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "256M"
+        reservations:
+          cpus: "0.25"
+          memory: "128M"
     ports:
       - "3005:3000"
     volumes:
       - /mnt/docker-storage/homepage/config:/app/config:rw # Persistent storage with read-only for added security
-      - /mnt/docker-storage/homepage/data:/data:rw # Ensure appropriate access
+      - /mnt/nfs/data:/data:rw # Ensure appropriate access
       - /var/run/docker.sock:/var/run/docker.sock:ro # Keep the socket read-only
     networks:
       - traefik-public
