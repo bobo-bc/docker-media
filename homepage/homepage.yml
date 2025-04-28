@@ -34,7 +34,7 @@ services:
     ports:
       - "3005:3000"
     volumes:
-      - /mnt/docker-storage/homepage/config:/app/config:ro # Persistent storage with read-only for added security
+      - /mnt/docker-storage/homepage/config:/app/config:rw # Persistent storage with read-only for added security
       - /mnt/docker-storage/homepage/data:/data:rw # Ensure appropriate access
       - /var/run/docker.sock:/var/run/docker.sock:ro # Keep the socket read-only
     networks:
