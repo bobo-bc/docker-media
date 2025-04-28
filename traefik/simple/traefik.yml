@@ -16,8 +16,8 @@ services:
       - --api.dashboard=true
       - --log.level=INFO
       - --accesslog=true
-      - "--providers.docker=true"
-      - "--providers.docker.swarmMode=true"
+      - --providers.docker=true
+      - --providers.docker.swarmMode=true
       - --providers.swarm.exposedByDefault=false
       - --providers.swarm.network=traefik-public
       - --entrypoints.web.address=:80
