@@ -14,12 +14,12 @@ services:
     networks:
       - frontend-ntwk
     environment:
-      - TUNNEL_TOKEN_file= /run/secrets/tunneltoken
+      - TUNNEL_TOKEN_FILE= /run/secrets/TUNNEL_TOKEN
     secrets:
-      - tunneltoken
+      - TUNNEL-TOKEN
 
 secrets:
-   tunneltoken:
+   TUNNEL_TOKEN:
      external: true
 networks:
     frontend-ntwk:
