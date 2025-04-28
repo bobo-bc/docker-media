@@ -7,10 +7,10 @@ services:
       mode: replicated
       replicas: 1 # Specify replicas for high availability
       restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 60s
+  #      condition: on-failure
+  #      delay: 5s
+  #      max_attempts: 3
+  #      window: 60s
       labels:
         # Traefik labels for routing
         - traefik.enable=true
