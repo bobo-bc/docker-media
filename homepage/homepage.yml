@@ -24,13 +24,13 @@ services:
         - homepage.href=http://homepage.example.com
         - homepage.description=Dashboard
         - com.centurylinklabs.watchtower.enable="true"
-      resources:
-        limits:
-          cpus: "0.50"
-          memory: "256M"
-        reservations:
-          cpus: "0.25"
-          memory: "128M"
+ #     resources:
+ #       limits:
+ #         cpus: "0.50"
+ #         memory: "256M"
+ #       reservations:
+ #         cpus: "0.25"
+ #         memory: "128M"
     ports:
       - "3005:3000"
     volumes:
