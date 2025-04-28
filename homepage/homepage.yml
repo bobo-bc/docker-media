@@ -1,31 +1,45 @@
-version: "3.7"
+version: "3.9"
 
 services:
   homepage:
     image: ghcr.io/benphelps/homepage:latest
-    container_name: homepage
-    ports:
-      - 3005:3000
-    volumes:
-      - ${config}/homepage:/app/config
-      - ${data}:/data
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    networks:
-      - traefik-public
     deploy:
+      mode: replicated
+      replicas: 1 # Specify replicas for high availability
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 60s
       labels:
-        - traefik.enable=true   #enable the use of traefik labels for routing.
-        - traefik.http.routers.homepage.rule=Host(`homepage`)   #local dns setting
+        # Traefik labels for routing
+        - traefik.enable=true
+        - traefik.http.routers.homepage.rule=Host(`homepage`) # Replace with your domain
         - traefik.http.routers.homepage.entrypoints=web
-        - traefik.http.services.homepage.loadbalancer.server.port=3000   #tells Traefik which port to route to for this app.
-       
-        #homepage labels when autodiscovering docker swarm services.
+        - traefik.http.services.homepage.loadbalancer.server.port=3000
+        # Homepage autodiscovery labels
         - homepage.group=Utilities
         - homepage.name=HomePage
         - homepage.icon=homepage.png
-        - homepage.href=http://homepage
-        - homepage.description=dashboard
-        - com.centurylinklabs.watchtower.enable: "true"
+        - homepage.href=http://homepage.example.com
+        - homepage.description=Dashboard
+        - com.centurylinklabs.watchtower.enable="true"
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "256M"
+        reservations:
+          cpus: "0.25"
+          memory: "128M"
+    ports:
+      - "3005:3000"
+    volumes:
+      - /mnt/docker-storage/homepage/config:/app/config:ro # Persistent storage with read-only for added security
+      - /mnt/docker-storage/homepage/data:/data:rw # Ensure appropriate access
+      - /var/run/docker.sock:/var/run/docker.sock:ro # Keep the socket read-only
+    networks:
+      - traefik-public
 networks:
   traefik-public:
     external: true
+
