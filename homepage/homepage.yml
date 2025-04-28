@@ -8,6 +8,7 @@ services:
       - 3005:3000
     volumes:
       - /mnt/docker-storage/homepage:/app/config
+      -/mnt/nfs/data:/data
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - traefik-public
