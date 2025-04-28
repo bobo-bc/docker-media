@@ -6,7 +6,7 @@ services:
     deploy:
       mode: replicated
       replicas: 1 # Specify replicas for high availability
-      restart_policy:
+   #   restart_policy:
   #      condition: on-failure
   #      delay: 5s
   #      max_attempts: 3
