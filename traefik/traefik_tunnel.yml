@@ -34,7 +34,7 @@ services:
       labels:
          # Enable Traefik Dashboard
          - "traefik.enable=true"
-         - "traefik.http.routers.dashboard.rule=Host(`traefik.local.stevenfmeyer.me`)"
+         - "traefik.http.routers.dashboard.rule=Host(`traefik.local.stevenfmeyer.me, traefik`)"
          - "traefik.http.routers.dashboard.service=api@internal"
          - "traefik.http.routers.dashboard.entrypoints=websecure"
          - "traefik.http.routers.dashboard.tls.certresolver=myresolver"
