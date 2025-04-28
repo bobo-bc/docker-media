@@ -1,44 +1,25 @@
-version: "3.9"
+version: "3.7"
 
 services:
   homepage:
     image: ghcr.io/benphelps/homepage:latest
-    deploy:
-      mode: replicated
-      replicas: 1 # Specify replicas for high availability
-   #   restart_policy:
-  #      condition: on-failure
-  #      delay: 5s
-  #      max_attempts: 3
-  #      window: 60s
-      labels:
-        # Traefik labels for routing
-        - traefik.enable=true
-        - traefik.http.routers.homepage.rule=Host(`homepage`) # Replace with your domain
-        - traefik.http.routers.homepage.entrypoints=web
-        - traefik.http.services.homepage.loadbalancer.server.port=3000
-        # Homepage autodiscovery labels
-        - homepage.group=Utilities
-        - homepage.name=HomePage
-        - homepage.icon=homepage.png
-        - homepage.href=http://homepage.example.com
-        - homepage.description=Dashboard
-        - com.centurylinklabs.watchtower.enable="true"
- #     resources:
- #       limits:
- #         cpus: "0.50"
- #         memory: "256M"
- #       reservations:
- #         cpus: "0.25"
- #         memory: "128M"
+    container_name: homepage
     ports:
-      - "3005:3000"
+      - 3005:3000
     volumes:
-      - /mnt/docker-storage/homepage/config:/app/config:rw # Persistent storage with read-only for added security
-      - /var/run/docker.sock:/var/run/docker.sock:ro # Keep the socket read-only
+      - /mnt/docker-storage/homepage:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - traefik-public
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.homepage.rule=Host(`homepage`)
+        - traefik.http.routers.homepage.entrypoints=web
+        - traefik.http.services.homepage.loadbalancer.server.port=3005
 networks:
   traefik-public:
     external: true
+
+
 
