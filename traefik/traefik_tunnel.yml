@@ -27,7 +27,9 @@ services:
       placement:
         constraints:
           - node.role == manager
-
+secrets:
+  TUNNEL_TOKEN:
+    external: true
 networks:
   traefik-public:
     external: true
