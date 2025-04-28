@@ -1,33 +1,46 @@
+version: '3.9'
+
 services:
   prowlarr:
-    image: lscr.io/linuxserver/prowlarr:latest
+    image: lscr.io/linuxserver/prowlarr:latest # Pin to a specific version if needed
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${config}/prowlarr:/config
+      - ${config}/prowlarr:/config:rw
     ports:
-      - 9696:9696
-    restart: unless-stopped
-
+      - "9696:9696"
     networks:
       - traefik-public
     deploy:
+      mode: replicated
+      replicas: 1 # Adjust as needed for scaling
       labels:
         - 'traefik.enable=true'
-        - 'traefik.http.routers.prowlarr.rule=Host(`prowlarr`)'
+        - 'traefik.http.routers.prowlarr.rule=Host(`prowlarr`)' # Use FQDN
         - 'traefik.http.services.prowlarr.loadbalancer.server.port=9696'
         - 'traefik.http.routers.prowlarr.entrypoints=web'
         - 'homepage.group=Media'
         - 'homepage.name=Prowlarr'
         - 'homepage.icon=prowlarr.png'
-        - 'homepage.href=http://prowlarr/'
-        - 'homepage.description=indexers'
+        - 'homepage.href=http://prowlarr/' # Updated for FQDN
+        - 'homepage.description=Indexers'
         - homepage.weight=6
-        - com.centurylinklabs.watchtower.enable: "true"
+        - com.centurylinklabs.watchtower.enable="true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "256M"
+        reservations:
+          cpus: "0.25"
+          memory: "128M"
+
 networks:
   traefik-public:
     external: true
-
 
