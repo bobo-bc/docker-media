@@ -1,92 +1,97 @@
-version: '3.8'
+version: "3.8" # Defines the Docker Compose file format.
+
 services:
 
-#### establish database instance #### 
+  ##### Define the MySQL Database Service #####
   mysql:
-    image: mysql:latest
+    image: mysql:latest # Uses the latest MySQL image—consider pinning to a stable version.
 
-#### Create a private network for the web front end to talk to database ####
+    ##### Network Configuration #####
     networks:
-      - backend-ntwk
+      - backend-ntwk # Connects MySQL to a private backend network for secure communication.
 
-#### define where database is stored on persistent volume ####
+    ##### Persistent Storage Configuration #####
     volumes:
-      - ${config}/word/sql-data1:/var/lib/mysql
+      - ${config}/word/sql-data1:/var/lib/mysql # Stores MySQL database data persistently.
 
-#### docker secrets for passwords storage ####
+    ##### Database Authentication & Security #####
     environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: /run/secrets/db_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password # Securely retrieves root password from Docker secrets.
+      MYSQL_DATABASE: wordpress # Defines the primary database name.
+      MYSQL_USER: wordpress # Creates a dedicated user for the WordPress database.
+      MYSQL_PASSWORD: /run/secrets/db_password # Securely retrieves user password from Docker secrets.
 
-#### list secrets referenced for database in compose file ###
+    ##### Secret Management #####
     secrets:
-      - db_root_password
-      - db_password
+      - db_root_password # References externally stored root password secret.
+      - db_password # References externally stored user password secret.
 
-#### docker swarm depoy instructions ####
+    ##### Deployment Configuration #####
     deploy:
-      replicas: 1
+      replicas: 1 # Runs a single MySQL instance—scale as needed.
       restart_policy:
-        condition: on-failure
-        
-#### establish web instance #### 
+        condition: on-failure # Ensures service restarts only upon failure.
+
+  ##### Define the WordPress Web Server #####
   wordpress:
-    image: wordpress:latest
+    image: wordpress:latest # Uses the latest WordPress image—consider pinning for stability.
+
+    ##### Port Mapping #####
     ports:
-      - "8081:80"
+      - "8081:80" # Maps container port 80 to host port 8081 for external access.
 
-#### define both the private network for database communication and an external network for web hosting ####
+    ##### Network Configuration #####
     networks:
-      - frontend-ntwk
-      - backend-ntwk
+      - frontend-ntwk # Connects to an external network for web hosting.
+      - backend-ntwk # Connects privately to MySQL for database access.
 
-#### define where web files are stored on persistent volume ####
+    ##### Persistent Storage Configuration #####
     volumes:
-      - ${config}/word:/var/www/html
+      - ${config}/word:/var/www/html # Stores WordPress site files persistently.
 
-#### docker secrets for password storage ####
+    ##### Database Connection Configuration #####
     environment:
-      WORDPRESS_DB_HOST: mysql:3306
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: /run/secrets/db_password
-      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_HOST: mysql:3306 # Specifies the MySQL database hostname and port.
+      WORDPRESS_DB_USER: wordpress # Uses the dedicated database user.
+      WORDPRESS_DB_PASSWORD: /run/secrets/db_password # Securely retrieves password from Docker secrets.
+      WORDPRESS_DB_NAME: wordpress # Defines the primary database name.
 
-#### list secrets referenced for website in compose file ###
+    ##### Secret Management #####
     secrets:
-      - db_password
+      - db_password # References externally stored user password secret.
 
-#### docker swarm depoy instructions, labels for homepage presentation ####
+    ##### Deployment Configuration #####
     deploy:
       labels:
-        - homepage.group=Productivity
-        - homepage.name=Wordpress
-        - homepage.icon=wordpress.png
-        - homepage.href=https://stevenfmeyer.me
-        - homepage.description=my personal blog
-        - com.centurylinklabs.watchtower.enable: "false"
-      replicas: 1
+        - homepage.group=Productivity # Groups WordPress under "Productivity" in the dashboard.
+        - homepage.name=WordPress # Sets display name for easy identification.
+        - homepage.icon=wordpress.png # Assigns a recognizable icon.
+        - homepage.href=https://stevenfmeyer.me # Provides direct access via dashboard.
+        - homepage.description=My personal blog # Short description for dashboard entry.
+        - com.centurylinklabs.watchtower.enable="false" # Disables automated updates via Watchtower.
+
+      replicas: 1 # Runs a single WordPress instance—scale for redundancy.
       restart_policy:
-        condition: on-failure
+        condition: on-failure # Ensures service restarts only upon failure.
 
-#### tell docker to spin up database first ####
+    ##### Service Dependencies #####
     depends_on:
-      - mysql
+      - mysql # Ensures MySQL starts before WordPress.
 
-#### secrects file is external to compose file ####
+##### Define External Secret Storage #####
 secrets:
-   db_password:
-     external: true
-   db_root_password:
-     external: true
+  db_password:
+    external: true # Retrieves the database password from an external secret manager.
+  db_root_password:
+    external: true # Retrieves the root password from an external secret manager.
 
+##### Persistent Storage Definitions #####
 volumes:
-  sql-data:
+  sql-data: # Defines persistent storage for MySQL database.
 
-#### define network behaviour ####
+##### Network Configuration #####
 networks:
   backend-ntwk:
-    external: false
+    external: false # Private backend network for database communication.
   frontend-ntwk:
-    external: true
+    external: true # External frontend network for web hosting.
