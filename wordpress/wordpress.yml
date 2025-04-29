@@ -1,0 +1,92 @@
+version: '3.8'
+services:
+
+#### establish database instance #### 
+  mysql:
+    image: mysql:latest
+
+#### Create a private network for the web front end to talk to database ####
+    networks:
+      - backend-ntwk
+
+#### define where database is stored on persistent volume ####
+    volumes:
+      - ${config}/word/sql-data1:/var/lib/mysql
+
+#### docker secrets for passwords storage ####
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: /run/secrets/db_password
+
+#### list secrets referenced for database in compose file ###
+    secrets:
+      - db_root_password
+      - db_password
+
+#### docker swarm depoy instructions ####
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        
+#### establish web instance #### 
+  wordpress:
+    image: wordpress:latest
+    ports:
+      - "8081:80"
+
+#### define both the private network for database communication and an external network for web hosting ####
+    networks:
+      - frontend-ntwk
+      - backend-ntwk
+
+#### define where web files are stored on persistent volume ####
+    volumes:
+      - ${config}/word:/var/www/html
+
+#### docker secrets for password storage ####
+    environment:
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: /run/secrets/db_password
+      WORDPRESS_DB_NAME: wordpress
+
+#### list secrets referenced for website in compose file ###
+    secrets:
+      - db_password
+
+#### docker swarm depoy instructions, labels for homepage presentation ####
+    deploy:
+      labels:
+        - homepage.group=Productivity
+        - homepage.name=Wordpress
+        - homepage.icon=wordpress.png
+        - homepage.href=https://stevenfmeyer.me
+        - homepage.description=my personal blog
+        - com.centurylinklabs.watchtower.enable: "false"
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+#### tell docker to spin up database first ####
+    depends_on:
+      - mysql
+
+#### secrects file is external to compose file ####
+secrets:
+   db_password:
+     external: true
+   db_root_password:
+     external: true
+
+volumes:
+  sql-data:
+
+#### define network behaviour ####
+networks:
+  backend-ntwk:
+    external: false
+  frontend-ntwk:
+    external: true
