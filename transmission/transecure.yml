@@ -1,31 +1,71 @@
+version: "3.9" # Specifies the Docker Compose file format.
+
 services:
+
+  ##### Define the Transmission VPN Service #####
   transmission-openvpn:
+    image: haugene/transmission-openvpn # Uses Transmission with OpenVPN for secure torrent downloads.
+
+    ##### Privileged Capabilities #####
     cap_add:
-      - NET_ADMIN
+      - NET_ADMIN # Grants network administrative capabilities for VPN configuration.
+
+    ##### Port Mapping #####
     ports:
-      - 9091:9091
+      - 9091:9091 # Maps Transmission's web UI port for access.
+
+    ##### Persistent Storage Configuration #####
     volumes:
-      - ${data}:/data
-      - ${config}/transmission:/config
+      - ${data}:/data # Stores downloaded files persistently.
+      - ${config}/transmission:/config # Keeps Transmission configuration persistent.
+
+    ##### VPN Configuration #####
     environment:
-      - OPENVPN_PROVIDER=NordVPN
-      - OPENVPN_CONFIG=${vpnconfig}
-      - OPENVPN_USERNAME=${vpnuser}
-      - OPENVPN_PASSWORD=${vpnpass}
-      - LOCAL_NETWORK=${local}
+      - OPENVPN_PROVIDER=NordVPN # Specifies the VPN provider.
+      - OPENVPN_CONFIG=${vpnconfig} # Defines the VPN configuration profile.
+      - OPENVPN_USERNAME=${vpnuser} # Uses credentials for VPN authentication.
+      - OPENVPN_PASSWORD=${vpnpass} # Securely passes VPN login credentials.
+      - LOCAL_NETWORK=${local} # Defines local network range for direct access.
+
+    ##### Logging Configuration #####
     logging:
-      driver: json-file
+      driver: json-file # Uses JSON file logging format.
       options:
-         max-size: 10m
-    image: haugene/transmission-openvpn
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.transmission.rule=Host(`transmission`)'
-      - 'traefik.http.services.transmission.loadbalancer.server.port=9091'
-      - 'traefik.http.routers.transmission.entrypoints=web'
-      - homepage.group=Media
-      - homepage.name=transmission
-      - homepage.icon=transmission.png
-      - homepage.href=http://transmission/
-      - homepage.description=downloader-vpn
-      - homepage.weight=5
+        max-size: 10m # Restricts log file size to 10MB to prevent excessive disk usage.
+
+    ##### Deployment Configuration #####
+    deploy:
+      mode: replicated # Ensures the service can run multiple instances if required.
+      replicas: 1 # Runs a single instance—adjust for scalability.
+      restart_policy:
+        condition: on-failure # Restarts the service only if it fails.
+        delay: 5s # Waits 5 seconds before attempting a restart.
+        max_attempts: 3 # Limits restart attempts to prevent loops.
+      resources:
+        limits:
+          cpus: "0.50" # Restricts CPU usage to prevent overutilization.
+          memory: "512M" # Caps memory usage at 512MB.
+        reservations:
+          cpus: "0.25" # Ensures at least 25% of a CPU is available.
+          memory: "128M" # Guarantees a minimum of 128MB memory allocation.
+
+      ##### Reverse Proxy Labels for Traefik #####
+      labels:
+        - "traefik.enable=true" # Enables Traefik for routing requests efficiently.
+        - "traefik.http.routers.transmission.rule=Host(`transmission`)" # Defines hostname routing within the network.
+        - "traefik.http.services.transmission.loadbalancer.server.port=9091" # Specifies the internal service port for load balancing.
+        - "traefik.http.routers.transmission.entrypoints=web" # Uses HTTP entrypoint—consider enabling HTTPS for security.
+
+      ##### Homepage Dashboard Labels #####
+        - "homepage.group=Media" # Groups Transmission under "Media" in the dashboard.
+        - "homepage.name=Transmission" # Sets display name for easy identification.
+        - "homepage.icon=transmission.png" # Assigns a recognizable icon.
+        - "homepage.href=http://transmission/" # Provides direct access via the dashboard.
+        - "homepage.description=Downloader with VPN" # Short description for dashboard entry.
+        - "homepage.weight=5" # Defines weight for ordering in the dashboard.
+
+##### Network Definitions #####
+networks:
+  traefik-public:
+    external: true # Uses an externally created Traefik network for reverse proxy integration.
+
