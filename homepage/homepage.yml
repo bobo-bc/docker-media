@@ -1,19 +1,35 @@
 version: "3.7"
 
 services:
+
+#### define the service #####
   homepage:
     image: ghcr.io/benphelps/homepage:latest
-    container_name: homepage
+
+#### assign a free port ####
     ports:
       - 3005:3000
+
+#### mount volunes for config and to meter other storage volumes, add docker.sock to automate ####    
     volumes:
       - /mnt/docker-storage/homepage:/app/config
       - /mnt/nfs/data:/data
       - /var/run/docker.sock:/var/run/docker.sock:ro
+
+### assign to traefik network for reverse proxy ####    
     networks:
       - traefik-public
+
+### define deployment ####      
     deploy:
+      replicas: 2    
       labels:
+      # - homepage dashboard labels #
+        - homepage.group=System Tools
+        - homepage.name=Homepage
+        - homepage.icon=Homepage.png
+        - homepage.description=dashboard
+        # simple traefik reverse proxy for internal DNS
         - traefik.enable=true
         - traefik.http.routers.homepage.rule=Host(`homepage`)
         - traefik.http.routers.homepage.entrypoints=web
