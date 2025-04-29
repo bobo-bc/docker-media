@@ -1,56 +1,61 @@
-version: "3.9"
+version: "3.9" # Defines the Docker Compose file version.
 
 services:
-
-#### define the service ####
+  ### Dozzle Service - Lightweight Log Viewer ###
   dozzle:
-    image: amir20/dozzle:latest # Pin the version if necessary
+    image: amir20/dozzle:latest # Pin the version if necessary to ensure stability.
 
-#### tell dozzle that it is in a swarm ####    
+    ### Environment Variables ###
     environment:
-      - DOZZLE_MODE=swarm
+      - DOZZLE_MODE=swarm # Enables Swarm Mode for auto-discovery of containers.
 
-#### read access to docker.sock for automated discovery, map config to persistent storage glusterfs ####     
+    ### Storage & Socket Access ###
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ${config}/dozzle:/config:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro # Read-only access to monitor container logs.
+      - ${config}/dozzle:/config:rw # Persistent configuration storage (ensure GlusterFS permissions).
 
-### reassign a free port ####    
+    ### Port Mapping ###
     ports:
-      - "8083:8080"
+      - "8083:8080" # Maps a free host port (8083) to Dozzle’s container port (8080).
 
-####put on traefik network for reverse proxy #####      
+    ### Network Configuration ###
     networks:
-      - traefik-public
+      - traefik-public # Connects service to the shared Traefik reverse proxy network.
+
+    ### Deployment Configuration ###
     deploy:
-      mode: global
+      mode: global # Runs Dozzle on every node in the Swarm.
       labels:
-        # simple traefik labels for internal name resolution
+        # Enables Traefik routing for internal service discovery
         - 'traefik.enable=true'
-        - 'traefik.http.routers.dozzle.rule=Host(`dozzle`)' # Use proper FQDN
-        - 'traefik.http.services.dozzle.loadbalancer.server.port=8080'
-        - 'traefik.http.routers.dozzle.entrypoints=web'
-        # homepage labels
+        - 'traefik.http.routers.dozzle.rule=Host(`dozzle`)' # Ensure proper FQDN for external access.
+        - 'traefik.http.services.dozzle.loadbalancer.server.port=8080' # Defines the internal service port.
+        - 'traefik.http.routers.dozzle.entrypoints=web' # Uses HTTP (consider using websecure if TLS is needed).
+
+        # Homepage Dashboard Integration
         - homepage.group=System Tools
         - homepage.name=Dozzle
         - homepage.icon=https://developer.asustor.com/uploadIcons/0020_117518_1660879946_dozzle_256.png
         - homepage.href=http://dozzle/
         - homepage.description=Stats
 
-  ### contain the resources and enable logging ####
+    ### Resource Constraints ###
       resources:
         limits:
-          cpus: "0.50"
-          memory: "256M"
+          cpus: "0.50" # Limits usage to 50% of a CPU core—adjust if needed.
+          memory: "256M" # Caps memory usage at 256MB to prevent excessive consumption.
         reservations:
-          cpus: "0.25"
-          memory: "128M"
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
+          cpus: "0.25" # Guarantees 25% CPU availability—helps with stability.
+          memory: "128M" # Ensures a minimum of 128MB is available for the container.
 
+    ### Logging Configuration ###
+    logging:
+      driver: json-file # Logs are stored locally—consider integrating with a central logging service.
+      options:
+        max-size: "10m" # Limits log size per container to **10MB** to prevent excessive disk usage.
+        max-file: "3" # Retains the **last 3 log files** to avoid disk clutter.
+
+### External Network Definition ###
 networks:
   traefik-public:
-    external: true
+    external: true # Uses an external Traefik network for reverse proxy across multiple services.
