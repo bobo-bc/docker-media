@@ -1,96 +1,131 @@
-version: '3.3'
+version: "3.3" # Specifies the Docker Compose file format.
 
 services:
+
+  ##### Define the Swarmpit Monitoring Service #####
   app:
-    image: swarmpit/swarmpit:latest
+    image: swarmpit/swarmpit:latest # Uses the latest Swarmpit image for container monitoring and management.
+
+    ##### Environment Configuration #####
     environment:
-      - SWARMPIT_DB=http://db:5984
-      - SWARMPIT_INFLUXDB=http://influxdb:8086
+      - SWARMPIT_DB=http://db:5984 # Defines the CouchDB database URL for Swarmpit.
+      - SWARMPIT_INFLUXDB=http://influxdb:8086 # Configures InfluxDB for collecting monitoring metrics.
+
+    ##### Persistent Storage Configuration #####
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro # Provides read-only access to Docker socket for container status tracking.
+
+    ##### Port Mapping #####
     ports:
-      - 8089:8080
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:888"]
-      interval: 60s
-      timeout: 10s
-      retries: 3
+      - 8089:8080 # Maps container port 8080 to host port 8089 for web access.
+
+    ##### Network Configuration #####
     networks:
-      - net
+      - net # Connects Swarmpit to a private overlay network.
+
+    ##### Deployment Configuration #####
     deploy:
-      replicas: 1
+      mode: replicated # Ensures the service runs with defined replication settings.
+      replicas: 1 # Runs a single instance—adjust if horizontal scaling is needed.
       restart_policy:
-        condition: on-failure
+        condition: on-failure # Ensures service restarts only upon failure.
       resources:
         limits:
-          cpus: '0.50'
-          memory: 1024M
+          cpus: "0.50" # Caps CPU usage to prevent resource exhaustion.
+          memory: 1024M # Restricts memory usage to 1GB.
         reservations:
-          cpus: '0.25'
-          memory: 512M
-      labels:    
-        - homepage.group=System Tools
-        - homepage.name=Swarmpit
-        - homepage.icon=swarmpit.png
-        - homepage.href=http://10.0.0.20:8089
-        - homepage.description=monitoring
+          cpus: "0.25" # Guarantees at least 25% CPU availability.
+          memory: 512M # Ensures sufficient memory for stability.
 
-  db:
-    image: couchdb:2.3.0
-    volumes:
-      - /mnt/docker-storage/swarmpit/db-data:/opt/couchdb/data
-    networks:
-      - net
-    deploy:
-      resources:
-        limits:
-          cpus: '0.30'
-          memory: 256M
-        reservations:
-          cpus: '0.15'
-          memory: 128M
-
-  influxdb:
-    image: influxdb:1.8
-    volumes:
-      - /mnt/docker-storage/swarmpit/influx-data:/var/lib/influxdb
-    networks:
-      - net
-    deploy:
-      resources:
-        limits:
-          cpus: '0.60'
-          memory: 512M
-        reservations:
-          cpus: '0.30'
-          memory: 128M
-
-  agent:
-    image: swarmpit/agent:latest
-    environment:
-      - DOCKER_API_VERSION=1.35
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    networks:
-      - net
-    deploy:
-      mode: global
+      ##### Homepage Dashboard Labels #####
       labels:
-        swarmpit.agent: 'true'
+        - homepage.group=System Tools # Groups Swarmpit under "System Tools" in the dashboard.
+        - homepage.name=Swarmpit # Sets the display name for easy identification.
+        - homepage.icon=swarmpit.png # Assigns an icon for quick recognition.
+        - homepage.href=http://10.0.0.20:8089 # Provides direct access via the dashboard.
+        - homepage.description=Monitoring # Short description for dashboard entry.
+
+  ##### Define the CouchDB Database for Swarmpit #####
+  db:
+    image: couchdb:2.3.0 # Uses CouchDB as the backend database for Swarmpit.
+
+    ##### Persistent Storage Configuration #####
+    volumes:
+      - /mnt/docker-storage/swarmpit/db-data:/opt/couchdb/data # Stores CouchDB data persistently.
+
+    ##### Network Configuration #####
+    networks:
+      - net # Connects CouchDB to the private overlay network.
+
+    ##### Deployment Configuration #####
+    deploy:
       resources:
         limits:
-          cpus: '0.10'
-          memory: 64M
+          cpus: "0.30" # Restricts CPU usage to prevent excessive consumption.
+          memory: 256M # Caps memory usage for efficiency.
         reservations:
-          cpus: '0.05'
-          memory: 32M
+          cpus: "0.15" # Ensures a minimum of 15% CPU availability.
+          memory: 128M # Guarantees baseline memory for stability.
 
+  ##### Define the InfluxDB Service for Metric Storage #####
+  influxdb:
+    image: influxdb:1.8 # Uses InfluxDB to store monitoring metrics.
+
+    ##### Persistent Storage Configuration #####
+    volumes:
+      - /mnt/docker-storage/swarmpit/influx-data:/var/lib/influxdb # Stores InfluxDB data persistently.
+
+    ##### Network Configuration #####
+    networks:
+      - net # Connects InfluxDB to the private overlay network.
+
+    ##### Deployment Configuration #####
+    deploy:
+      resources:
+        limits:
+          cpus: "0.60" # Restricts CPU usage to prevent overloading.
+          memory: 512M # Caps memory usage at 512MB.
+        reservations:
+          cpus: "0.30" # Ensures a minimum of 30% CPU availability.
+          memory: 128M # Guarantees baseline memory for stability.
+
+  ##### Define the Swarmpit Agent #####
+  agent:
+    image: swarmpit/agent:latest # Uses the latest Swarmpit agent image for collecting data.
+
+    ##### Environment Configuration #####
+    environment:
+      - DOCKER_API_VERSION=1.35 # Sets the Docker API version for compatibility.
+
+    ##### Persistent Storage Configuration #####
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro # Provides read-only access to the Docker socket for monitoring.
+
+    ##### Network Configuration #####
+    networks:
+      - net # Connects the agent to the private overlay network.
+
+    ##### Deployment Configuration #####
+    deploy:
+      mode: global # Ensures this service runs on all nodes.
+      labels:
+        - swarmpit.agent=true # Marks this service as a Swarmpit monitoring agent.
+      resources:
+        limits:
+          cpus: "0.10" # Restricts CPU usage for minimal impact.
+          memory: 64M # Caps memory usage to 64MB.
+        reservations:
+          cpus: "0.05" # Guarantees a minimum of 5% CPU availability.
+          memory: 32M # Ensures baseline memory for proper functionality.
+
+##### Network Definitions #####
 networks:
   net:
-    driver: overlay
+    driver: overlay # Uses overlay networking for Swarm service communication.
 
+##### Persistent Storage Definitions #####
 volumes:
   db-data:
-    driver: local
+    driver: local # Stores CouchDB data persistently.
   influx-data:
-    driver: local
+    driver: local # Stores InfluxDB data persistently.
