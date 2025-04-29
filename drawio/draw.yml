@@ -1,53 +1,61 @@
-version: "3.8"
+version: "3.8" # Defines the Docker Compose file format.
 
 services:
 
-#### define the service ####
+  ##### Define the Draw.io Service #####
   drawio:
-    image: jgraph/drawio:latest
+    image: jgraph/drawio:latest # Uses the latest official Draw.io image.
 
-### deployment criteria ####
+    ##### Deployment Configuration #####
     deploy:
-      replicas: 1 # Specify the number of replicas for high availability
+      replicas: 1 # Runs a single instance—adjust if high availability is required.
       restart_policy:
-        condition: on-failure # Better restart control than 'restart: always'
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-      labels:
-        # homepage dashboard labels
-        - homepage.group=Productivity
-        - homepage.name=Drawio
-        - homepage.icon=draw-io.svg
-        - homepage.href=http://10.0.0.20:8086/
-        - homepage.description=drawing tool
-        # simple traefik revers proxy labels
-        - traefik.enable=true   #enable the use of traefik labels for routing.
-        - traefik.http.routers.draw.rule=Host(`draw`)   #local dns setting
-        - traefik.http.routers.draw.entrypoints=web
-        - traefik.http.services.draw.loadbalancer.server.port=8086 
+        condition: on-failure # Ensures service restarts only if a failure occurs.
+        delay: 5s # Waits 5 seconds before attempting a restart.
+        max_attempts: 3 # Limits restart attempts to prevent crash loops.
+        window: 120s # Defines a monitoring window for failure handling.
 
-#### set resource limits ####
+    ##### Service Labels #####
+      labels:
+        # Homepage dashboard integration for visibility
+        - homepage.group=Productivity # Groups Draw.io under 'Productivity' in the dashboard.
+        - homepage.name=Draw.io # Sets display name for easy identification.
+        - homepage.icon=draw-io.svg # Assigns an icon for quick recognition.
+        - homepage.href=http://10.0.0.20:8086/ # Provides direct access via dashboard.
+        - homepage.description=Drawing tool # Brief description of the service.
+
+        # Traefik reverse proxy settings for internal DNS resolution
+        - traefik.enable=true # Enables Traefik for routing requests efficiently.
+        - traefik.http.routers.draw.rule=Host(`draw`) # Defines hostname routing within the network.
+        - traefik.http.routers.draw.entrypoints=web # Uses the HTTP entrypoint (consider securing with HTTPS).
+        - traefik.http.services.draw.loadbalancer.server.port=8086 # Specifies the internal service port.
+
+    ##### Resource Constraints #####
       resources:
         limits:
-          cpus: "0.50"
-          memory: "512M"
+          cpus: "0.50" # Caps CPU usage at 50% to prevent resource exhaustion.
+          memory: "512M" # Restricts container memory usage.
         reservations:
-          cpus: "0.25"
-          memory: "128M"
+          cpus: "0.25" # Guarantees a minimum of 25% CPU availability for stable performance.
+          memory: "128M" # Ensures a baseline memory allocation.
 
-#### assign a free port #####          
+    ##### Port Mapping #####
     ports:
-      - "8086:8080"
+      - "8086:8080" # Maps container port 8080 to host port 8086.
 
-#### use traefik network for local reverse proxy      
-    networks:
-      - traefik-public
+    ##### Environment Variables #####
     environment:
-      DRAWIO_HOME: "/data" # Example environment variable for customization
+      DRAWIO_HOME: "/data" # Sets the default storage directory inside the container.
+
+    ##### Persistent Storage Configuration #####
     volumes:
-      - /mnt/docker-storage/drawio:/data:rw # Persistent storage for data
+      - /mnt/docker-storage/drawio:/data:rw # Ensures data is retained across restarts.
+
+    ##### Network Configuration #####
+    networks:
+      - traefik-public # Connects the service to Traefik for reverse proxy and routing.
 
 networks:
+  ##### External Traefik Network #####
   traefik-public:
-    external: true
+    external: true # Uses a shared Traefik network for service communication.
