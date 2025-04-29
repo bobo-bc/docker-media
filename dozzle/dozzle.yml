@@ -1,30 +1,43 @@
 version: "3.9"
 
 services:
+
+#### define the service ####
   dozzle:
     image: amir20/dozzle:latest # Pin the version if necessary
+
+#### tell dozzle that it is in a swarm ####    
     environment:
       - DOZZLE_MODE=swarm
+
+#### read access to docker.sock for automated discovery, map config to persistent storage glusterfs ####     
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ${config}/dozzle:/config:rw
+
+### reassign a free port ####    
     ports:
       - "8083:8080"
+
+####put on traefik network for reverse proxy #####      
     networks:
       - traefik-public
     deploy:
       mode: global
       labels:
+        # simple traefik labels for internal name resolution
         - 'traefik.enable=true'
         - 'traefik.http.routers.dozzle.rule=Host(`dozzle`)' # Use proper FQDN
         - 'traefik.http.services.dozzle.loadbalancer.server.port=8080'
         - 'traefik.http.routers.dozzle.entrypoints=web'
+        # homepage labels
         - homepage.group=System Tools
         - homepage.name=Dozzle
         - homepage.icon=https://developer.asustor.com/uploadIcons/0020_117518_1660879946_dozzle_256.png
         - homepage.href=http://dozzle/
         - homepage.description=Stats
-        - com.centurylinklabs.watchtower.enable="true"
+
+  ### contain the resources and enable logging ####
       resources:
         limits:
           cpus: "0.50"
