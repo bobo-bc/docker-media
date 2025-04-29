@@ -1,48 +1,73 @@
-version: "3.9"
+version: "3.9" # Specifies the Docker Compose file format.
 
 services:
+
+  ##### Define the Lidarr Service #####
   lidarr:
-    image: lscr.io/linuxserver/lidarr:latest
+    image: lscr.io/linuxserver/lidarr:latest # Uses the latest Lidarr image from LinuxServer.io.
+
+    ##### Environment Configuration #####
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
+      - PUID=${PUID} # Defines the user ID to ensure proper file access.
+      - PGID=${PGID} # Sets the group ID for maintaining correct permissions.
+      - TZ=${TZ} # Configures the timezone for consistency with the host.
+
+    ##### Persistent Storage Configuration #####
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ${config}/lidarr:/config:rw
-      - ${media}/music:/music:ro # Optional, ensure proper permissions
-      - ${data}:/data:rw
+      - /etc/localtime:/etc/localtime:ro # Synchronizes container time with the host system.
+      - ${config}/lidarr:/config:rw # Stores configuration files persistently.
+      - ${media}/music:/music:ro # (Optional) Mounts music library—ensure correct permissions.
+      - ${data}:/data:rw # General persistent storage volume.
+
+    ##### Port Mapping #####
     ports:
-      - "8686:8686"
+      - "8686:8686" # Maps container port 8686 to host port 8686 for external access.
+
+    ##### Network Configuration #####
     networks:
-      - traefik-public
+      - traefik-public # Connects service to Traefik for reverse proxy and routing.
+
+    ##### Deployment Configuration #####
     deploy:
-      mode: replicated
-      replicas: 1 # Increase replicas for high availability if supported
+      mode: replicated # Ensures the service can run multiple instances if needed.
+      replicas: 1 # Runs a single instance—adjust for high availability if required.
+
+      ##### Service Labels #####
       labels:
-        - 'traefik.enable=true'
-        - 'traefik.http.routers.lidarr.rule=Host(`lidarr`)' # Update domain
-        - 'traefik.http.services.lidarr.loadbalancer.server.port=8686'
-        - 'traefik.http.routers.lidarr.entrypoints=web'
-        - homepage.group=Media
-        - homepage.name=Lidarr
-        - homepage.icon=lidarr.png
-        - homepage.href=http://lidarr
-        - homepage.description=Music
-        - homepage.weight=4
-        - com.centurylinklabs.watchtower.enable="true"
+        # Traefik Reverse Proxy Labels
+        - 'traefik.enable=true' # Enables Traefik for routing requests efficiently.
+        - 'traefik.http.routers.lidarr.rule=Host(`lidarr`)' # Defines hostname routing within the network.
+        - 'traefik.http.services.lidarr.loadbalancer.server.port=8686' # Specifies the internal service port.
+        - 'traefik.http.routers.lidarr.entrypoints=web' # Uses HTTP entrypoint—consider HTTPS for security.
+
+        # Homepage Dashboard Labels
+        - homepage.group=Media # Groups service under "Media" in the dashboard.
+        - homepage.name=Lidarr # Sets display name for easy identification.
+        - homepage.icon=lidarr.png # Assigns a recognizable icon.
+        - homepage.href=http://lidarr # Provides direct access via dashboard.
+        - homepage.description=Music # Short description for dashboard entry.
+        - homepage.weight=4 # Defines weight for ordering in dashboard.
+
+        # Automated Updates
+        - com.centurylinklabs.watchtower.enable="true" # Enables automatic updates via Watchtower.
+
+    ##### Restart Policy #####
       restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
+        condition: on-failure # Ensures service restarts only if it crashes.
+        delay: 5s # Waits 5 seconds before attempting a restart.
+        max_attempts: 3 # Limits restart attempts to prevent infinite loops.
+
+    ##### Resource Constraints #####
       resources:
         limits:
-          cpus: "0.50"
-          memory: "512M"
+          cpus: "0.50" # Limits CPU usage to prevent excessive resource consumption.
+          memory: "512M" # Restricts memory usage to 512MB per instance.
         reservations:
-          cpus: "0.25"
-          memory: "128M"
+          cpus: "0.25" # Guarantees at least 25% CPU availability.
+          memory: "128M" # Ensures a baseline memory allocation for stability.
+
+##### Network Definitions #####
 networks:
   traefik-public:
-    external: true
+    external: true # Uses an externally created Traefik network for reverse proxying and service communication.
 
