@@ -1,16 +1,23 @@
 version: "3.9
 services:
+
+##### define the service #####
   tunnel:
     image: cloudflare/cloudflared
     command: tunnel run
+
+#### define deployment critieria and labels, need 2 replicas for high availability #####
+    
     deploy:
       replicas: 2
       labels:
+      # - homepage dashboard labels #
         - homepage.group=Web
         - homepage.name=Cloudflare tunnel
         - homepage.icon=cloudflare.png
         - homepage.description=Secure tunnel
-        - com.centurylinklabs.watchtower.enable="true"
+
+ #### contain the resources ####       
       resources:
         limits:
           cpus: "0.50"
@@ -18,16 +25,22 @@ services:
         reservations:
           cpus: "0.25"
           memory: "128M"
+ 
+ #### provide the token in a docker secret ####         
     environment:
       - TUNNEL_TOKEN_FILE=/run/secrets/TUNNEL_TOKEN
     secrets:
       - TUNNEL_TOKEN
+
+#### define the network, not using traefik for this one ####      
     networks:
       - frontend-ntwk
+
+#### docker secret is external to the compose file, contfigured in Portainer ####      
 secrets:
   TUNNEL_TOKEN:
     external: true
-
+#### defines the network can communicate outside docker ####
 networks:
   frontend-ntwk:
     external: true
