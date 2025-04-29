@@ -1,46 +1,48 @@
-version: "3.9
+version: "3.9" # Defines the Docker Compose file format.
+
 services:
 
-##### define the service #####
+  ### Cloudflare Tunnel Service ###
   tunnel:
-    image: cloudflare/cloudflared
-    command: tunnel run
+    image: cloudflare/cloudflared # Uses Cloudflare's official tunnel image.
+    command: tunnel run # Runs Cloudflare tunnel mode to create a secure connection.
 
-#### define deployment critieria and labels, need 2 replicas for high availability #####
-    
+    ### Deployment Configuration (High Availability) ###
     deploy:
-      replicas: 2
+      replicas: 2 # Runs two instances for redundancy and reliability.
       labels:
-      # - homepage dashboard labels #
-        - homepage.group=Web
-        - homepage.name=Cloudflare tunnel
-        - homepage.icon=cloudflare.png
-        - homepage.description=Secure tunnel
+        # Homepage dashboard integration for easy access.
+        - homepage.group=Web # Categorizes the service under 'Web'.
+        - homepage.name=Cloudflare tunnel # Sets display name in the dashboard.
+        - homepage.icon=cloudflare.png # Uses a recognizable Cloudflare icon.
+        - homepage.description=Secure tunnel # Brief description of the service.
 
- #### contain the resources ####       
+    ### Resource Allocation ###
       resources:
         limits:
-          cpus: "0.50"
-          memory: "256M"
+          cpus: "0.50" # Caps CPU usage to prevent resource exhaustion.
+          memory: "256M" # Restricts memory usage to 256MB per instance.
         reservations:
-          cpus: "0.25"
-          memory: "128M"
- 
- #### provide the token in a docker secret ####         
+          cpus: "0.25" # Ensures 25% of a CPU core is always available.
+          memory: "128M" # Reserves a minimum of 128MB of RAM for stability.
+
+    ### Secure Authentication Using Docker Secrets ###
     environment:
-      - TUNNEL_TOKEN_FILE=/run/secrets/TUNNEL_TOKEN
+      - TUNNEL_TOKEN_FILE=/run/secrets/TUNNEL_TOKEN # Uses a Docker secret instead of exposing plaintext credentials.
     secrets:
-      - TUNNEL_TOKEN
+      - TUNNEL_TOKEN # External secret managed in Portainer.
 
-#### define the network, not using traefik for this one ####      
+    ### Networking Configuration ###
     networks:
-      - frontend-ntwk
+      - frontend-ntwk # Connects the tunnel service to the frontend network.
 
-#### docker secret is external to the compose file, contfigured in Portainer ####      
+### **External Secrets Management** ###
 secrets:
   TUNNEL_TOKEN:
-    external: true
-#### defines the network can communicate outside docker ####
+    external: true # The secret is configured outside this file (in Portainer).
+
+### **External Network Definition** ###
 networks:
   frontend-ntwk:
-    external: true
+    external: true # Allows communication with services **outside Docker** (not using Traefik).
+
