@@ -1,8 +1,12 @@
 version: "3.8"
 
 services:
+
+##### define the service #####
   cup:
     image: ghcr.io/sergi0g/cup:latest
+
+#### define deployment critieria ####    
     deploy:
 #      mode: replicated
       replicas: 1
@@ -14,6 +18,8 @@ services:
         condition: on-failure
         delay: 5s
         max_attempts: 3
+
+     #### contain the resources ####       
       resources:
         limits:
           cpus: "0.50"
@@ -22,6 +28,7 @@ services:
           cpus: "0.25"
           memory: "128M"
       labels:
+       # traefik labels for simple internal reverse proxy
         - traefik.enable=true
         - traefik.http.routers.cup.rule=Host(`cup`)
         - traefik.http.services.cup.loadbalancer.server.port=8000
@@ -31,41 +38,30 @@ services:
         - homepage.name=Cup
         - homepage.icon=https://cdn3.iconfinder.com/data/icons/kitchen-45/512/neonsign_kitchen06-1024.png
         - homepage.href=http://10.0.0.20:8001
-     #   - homepage.ping=http://10.0.0.20:8001
         - homepage.description=Checks for container updates
-        - homepage.widget.type=customapi
-        - homepage.widget.url=http://10.0.0.20:8001/api/v3/json
-        - homepage.widget.mappings[0].label=Monitoring
-        - homepage.widget.mappings[0].field.metrics=monitored_images
-        - homepage.widget.mappings[0].format=number
-        - homepage.widget.mappings[1].label=Up to date
-        - homepage.widget.mappings[1].field.metrics=up_to_date
-        - homepage.widget.mappings[1].format=number
-        - homepage.widget.mappings[2].label=Updates
-        - homepage.widget.mappings[2].field.metrics=updates_available
-        - homepage.widget.mappings[2].format=number
-        - com.centurylinklabs.watchtower.enable: "true"
+
+#### command to run the service #####
     command: serve
+
+#### reassign an unused port #####    
     ports:
       - "8001:8000"
+
+#### allow a read of docker so for auto discovery, and cup.json to store data ####
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro # Read-only for better security
       - /mnt/docker-storage/cup/cup.json:/config/cup.json
+
+#### define traefik network to DNS resolve #####      
     networks:
       - traefik-public
- #   healthcheck:
- #     test: ["CMD", "curl", "-f", "http://10.0.0.20:8001/health"]
- #     interval: 30s
- #     timeout: 10s
- #     retries: 3
- #   environment:
- #     CUP_SWARM_URL: "http://10.0.0.20:8001"
+
+#### using root to get it running internally for now, will investigate and update later ####      
     user: "0:0" # Use a non-root user for improved security
 
 networks:
   traefik-public:
- # cup-net:
- #   driver: overlay
+
 
 
 
