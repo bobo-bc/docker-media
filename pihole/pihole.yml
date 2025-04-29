@@ -1,43 +1,63 @@
+version: "3.9" # Specifies the Docker Compose file format.
+
 services:
+
+  ##### Define the Pi-hole DNS Filtering Service #####
   pihole:
-    image: pihole/pihole
+    image: pihole/pihole # Uses the official Pi-hole image to provide network-wide ad-blocking.
+
+    ##### Deployment Configuration #####
     deploy:
-      replicas: 1
+      replicas: 1 # Runs a single instance—adjust for high availability if needed.
       placement:
-        constraints: [node.hostname == node2]
+        constraints: [node.hostname == node2] # Ensures service runs specifically on node2.
+
+      ##### Resource Allocation #####
       resources:
         reservations:
-          memory: 128M
+          memory: 128M # Guarantees 128MB of RAM is available for stable performance.
         limits:
-          memory: 256M
+          memory: 256M # Restricts memory usage to 256MB to prevent excessive consumption.
+
+      ##### Service Labels #####
       labels:
-        - homepage.group=System Tools
-        - homepage.name=PiHole
-        - homepage.icon=pi-hole.png
-        - homepage.href=http://pihole/admin
-        - homepage.description=DNS server
+        # Homepage dashboard integration for visibility and organization
+        - homepage.group=System Tools # Groups Pi-hole under "System Tools" for easier navigation.
+        - homepage.name=Pi-hole # Sets display name in the dashboard.
+        - homepage.icon=pi-hole.png # Assigns a recognizable icon for quick identification.
+        - homepage.href=http://pihole/admin # Provides direct access to the admin interface.
+        - homepage.description=DNS server # Brief description of Pi-hole’s functionality.
+
+    ##### Port Mapping #####
     ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "85:80/tcp"
+      - "53:53/tcp" # Maps DNS port (TCP) for external DNS queries.
+      - "53:53/udp" # Maps DNS port (UDP) to handle fast query requests.
+      - "85:80/tcp" # Maps HTTP port for the Pi-hole web admin interface.
+
+    ##### Environment Variables #####
     environment:
-      TZ: 'America/Vancouver'
-      WEBPASSWORD: 'Hurts2p33'
-      # this supposedly reverts to previous behaviour to support cap_add
-      FTL_CMD: 'debug'
-      DNSMASQ_LISTENING: 'all'
+      TZ: 'America/Vancouver' # Sets timezone for consistent logging and scheduling.
+      WEBPASSWORD: 'Hurts2p33' # Defines the administrator password for Pi-hole’s web interface.
+      FTL_CMD: 'debug' # Enables debugging mode—useful for troubleshooting.
+      DNSMASQ_LISTENING: 'all' # Ensures Pi-hole listens on all interfaces for DNS queries.
+
+    ##### Persistent Storage Configuration #####
     volumes:
-      - /mnt/docker-storage/pihole/pihole-data:/etc/pihole/
-      - /mnt/docker-storage/pihole/pihole-dnsmasq:/etc/dnsmasq.d/
+      - /mnt/docker-storage/pihole/pihole-data:/etc/pihole/ # Stores configuration and DNS blocklists persistently.
+      - /mnt/docker-storage/pihole/pihole-dnsmasq:/etc/dnsmasq.d/ # Stores DNS resolver settings.
+
+    ##### DNS Configuration #####
     dns:
-      - 127.0.0.1
-      - 9.9.9.9
+      - 127.0.0.1 # Forces Pi-hole to use itself as the primary DNS resolver.
+      - 9.9.9.9 # Uses Quad9 for secure DNS resolution—consider alternatives like Cloudflare (1.1.1.1) or Google (8.8.8.8).
 
+    ##### Network Configuration #####
     networks:
-      - pihole
-      - traefik-public
+      - pihole # Defines an isolated network for DNS filtering.
+      - traefik-public # Connects Pi-hole to the shared Traefik reverse proxy network.
 
+##### Network Definitions #####
 networks:
-  pihole:
+  pihole: # Isolated network for Pi-hole’s internal processes.
   traefik-public:
-    external: true
+    external: true # Uses an externally created Traefik network for reverse proxy integration.
