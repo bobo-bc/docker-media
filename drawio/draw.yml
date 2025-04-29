@@ -1,8 +1,12 @@
 version: "3.8"
 
 services:
+
+#### define the service ####
   drawio:
     image: jgraph/drawio:latest
+
+### deployment criteria ####
     deploy:
       replicas: 1 # Specify the number of replicas for high availability
       restart_policy:
@@ -11,16 +15,19 @@ services:
         max_attempts: 3
         window: 120s
       labels:
+        # homepage dashboard labels
         - homepage.group=Productivity
         - homepage.name=Drawio
         - homepage.icon=draw-io.svg
         - homepage.href=http://10.0.0.20:8086/
         - homepage.description=drawing tool
-        - com.centurylinklabs.watchtower.enable="true"
+        # simple traefik revers proxy labels
         - traefik.enable=true   #enable the use of traefik labels for routing.
         - traefik.http.routers.draw.rule=Host(`draw`)   #local dns setting
         - traefik.http.routers.draw.entrypoints=web
         - traefik.http.services.draw.loadbalancer.server.port=8086 
+
+#### set resource limits ####
       resources:
         limits:
           cpus: "0.50"
@@ -28,8 +35,12 @@ services:
         reservations:
           cpus: "0.25"
           memory: "128M"
+
+#### assign a free port #####          
     ports:
       - "8086:8080"
+
+#### use traefik network for local reverse proxy      
     networks:
       - traefik-public
     environment:
