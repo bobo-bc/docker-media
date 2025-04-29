@@ -1,42 +1,44 @@
-version: "3.7"
+version: "3.7" # Specifies the Docker Compose file format.
 
 services:
 
-#### define the service #####
+  ##### Define the Homepage Service #####
   homepage:
-    image: ghcr.io/benphelps/homepage:latest
+    image: ghcr.io/benphelps/homepage:latest # Uses the latest official Homepage image.
 
-#### assign a free port ####
+    ##### Port Mapping #####
     ports:
-      - 3005:3000
+      - 3005:3000 # Maps container port 3000 to host port 3005 for external access.
 
-#### mount volunes for config and to meter other storage volumes, add docker.sock to automate ####    
+    ##### Persistent Storage Configuration #####
     volumes:
-      - /mnt/docker-storage/homepage:/app/config
-      - /mnt/nfs/data:/data
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /mnt/docker-storage/homepage:/app/config # Stores configuration data persistently.
+      - /mnt/nfs/data:/data # Mounts additional storage for shared access.
+      - /var/run/docker.sock:/var/run/docker.sock:ro # Read-only access for automated container discovery.
 
-### assign to traefik network for reverse proxy ####    
+    ##### Network Configuration #####
     networks:
-      - traefik-public
+      - traefik-public # Connects service to Traefik reverse proxy for routing.
 
-### define deployment ####      
+    ##### Deployment Configuration #####
     deploy:
-      replicas: 2    
+      replicas: 2 # Runs two instances for high availability.
+
+      ##### Service Labels #####
       labels:
-      # - homepage dashboard labels #
-        - homepage.group=System Tools
-        - homepage.name=Homepage
-        - homepage.icon=Homepage.png
-        - homepage.description=dashboard
-        # simple traefik reverse proxy for internal DNS
-        - traefik.enable=true
-        - traefik.http.routers.homepage.rule=Host(`homepage`)
-        - traefik.http.routers.homepage.entrypoints=web
-        - traefik.http.services.homepage.loadbalancer.server.port=3005
+        # Homepage dashboard integration for visibility
+        - homepage.group=System Tools # Groups Homepage under 'System Tools' for organization.
+        - homepage.name=Homepage # Sets display name in the dashboard.
+        - homepage.icon=Homepage.png # Defines a recognizable icon.
+        - homepage.description=Dashboard # Brief description of the service.
+
+        # Traefik reverse proxy settings for internal DNS resolution
+        - traefik.enable=true # Enables Traefik for routing requests efficiently.
+        - traefik.http.routers.homepage.rule=Host(`homepage`) # Defines hostname routing within the network.
+        - traefik.http.routers.homepage.entrypoints=web # Uses HTTP entrypoint—consider securing with HTTPS.
+        - traefik.http.services.homepage.loadbalancer.server.port=3005 # Specifies the internal service port.
+
+##### Network Definitions #####
 networks:
   traefik-public:
-    external: true
-
-
-
+    external: true # Uses an externally created Traefik network for reverse proxy.
