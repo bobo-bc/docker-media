@@ -1,50 +1,72 @@
-version: "3.9"
+version: "3.9" # Specifies the Docker Compose file format.
 
 services:
+
+  ##### Define the Kavita Service #####
   kavita:
-    image: lscr.io/linuxserver/kavita:latest
+    image: lscr.io/linuxserver/kavita:latest # Uses the latest Kavita image from LinuxServer.io.
+
+    ##### Environment Configuration #####
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
+      - PUID=${PUID} # Sets the user ID for file permissions.
+      - PGID=${PGID} # Defines the group ID to maintain proper access.
+      - TZ=${TZ} # Configures the timezone setting for the container.
+
+    ##### Persistent Storage Configuration #####
     volumes:
-      - ${config}/kavita:/config:rw
-      - ${media}:/data:rw # optional, ensure proper permissions
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${config}/kavita:/config:rw # Stores configuration files persistently.
+      - ${media}:/data:rw # (Optional) Stores media content—ensure correct permissions.
+      - /var/run/docker.sock:/var/run/docker.sock:ro # Read-only access to the Docker socket for monitoring.
+
+    ##### Port Mapping #####
     ports:
-      - "5000:5000"
+      - "5000:5000" # Maps container port 5000 to host port 5000 for external access.
+
+    ##### Network Configuration #####
     networks:
-      - traefik-public
+      - traefik-public # Connects service to Traefik for reverse proxy management.
+
+    ##### Deployment Configuration #####
     deploy:
-      mode: replicated
-      replicas: 1 # Increase replicas for high availability if supported
+      mode: replicated # Ensures the service can run multiple instances if needed.
+      replicas: 1 # Runs a single instance—adjust for high availability if required.
+
+      ##### Traefik Reverse Proxy Labels #####
       labels:
-        - 'traefik.enable=true'
-        - 'traefik.http.routers.kavita.rule=Host(`read.stevenfmeyer.me, read`)' # Update domain
-        - 'traefik.http.services.kavita.loadbalancer.server.port=5000'
-        - 'traefik.http.routers.kavita.entrypoints=websecure'
-        - 'traefik.http.routers.kavita.tls.certresolver=myresolver'
-        - homepage.group=Media
-        - homepage.name=Kavita
-        - homepage.icon=kavita.png
-        - homepage.href=http://read/
-        - homepage.description=Reader
-        - homepage.weight=100
-        - com.centurylinklabs.watchtower.enable="true"
+        - 'traefik.enable=true' # Enables Traefik routing for this service.
+        - 'traefik.http.routers.kavita.rule=Host(`read.stevenfmeyer.me, read`)' # Defines hostname routing within the network.
+        - 'traefik.http.services.kavita.loadbalancer.server.port=5000' # Specifies internal service port.
+        - 'traefik.http.routers.kavita.entrypoints=websecure' # Uses secure HTTPS entrypoint.
+        - 'traefik.http.routers.kavita.tls.certresolver=myresolver' # Sets up TLS certificate resolver.
+
+      ##### Homepage Dashboard Labels #####
+        - homepage.group=Media # Groups service under "Media" in the dashboard.
+        - homepage.name=Kavita # Sets the display name.
+        - homepage.icon=kavita.png # Assigns a recognizable icon.
+        - homepage.href=http://read/ # Provides direct access via dashboard.
+        - homepage.description=Reader # Short description for dashboard entry.
+        - homepage.weight=100 # Defines weight for ordering in dashboard.
+
+      ##### Automated Updates #####
+        - com.centurylinklabs.watchtower.enable="true" # Enables automatic updates via Watchtower.
+
+    ##### Resource Constraints #####
       resources:
         limits:
-          cpus: "0.50"
-          memory: "512M"
+          cpus: "0.50" # Limits CPU usage to prevent excessive resource consumption.
+          memory: "512M" # Restricts memory usage to 512MB per instance.
         reservations:
-          cpus: "0.25"
-          memory: "128M"
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
+          cpus: "0.25" # Guarantees at least 25% CPU availability.
+          memory: "128M" # Ensures a baseline memory allocation for stability.
 
+    ##### Restart Policy #####
+      restart_policy:
+        condition: on-failure # Ensures service restarts only if it crashes.
+        delay: 5s # Waits 5 seconds before attempting a restart.
+        max_attempts: 3 # Limits restart attempts to prevent infinite loops.
+        window: 120s # Defines monitoring window for failure handling.
+
+##### Network Definitions #####
 networks:
   traefik-public:
-    external: true
-
+    external: true # Uses an externally created Traefik network for service communication.
