@@ -1,28 +1,40 @@
-version: "3.7"
+version: "3.7" # Specifies the Docker Compose file format.
 
 services:
+
+  ##### Define the IT-Tools Service #####
   homepage:
-    image: corentinth/it-tools:latest
-    container_name: It\T-Tools
+    image: corentinth/it-tools:latest # Uses the latest IT-Tools image from GitHub Container Registry.
+    container_name: It\T-Tools # Defines a custom container name for easier identification.
+
+    ##### Port Mapping #####
     ports:
-      - 8082:80
+      - 8082:80 # Maps container port 80 to host port 8082 for external access.
+
+    ##### Network Configuration #####
     networks:
-      - traefik-public
+      - traefik-public # Connects service to Traefik reverse proxy for efficient routing.
+
+    ##### Deployment Configuration #####
     deploy:
       labels:
-        - traefik.enable=true   #enable the use of traefik labels for routing.
-        - traefik.http.routers.tools.rule=Host(`tools`)   #local dns setting
-        - traefik.http.routers.tools.entrypoints=web
-        - traefik.http.services.tools.loadbalancer.server.port=8082   #tells Traefik which port to route to for this app.
-       
-        #homepage labels when autodiscovering docker swarm services.
-        - homepage.group=Utilities
-        - homepage.name=IT-Tools
-        - homepage.icon=it-tools.svg
-        - homepage.href=http://10.0.0.20:8082/
-        - homepage.description=handy tools
-        - com.centurylinklabs.watchtower.enable: "true"
+        # Traefik reverse proxy settings for DNS resolution and routing
+        - traefik.enable=true # Enables Traefik routing for this service.
+        - traefik.http.routers.tools.rule=Host(`tools`) # Defines hostname routing within the network.
+        - traefik.http.routers.tools.entrypoints=web # Uses HTTP entrypoint (consider securing with HTTPS).
+        - traefik.http.services.tools.loadbalancer.server.port=8082 # Specifies the service port within Traefik.
+
+        # Homepage dashboard integration for easy service discovery
+        - homepage.group=Utilities # Groups IT-Tools under 'Utilities' for better organization.
+        - homepage.name=IT-Tools # Sets display name for accessibility.
+        - homepage.icon=it-tools.svg # Assigns a recognizable icon for the dashboard.
+        - homepage.href=http://10.0.0.20:8082/ # Provides direct access via the homepage dashboard.
+        - homepage.description=Handy tools # Brief description of the service.
+
+        # Enable automatic updates with Watchtower
+        - com.centurylinklabs.watchtower.enable="true" # Allows Watchtower to manage automatic updates.
+
+##### Network Definitions #####
 networks:
   traefik-public:
-    external: true
-
+    external: true # Uses an externally created Traefik network for reverse proxying and service communication.
