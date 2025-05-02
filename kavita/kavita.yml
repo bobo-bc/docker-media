@@ -36,8 +36,8 @@ services:
         - 'traefik.enable=true' # Enables Traefik routing for this service.
         - 'traefik.http.routers.kavita.rule=Host(`kavita, read`)' # Defines hostname routing within the network.
         - 'traefik.http.services.kavita.loadbalancer.server.port=5000' # Specifies internal service port.
-        - 'traefik.http.routers.kavita.entrypoints=websecure' # Uses secure HTTPS entrypoint.
-        - 'traefik.http.routers.kavita.tls.certresolver=myresolver' # Sets up TLS certificate resolver.
+        - 'traefik.http.routers.kavita.entrypoints=web' # Uses secure HTTPS entrypoint.
+
 
       ##### Homepage Dashboard Labels #####
         - homepage.group=Media # Groups service under "Media" in the dashboard.
