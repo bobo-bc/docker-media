@@ -63,7 +63,7 @@ services:
     ##### Deployment Configuration #####
     deploy:
       labels:
-        - homepage.group=Productivity # Groups WordPress under "Productivity" in the dashboard.
+        - homepage.group=Utilities # Groups WordPress under "Productivity" in the dashboard.
         - homepage.name=WordPress # Sets display name for easy identification.
         - homepage.icon=wordpress.png # Assigns a recognizable icon.
         - homepage.href=https://stevenfmeyer.me # Provides direct access via dashboard.
