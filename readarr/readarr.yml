@@ -46,3 +46,8 @@ services:
         - "homepage.href=http://readarr/" # Provides direct access via the dashboard.
         - "homepage.description=Books" # Short description for dashboard entry.
         - "homepage.weight=3" # Defines weight for ordering in the dashboard
+
+##### Network Definitions #####
+networks:
+  traefik-public:
+    external: true # Uses an externally created Traefik network for reverse proxy management.
