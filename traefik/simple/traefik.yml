@@ -16,7 +16,7 @@ services:
       - --api.dashboard=true
       - --log.level=INFO
       - --accesslog=true
-
+      - --api.insecure=true
       - --providers.swarm.exposedByDefault=false
       - --providers.swarm.network=traefik-public
       - --entrypoints.web.address=:80
@@ -27,9 +27,9 @@ services:
           - node.labels.main ==true
       labels:
         - traefik.enable=true
-        - traefik.http.routers.mydashboard.rule=Host(`traefik`)
-        - traefik.http.routers.mydashboard.service=api@internal
-        - traefik.http.services.mydashboard.loadbalancer.server.port=1337
+        - traefik.http.routers.traefik.rule=Host(`traefik`)
+        - traefik.http.routers.traefik.entrypoints=web
+        - traefik.http.routers.traefik.service=api@internal
         - homepage.group=System Tools
         - homepage.name=Traefik
         - homepage.icon=traefik.png
