@@ -28,7 +28,7 @@ services:
         - traefik.http.routers.dashboard.rule=Host(`traefik`)
         - traefik.http.routers.dashboard.entrypoints=web
         - traefik.http.routers.dashboard.service=api@internal
-        - "traefik.http.services.sonarr.loadbalancer.server.port=8080" # Specifies service port for Traefik load balancing.
+        - "traefik.http.services.dashboard.loadbalancer.server.port=8080" # Specifies service port for Traefik load balancing.
 
 networks:
   traefik-public:
