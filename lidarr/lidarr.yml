@@ -33,6 +33,7 @@ services:
       replicas: 1 # Runs a single instance—adjust for high availability if required.
 
       ##### Service Labels #####
+      labels:
         - "traefik.enable=true" # Enables Traefik service routing.
         - "traefik.http.routers.lidarr.rule=Host(`lidarr`)" # Uses hostname-based routing—update as needed.
         - "traefik.http.services.lidarr.loadbalancer.server.port=8686" # Specifies service port for Traefik load balancing.
