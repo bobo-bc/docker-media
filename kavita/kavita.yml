@@ -33,10 +33,11 @@ services:
 
       ##### Traefik Reverse Proxy Labels #####
       labels:
-        - 'traefik.enable=true' # Enables Traefik routing for this service.
-        - 'traefik.http.routers.kavita.rule=Host(`kavita, read`)' # Defines hostname routing within the network.
-        - 'traefik.http.services.kavita.loadbalancer.server.port=5000' # Specifies internal service port.
-        - 'traefik.http.routers.kavita.entrypoints=web' # Uses secure HTTPS entrypoint.
+        # Traefik Reverse Proxy Labels
+        - 'traefik.enable=true' # Enables Traefik for routing requests efficiently.
+        - 'traefik.http.routers.kavita.rule=Host(`read`)' # Defines hostname routing within the network.
+        - 'traefik.http.services.kavita.loadbalancer.server.port=5000' # Specifies the internal service port.
+        - 'traefik.http.routers.kavita.entrypoints=web' # Uses HTTP entrypoint—consider HTTPS for security.
 
 
       ##### Homepage Dashboard Labels #####
