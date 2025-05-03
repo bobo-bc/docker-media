@@ -31,13 +31,13 @@
 
 services:
   broker:
-    image: docker.io/library/redis:7
+    image: docker.io/library/redis:latest
     restart: unless-stopped
     volumes:
       - ./redisdata:/data
 
   db:
-    image: docker.io/library/mariadb:11
+    image: docker.io/library/mariadb:latest
     restart: unless-stopped
     volumes:
       - ./dbdata:/var/lib/mysql
@@ -83,7 +83,7 @@ services:
       - com.centurylinklabs.watchtower.enable: "true"
 
   gotenberg:
-    image: docker.io/gotenberg/gotenberg:8.7
+    image: docker.io/gotenberg/gotenberg:latest
     restart: unless-stopped
     # The gotenberg chromium route is used to convert .eml files. We do not
     # want to allow external content like tracking pixels or even javascript.
