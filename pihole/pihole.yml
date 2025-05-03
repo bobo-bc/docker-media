@@ -21,6 +21,11 @@ services:
 
       ##### Service Labels #####
       labels:
+        # Traefik Reverse Proxy Labels
+        - 'traefik.enable=true' # Enables Traefik for routing requests efficiently.
+        - 'traefik.http.routers.pihole.rule=Host(`pihole`)' # Defines hostname routing within the network.
+        - 'traefik.http.services.pihole.loadbalancer.server.port=85' # Specifies the internal service port.
+        - 'traefik.http.routers.pihole.entrypoints=web' # Uses HTTP entrypoint—consider HTTPS for security.
         # Homepage dashboard integration for visibility and organization
         - homepage.group=System Tools # Groups Pi-hole under "System Tools" for easier navigation.
         - homepage.name=Pi-hole # Sets display name in the dashboard.
