@@ -30,7 +30,7 @@ services:
         - homepage.group=System Tools # Groups Pi-hole under "System Tools" for easier navigation.
         - homepage.name=Pi-hole # Sets display name in the dashboard.
         - homepage.icon=pi-hole.png # Assigns a recognizable icon for quick identification.
-        - homepage.href=http://pihole/admin # Provides direct access to the admin interface.
+        - homepage.href=http://10.0.0.20/admin # Provides direct access to the admin interface.
         - homepage.description=DNS server # Brief description of Pi-hole’s functionality.
 
     ##### Port Mapping #####
