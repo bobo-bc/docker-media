@@ -36,18 +36,7 @@ services:
         - homepage.href=http://traefik/
         - homepage.description= proxy
     #    - com.centurylinklabs.watchtower.enable: "true"
-  whoami:
-    image: traefik/whoami:latest
-    hostname: '{{.Node.Hostname}}'
-    networks:
-      - traefik-public
-    deploy:
-      mode: global
-      labels:
-        - traefik.enable=true
-        - traefik.http.routers.whoami.rule=Host(`whoami`)
-        - traefik.http.services.whoami.loadbalancer.server.port=80
- #       - com.centurylinklabs.watchtower.enable: "true"
+
 
 networks:
   traefik-public:
