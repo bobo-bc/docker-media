@@ -18,7 +18,7 @@ services:
     ##### Service Labels #####
       labels:
         # Homepage dashboard integration for visibility
-        - homepage.group=Productivity # Groups Draw.io under 'Productivity' in the dashboard.
+        - homepage.group=Utilities # Groups Draw.io under 'Productivity' in the dashboard.
         - homepage.name=Draw.io # Sets display name for easy identification.
         - homepage.icon=draw-io.svg # Assigns an icon for quick recognition.
         - homepage.href=http://10.0.0.20:8086/ # Provides direct access via dashboard.
