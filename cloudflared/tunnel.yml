@@ -12,7 +12,7 @@ services:
       replicas: 2 # Runs two instances for redundancy and reliability.
       labels:
         # Homepage dashboard integration for easy access.
-        - homepage.group=Web # Categorizes the service under 'Web'.
+        - homepage.group=System Tools # Categorizes the service under 'Web'.
         - homepage.name=Cloudflare tunnel # Sets display name in the dashboard.
         - homepage.icon=cloudflare.png # Uses a recognizable Cloudflare icon.
         - homepage.description=Secure tunnel # Brief description of the service.
