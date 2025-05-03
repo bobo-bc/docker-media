@@ -34,13 +34,13 @@ services:
     image: docker.io/library/redis:latest
     restart: unless-stopped
     volumes:
-      - ./redisdata:/data
+      - /mnt/docker-storage/paperlessng/redisdata:/data
 
   db:
     image: docker.io/library/mariadb:latest
     restart: unless-stopped
     volumes:
-      - ./dbdata:/var/lib/mysql
+      - /mnt/docker-storage/paperlessng/dbdata:/var/lib/mysql
     environment:
       MARIADB_HOST: paperless
       MARIADB_DATABASE: paperless
@@ -59,10 +59,10 @@ services:
     ports:
       - "8005:8000"
     volumes:
-      - ./data:/usr/src/paperless/data
+      - /mnt/docker-storage/paperlessng/data:/usr/src/paperless/data
       - /mnt/nfs/data/files:/usr/src/paperless/media
-      - ./export:/usr/src/paperless/export
-      - ./consume:/usr/src/paperless/consume
+      - /mnt/docker-storage/paperlessng/export:/usr/src/paperless/export
+      - /mnt/docker-storage/paperlessng/consume:/usr/src/paperless/consume
     env_file: docker-compose.env
     environment:
       PAPERLESS_REDIS: redis://broker:6379
