@@ -1,29 +1,37 @@
-version: '3'
+version: '3.8'
 
 services:
   reverse-proxy:
-    # The official v2 Traefik docker image
     image: traefik:v2.4
-    # Enables the web UI and tells Traefik to listen to docker
-    command: --api.insecure=true --providers.docker --providers.docker.swarmMode=true --accesslog=true --log.level=DEBUG --log.format=json
-    network_mode: host
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker"
+      - "--providers.docker.swarmMode=true"
+      - "--accesslog=true"
+      - "--log.level=DEBUG"
+      - "--log.format=json"
     ports:
-      # The HTTP port
-      - "80:80"
-      # The Web UI (enabled by --api.insecure=true)
-      - "8080:8080"
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 8080
+        published: 8080
+        protocol: tcp
+        mode: host
     volumes:
-      # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
     deploy:
+      mode: replicated
+      replicas: 1
       labels:
-        traefik.enable: "False"
+        traefik.enable: "false"
       placement:
         constraints:
           - node.role == manager
     networks:
       - traefik-public
-          
+
 networks:
   traefik-public:
     external: true
