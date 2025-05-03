@@ -37,7 +37,7 @@ services:
         - traefik.http.routers.cup.entrypoints=web # Uses the default web entrypoint.
 
         # Homepage dashboard integration for visibility
-        - homepage.group=Utilities # Groups Cup under 'Utilities' in the dashboard.
+        - homepage.group=System Tools # Groups Cup under 'Utilities' in the dashboard.
         - homepage.name=Cup # Sets display name in the dashboard.
         - homepage.icon=https://cdn3.iconfinder.com/data/icons/kitchen-45/512/neonsign_kitchen06-1024.png # Uses recognizable Cup icon.
         - homepage.href=http://10.0.0.20:8001 # Provides direct access via the homepage dashboard.
