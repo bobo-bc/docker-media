@@ -2,7 +2,7 @@ version: '3'
 
 services:
   traefik:
-    image: traefik:v3.1
+    image: traefik:v3.3
     hostname: '{{.Node.Hostname}}'
     ports:
       - target: 80
