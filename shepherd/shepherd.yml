@@ -16,5 +16,5 @@ services:
       labels:
         - homepage.group=System Tools # Groups Watchtower under "System Tools" in the dashboard.
         - homepage.name=Shephard # Sets display name for easy identification.
-        - homepage.icon=shephard.png # Assigns a recognizable icon.
+        - homepage.icon=https://avatars.githubusercontent.com/u/49166261?v=4 # Assigns a recognizable icon.
         - homepage.description=Auto-update Docker containers # Short service description.
