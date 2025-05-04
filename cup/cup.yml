@@ -40,7 +40,7 @@ services:
         - homepage.group=System Tools # Groups Cup under 'Utilities' in the dashboard.
         - homepage.name=Cup # Sets display name in the dashboard.
         - homepage.icon=https://cdn3.iconfinder.com/data/icons/kitchen-45/512/neonsign_kitchen06-1024.png # Uses recognizable Cup icon.
-        - homepage.href=http://10.0.0.20:8001 # Provides direct access via the homepage dashboard.
+        - homepage.href=http://cup/ # Provides direct access via the homepage dashboard.
         - homepage.description=Checks for container updates # Description for dashboard entry.
 
     ##### Command to Start the Service #####
