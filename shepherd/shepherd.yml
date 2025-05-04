@@ -2,6 +2,7 @@ version: "3"
 services:
   shepherd:
     image: containrrr/shepherd
+    env_file : /mnt/docker-storage/shepherd/shepherd.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     deploy:
