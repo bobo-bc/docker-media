@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:v3.2
+    image: traefik:v3.3
     hostname: '{{.Node.Hostname}}'
     ports:
       # listen on host ports without ingress network
@@ -46,7 +46,7 @@ services:
         - homepage.description= proxy
 
   whoami:
-    image: traefik/whoami:v1.10
+    image: traefik/whoami:v1.11
     hostname: '{{.Node.Hostname}}'
     networks:
       - traefik-public
