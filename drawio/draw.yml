@@ -28,7 +28,7 @@ services:
         - traefik.enable=true # Enables Traefik for routing requests efficiently.
         - traefik.http.routers.draw.rule=Host(`draw`) # Defines hostname routing within the network.
         - traefik.http.routers.draw.entrypoints=web # Uses the HTTP entrypoint (consider securing with HTTPS).
-        - traefik.http.services.draw.loadbalancer.server.port=8086 # Specifies the internal service port.
+        - traefik.http.services.draw.loadbalancer.server.port=8080 # Specifies the internal service port.
 
     ##### Resource Constraints #####
       resources:
