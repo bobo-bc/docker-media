@@ -2,7 +2,9 @@ version: "3"
 services:
   shepherd:
     image: containrrr/shepherd
-    env_file : /mnt/docker-storage/shepherd/shepherd.env
+    environment:
+      - BLACKLIST_SERVICES="wordpress_wordpress wordpress_mysql"
+      - SLEEP_TIME=86400
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     deploy:
