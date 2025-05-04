@@ -37,7 +37,7 @@ services:
       mode: global
       placement:
         constraints:
-          - node.role==manager
+          - node.hostname == node1
       labels:
         - traefik.enable=true
         - traefik.http.routers.mydashboard.rule=Host(`traefik`)
