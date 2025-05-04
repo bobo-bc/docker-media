@@ -29,10 +29,6 @@ services:
       - "--providers.file.watch=true"
       - --entrypoints.web.address=:80
 
-    environment:
-      - AUTODNS_API_USER=12345678
-      - AUTODNS_API_PASSWORD=12345678
-      - AUTODNS_CONTEXT=1234
     deploy:
       mode: global
       placement:
