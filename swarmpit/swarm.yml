@@ -47,7 +47,7 @@ services:
 
   ##### Define the CouchDB Database for Swarmpit #####
   db:
-    image: couchdb:2.3.0 # Uses CouchDB as the backend database for Swarmpit.
+    image: couchdb:latest # Uses CouchDB as the backend database for Swarmpit.
 
     ##### Persistent Storage Configuration #####
     volumes:
@@ -69,7 +69,7 @@ services:
 
   ##### Define the InfluxDB Service for Metric Storage #####
   influxdb:
-    image: influxdb:1.8 # Uses InfluxDB to store monitoring metrics.
+    image: influxdb:latest # Uses InfluxDB to store monitoring metrics.
 
     ##### Persistent Storage Configuration #####
     volumes:
