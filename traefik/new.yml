@@ -16,6 +16,7 @@ services:
       - traefik-public
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /mnt/docker-storage/traefik:/etc/traefik
     command:
       - --api.dashboard=true
       - --log.level=DEBUG
@@ -24,6 +25,8 @@ services:
       #- --accesslog.filepath=/var/log/traefik-access.log
       - --providers.swarm.exposedByDefault=true
       - --providers.swarm.network=traefik-public
+      - "--providers.file.directory=/etc/traefik"
+      - "--providers.file.watch=true"
       - --entrypoints.web.address=:80
 
     environment:
