@@ -12,8 +12,8 @@ deploy:
     restart_policy:
         condition: on-failure
    ##### Homepage Dashboard Labels #####
-   labels:
-     - homepage.group=System Tools # Groups Watchtower under "System Tools" in the dashboard.
-     - homepage.name=Shephard # Sets display name for easy identification.
-     - homepage.icon=shephard.png # Assigns a recognizable icon.
-     - homepage.description=Auto-update Docker containers # Short service description.
+    labels:
+      - homepage.group=System Tools # Groups Watchtower under "System Tools" in the dashboard.
+      - homepage.name=Shephard # Sets display name for easy identification.
+      - homepage.icon=shephard.png # Assigns a recognizable icon.
+      - homepage.description=Auto-update Docker containers # Short service description.
