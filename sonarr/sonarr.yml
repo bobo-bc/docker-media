@@ -48,8 +48,7 @@ services:
         - "homepage.description=TV Shows" # Short description for dashboard entry.
         - "homepage.weight=1" # Defines weight for ordering in the dashboard.
 
-      ##### Automated Updates #####
-        - "com.centurylinklabs.watchtower.enable=true" # Enables automatic updates via Watchtower.
+
 
 ##### Network Definitions #####
 networks:
