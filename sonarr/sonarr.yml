@@ -7,6 +7,9 @@ services:
     image: lscr.io/linuxserver/sonarr:latest # Uses the latest Sonarr image—consider pinning to a specific version for stability.
 
     ##### Environment Configuration #####
+
+    env_file:
+      - stack.env
     environment:
       - PUID=${PUID} # Defines user ID to ensure proper file permissions.
       - PGID=${PGID} # Sets group ID to maintain correct access control.
