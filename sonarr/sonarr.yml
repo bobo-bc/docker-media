@@ -20,7 +20,7 @@ services:
       - /etc/localtime:/etc/localtime:ro # Ensures synchronization of system time between host and container.
       - ${config}/sonarr:/config # Stores configuration files persistently for data retention.
       - ${media}/tv:/tv # (Optional) Mounts TV show library—ensure proper permissions.
-      - ${data}:/data # General persistent storage volume.
+      - ${data}/torrents:/data # General persistent storage volume.
 
     ##### Restart Policy #####
     restart: unless-stopped # Ensures the service restarts unless explicitly stopped.
