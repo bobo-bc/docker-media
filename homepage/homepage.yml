@@ -31,6 +31,7 @@ services:
         - homepage.name=Homepage # Sets display name in the dashboard.
         - homepage.icon=Homepage.png # Defines a recognizable icon.
         - homepage.description=Dashboard # Brief description of the service.
+        - "shepherd.watch=true"
 
         # Traefik reverse proxy settings for internal DNS resolution
         - traefik.enable=true # Enables Traefik for routing requests efficiently.
