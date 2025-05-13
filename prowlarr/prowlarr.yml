@@ -44,6 +44,7 @@ services:
         - 'homepage.href=http://prowlarr/' # Provides direct access via dashboard—ensure hostname resolution.
         - 'homepage.description=Indexers' # Brief service description.
         - homepage.weight=6 # Defines weight for ordering in the dashboard.
+        - "shepherd.watch=true"
 
         # Automated Updates
         - com.centurylinklabs.watchtower.enable="true" # Enables automatic updates via Watchtower.
