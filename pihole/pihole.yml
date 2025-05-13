@@ -32,6 +32,7 @@ services:
         - homepage.icon=pi-hole.png # Assigns a recognizable icon for quick identification.
         - homepage.href=http://10.0.0.20:85/admin # Provides direct access to the admin interface.
         - homepage.description=DNS server # Brief description of Pi-hole’s functionality.
+        - "shepherd.watch=true"
 
     ##### Port Mapping #####
     ports:
