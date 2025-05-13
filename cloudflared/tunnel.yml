@@ -16,6 +16,7 @@ services:
         - homepage.name=Cloudflare tunnel # Sets display name in the dashboard.
         - homepage.icon=cloudflare.png # Uses a recognizable Cloudflare icon.
         - homepage.description=Secure tunnel # Brief description of the service.
+        - "shepherd.watch=true"
 
     ### Resource Allocation ###
       resources:
