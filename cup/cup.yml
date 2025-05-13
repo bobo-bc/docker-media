@@ -42,7 +42,8 @@ services:
         - homepage.icon=https://cdn3.iconfinder.com/data/icons/kitchen-45/512/neonsign_kitchen06-1024.png # Uses recognizable Cup icon.
         - homepage.href=http://cup/ # Provides direct access via the homepage dashboard.
         - homepage.description=Checks for container updates # Description for dashboard entry.
-
+        - "shepherd.watch=true"
+        
     ##### Command to Start the Service #####
     command: serve # Runs the primary service operation.
 
