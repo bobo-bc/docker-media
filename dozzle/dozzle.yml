@@ -38,6 +38,7 @@ services:
         - homepage.icon=https://developer.asustor.com/uploadIcons/0020_117518_1660879946_dozzle_256.png
         - homepage.href=http://dozzle/
         - homepage.description=Stats
+        - "shepherd.watch=true"
 
     ### Resource Constraints ###
       resources:
