@@ -63,6 +63,7 @@ services:
         - "homepage.href=http://transmission/" # Provides direct access via the dashboard.
         - "homepage.description=Downloader with VPN" # Short description for dashboard entry.
         - "homepage.weight=5" # Defines weight for ordering in the dashboard.
+        - "shepherd.watch=true"
 
 ##### Network Definitions #####
 networks:
