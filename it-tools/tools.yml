@@ -30,6 +30,7 @@ services:
         - homepage.icon=it-tools.svg # Assigns a recognizable icon for the dashboard.
         - homepage.href=http://tools/ # Provides direct access via the homepage dashboard.
         - homepage.description=Handy tools # Brief description of the service.
+        - "shepherd.watch=true"
 
         # Enable automatic updates with Watchtower
         - com.centurylinklabs.watchtower.enable="true" # Allows Watchtower to manage automatic updates.
