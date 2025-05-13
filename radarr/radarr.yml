@@ -43,6 +43,7 @@ services:
         - "homepage.href=http://radarr/" # Provides direct access via the dashboard.
         - "homepage.description=Movies" # Short description for dashboard entry.
         - "homepage.weight=2" # Defines weight for ordering in the dashboard.
+        - "shepherd.watch=true"
 
       ##### Automated Updates #####
         - "com.centurylinklabs.watchtower.enable=true" # Enables automatic updates via Watchtower.
