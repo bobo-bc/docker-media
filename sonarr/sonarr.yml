@@ -47,6 +47,7 @@ services:
         - "homepage.href=http://sonarr/" # Provides direct access via the dashboard.
         - "homepage.description=TV Shows" # Short description for dashboard entry.
         - "homepage.weight=1" # Defines weight for ordering in the dashboard.
+        - "shepherd.watch=true"
 
 
 
