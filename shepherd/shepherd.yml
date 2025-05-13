@@ -5,6 +5,7 @@ services:
     environment:
       - BLACKLIST_SERVICES="wordpress_wordpress wordpress_mysql"
       - SLEEP_TIME=86400
+      - SHEPHERD_PRUNE=true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     deploy:
@@ -20,3 +21,4 @@ services:
         - homepage.name=Shephard # Sets display name for easy identification.
         - homepage.icon=https://avatars.githubusercontent.com/u/49166261?v=4 # Assigns a recognizable icon.
         - homepage.description=Auto-update Docker containers # Short service description.
+        - "shepherd.watch=true"
