@@ -46,6 +46,7 @@ services:
         - homepage.href=http://lidarr/ # Provides direct access via dashboard.
         - homepage.description=Music # Short description for dashboard entry.
         - homepage.weight=4 # Defines weight for ordering in dashboard.
+        - "shepherd.watch=true"
 
         # Automated Updates
         - com.centurylinklabs.watchtower.enable="true" # Enables automatic updates via Watchtower.
