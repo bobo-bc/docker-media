@@ -4,7 +4,7 @@ services:
     image: containrrr/shepherd
     environment:
       - BLACKLIST_SERVICES="wordpress_wordpress wordpress_mysql"
-      - SLEEP_TIME=86400
+      - SLEEP_TIME=5m
       - SHEPHERD_PRUNE=true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
