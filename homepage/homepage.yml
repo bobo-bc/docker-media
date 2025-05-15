@@ -37,7 +37,7 @@ services:
         - traefik.enable=true # Enables Traefik for routing requests efficiently.
         - traefik.http.routers.homepage.rule=Host(`homepage`) # Defines hostname routing within the network.
         - traefik.http.routers.homepage.entrypoints=web # Uses HTTP entrypoint—consider securing with HTTPS.
-        - traefik.http.services.homepage.loadbalancer.server.port=3000 # Specifies the internal service port.
+        - traefik.http.services.homepage.loadbalancer.server.port=3005 # Specifies the internal service port.
 
 ##### Network Definitions #####
 networks:
