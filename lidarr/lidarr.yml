@@ -28,9 +28,10 @@ services:
 
     ##### Deployment Configuration #####
     deploy:
-      mode: replicated # Ensures the service can run multiple instances if needed.
-      replicas: 1 # Runs a single instance—adjust for high availability if required.
-
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        
       ##### Service Labels #####
       labels:
         - "traefik.enable=true" # Enables Traefik service routing.
