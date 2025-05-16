@@ -64,6 +64,7 @@ services:
         reservations:
           cpus: "0.25" # Guarantees at least 25% CPU availability.
           memory: "128M" # Ensures a baseline memory allocation for stability.
+
 volumes:
   lidarr_config:
     driver: local
