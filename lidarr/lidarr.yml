@@ -15,9 +15,8 @@ services:
     ##### Persistent Storage Configuration #####
     volumes:
       - /etc/localtime:/etc/localtime:ro # Synchronizes container time with the host system.
-      - ${config}/lidarr:/config:rw # Stores configuration files persistently.
-      - ${media}/music:/music:ro # (Optional) Mounts music library—ensure correct permissions.
-      - ${data}:/data:rw # General persistent storage volume.
+      - lidarr_config;/config
+      - media:/media
 
     ##### Port Mapping #####
     ports:
@@ -65,7 +64,19 @@ services:
         reservations:
           cpus: "0.25" # Guarantees at least 25% CPU availability.
           memory: "128M" # Ensures a baseline memory allocation for stability.
-
+volumes:
+  lidarr_config;
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/lidarr
+  media:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/nfs
 ##### Network Definitions #####
 networks:
   traefik-public:
