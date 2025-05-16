@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  ghost:
+    image: ghost:5
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      database__client: mysql
+      database__connection__host: ghost_db
+      database__connection__user: ghost
+      database__connection__password_file: /run/secrets/db_password
+      database__connection__database: ghost
+      url: https://ghost/
+    volumes:
+      - ghost_content:/var/lib/ghost/content
+    secrets:
+      - db_password
+    networks:
+      - ghost_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ghost.rule=Host(`ghost`)"
+      - "traefik.http.services.ghost.loadbalancer.server.port=2368"
+
+  ghost_db:
+    image: mariadb:10.5
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_DATABASE: ghost
+      MYSQL_USER: ghost
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+    volumes:
+      - db_data:/var/lib/mysql
+    secrets:
+      - db_password
+      - db_root_password
+    networks:
+      - ghost_net
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+volumes:
+  ghost_content:
+  db_data:
+
+secrets:
+  db_password:
+    external: true
+  db_root_password:
+    external: true
+
+networks:
+  ghost_net:
