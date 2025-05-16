@@ -1,0 +1,289 @@
+version: "3.8"
+
+services:
+
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - lidarr_config:/config
+      - media:/media
+    ports:
+      - "8686:8686"
+    networks:
+      - traefik-public
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.lidarr.rule=Host(`lidarr`)"
+        - "traefik.http.routers.lidarr.entrypoints=web"
+        - "traefik.http.services.lidarr.loadbalancer.server.port=8686"
+        - homepage.group=Media
+        - homepage.name=Lidarr
+        - homepage.icon=lidarr.png
+        - homepage.href=http://lidarr/
+        - homepage.description=Music
+        - homepage.weight=4
+        - "shepherd.watch=true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "512M"
+        reservations:
+          cpus: "0.25"
+          memory: "128M"
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - radarr_config:/config
+      - media:/media
+    ports:
+      - "7878:7878"
+    networks:
+      - traefik-public
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.radarr.rule=Host(`radarr`)"
+        - "traefik.http.routers.radarr.entrypoints=web"
+        - "traefik.http.services.radarr.loadbalancer.server.port=7878"
+        - homepage.group=Media
+        - homepage.name=Radarr
+        - homepage.icon=radarr.png
+        - homepage.href=http://radarr/
+        - homepage.description=Movies
+        - homepage.weight=3
+        - "shepherd.watch=true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - sonarr_config:/config
+      - media:/media
+    ports:
+      - "8989:8989"
+    networks:
+      - traefik-public
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.sonarr.rule=Host(`sonarr`)"
+        - "traefik.http.routers.sonarr.entrypoints=web"
+        - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+        - homepage.group=Media
+        - homepage.name=Sonarr
+        - homepage.icon=sonarr.png
+        - homepage.href=http://sonarr/
+        - homepage.description=TV
+        - homepage.weight=2
+        - "shepherd.watch=true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+
+  readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - readarr_config:/config
+      - media:/media
+    ports:
+      - "8787:8787"
+    networks:
+      - traefik-public
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.readarr.rule=Host(`readarr`)"
+        - "traefik.http.routers.readarr.entrypoints=web"
+        - "traefik.http.services.readarr.loadbalancer.server.port=8787"
+        - homepage.group=Media
+        - homepage.name=Readarr
+        - homepage.icon=readarr.png
+        - homepage.href=http://readarr/
+        - homepage.description=Books
+        - homepage.weight=5
+        - "shepherd.watch=true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - prowlarr_config:/config
+    ports:
+      - "9696:9696"
+    networks:
+      - traefik-public
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.prowlarr.rule=Host(`prowlarr`)"
+        - "traefik.http.routers.prowlarr.entrypoints=web"
+        - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
+        - homepage.group=Media
+        - homepage.name=Prowlarr
+        - homepage.icon=prowlarr.png
+        - homepage.href=http://prowlarr/
+        - homepage.description=Indexer Aggregator
+        - homepage.weight=1
+        - "shepherd.watch=true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+
+  kavita:
+    image: lscr.io/linuxserver/kavita:latest # Uses the latest Kavita image from LinuxServer.io.
+    environment:
+      - PUID=${PUID} # Sets the user ID for file permissions.
+      - PGID=${PGID} # Defines the group ID to maintain proper access.
+      - TZ=${TZ} # Configures the timezone setting for the container.
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - kavita_config:/config
+      - media:/media
+      - /var/run/docker.sock:/var/run/docker.sock:ro # Read-only access to the Docker socket for monitoring.
+
+    ##### Port Mapping #####
+    ports:
+      - "5000:5000" # Maps container port 5000 to host port 5000 for external access.
+
+    ##### Network Configuration #####
+    networks:
+      - traefik-public # Connects service to Traefik for reverse proxy management.
+
+    ##### Deployment Configuration #####
+    deploy:
+      mode: replicated # Ensures the service can run multiple instances if needed.
+      replicas: 1 # Runs a single instance—adjust for high availability if required.
+
+      ##### Traefik Reverse Proxy Labels #####
+      labels:
+        # Traefik Reverse Proxy Labels
+        - 'traefik.enable=true' # Enables Traefik for routing requests efficiently.
+        - 'traefik.http.routers.kavita.rule=Host(`read`)' # Defines hostname routing within the network.
+        - 'traefik.http.services.kavita.loadbalancer.server.port=5000' # Specifies the internal service port.
+        - 'traefik.http.routers.kavita.entrypoints=web' # Uses HTTP entrypoint—consider HTTPS for security.
+
+
+      ##### Homepage Dashboard Labels #####
+        - homepage.group=Media # Groups service under "Media" in the dashboard.
+        - homepage.name=Kavita # Sets the display name.
+        - homepage.icon=kavita.png # Assigns a recognizable icon.
+        - homepage.href=http://read/ # Provides direct access via dashboard.
+        - homepage.description=Reader # Short description for dashboard entry.
+        - homepage.weight=100 # Defines weight for ordering in dashboard.
+        - "shepherd.watch=true"
+
+    ##### Resource Constraints #####
+      resources:
+        limits:
+          cpus: "0.50" # Limits CPU usage to prevent excessive resource consumption.
+          memory: "512M" # Restricts memory usage to 512MB per instance.
+        reservations:
+          cpus: "0.25" # Guarantees at least 25% CPU availability.
+          memory: "128M" # Ensures a baseline memory allocation for stability.
+
+    ##### Restart Policy #####
+      restart_policy:
+        condition: on-failure # Ensures service restarts only if it crashes.
+        delay: 5s # Waits 5 seconds before attempting a restart.
+        max_attempts: 3 # Limits restart attempts to prevent infinite loops.
+        window: 120s # Defines monitoring window for failure handling.
+
+
+volumes:
+  lidarr_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/lidarr
+
+  radarr_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/radarr
+
+  sonarr_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/sonarr
+
+  readarr_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/readarr
+
+  prowlarr_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/prowlarr
+
+  kavita_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/kavita
+
+  media:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/nfs
+
+networks:
+  traefik-public:
+    external: true
