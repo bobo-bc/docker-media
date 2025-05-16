@@ -15,7 +15,7 @@ services:
       database__connection__database: ghost
       url: https://ghost/
     volumes:
-      - mnt/docker-storage/ghost:/var/lib/ghost/content
+      - /mnt/docker-storage/ghost:/var/lib/ghost/content
     secrets:
       - db_password
     networks:
