@@ -1,4 +1,4 @@
-version: "3.9" # Specifies the Docker Compose file format.
+version: "3.8" # Specifies the Docker Compose file format.
 
 services:
 
@@ -15,7 +15,7 @@ services:
     ##### Persistent Storage Configuration #####
     volumes:
       - /etc/localtime:/etc/localtime:ro # Synchronizes container time with the host system.
-      - lidarr_config;/config
+      - lidarr_config:/config
       - media:/media
 
     ##### Port Mapping #####
@@ -29,9 +29,6 @@ services:
     ##### Deployment Configuration #####
     deploy:
       replicas: 1
-      restart_policy:
-        condition: on-failure
-        
       ##### Service Labels #####
       labels:
         - "traefik.enable=true" # Enables Traefik service routing.
