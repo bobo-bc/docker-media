@@ -12,7 +12,7 @@ services:
 
     ##### Persistent Storage Configuration #####
     volumes:
-      - ${config}/word/sql-data1:/var/lib/mysql # Stores MySQL database data persistently.
+      - sql-data:/var/lib/mysql # Stores MySQL database data persistently.
 
     ##### Database Authentication & Security #####
     environment:
@@ -47,7 +47,7 @@ services:
 
     ##### Persistent Storage Configuration #####
     volumes:
-      - ${config}/word:/var/www/html # Stores WordPress site files persistently.
+      - word_config:/var/www/html # Stores WordPress site files persistently.
 
     ##### Database Connection Configuration #####
     environment:
@@ -87,7 +87,20 @@ secrets:
 
 ##### Persistent Storage Definitions #####
 volumes:
-  sql-data: # Defines persistent storage for MySQL database.
+  word_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/word
+
+  sql-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/word/sql-data1
+
 
 ##### Network Configuration #####
 networks:
