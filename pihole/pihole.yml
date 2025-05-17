@@ -49,7 +49,7 @@ services:
 
     ##### Persistent Storage Configuration #####
     volumes:
-      - pihole-config:/etc/pihole/ # Stores configuration and DNS blocklists persistently.
+      - pihole_config:/etc/pihole/ # Stores configuration and DNS blocklists persistently.
       - dnsmasq_config:/etc/dnsmasq.d/ # Stores DNS resolver settings.
 
     ##### DNS Configuration #####
