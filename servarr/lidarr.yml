@@ -1,0 +1,82 @@
+version: "3.8" # Specifies the Docker Compose file format.
+
+services:
+
+  ##### Define the Lidarr Service #####
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest # Uses the latest Lidarr image from LinuxServer.io.
+
+    ##### Environment Configuration #####
+    environment:
+      - PUID=${PUID} # Defines the user ID to ensure proper file access.
+      - PGID=${PGID} # Sets the group ID for maintaining correct permissions.
+      - TZ=${TZ} # Configures the timezone for consistency with the host.
+
+    ##### Persistent Storage Configuration #####
+    volumes:
+      - /etc/localtime:/etc/localtime:ro # Synchronizes container time with the host system.
+      - lidarr_config:/config
+      - media:/media
+
+    ##### Port Mapping #####
+    ports:
+      - "8686:8686" # Maps container port 8686 to host port 8686 for external access.
+
+    ##### Network Configuration #####
+    networks:
+      - traefik-public # Connects service to Traefik for reverse proxy and routing.
+
+    ##### Deployment Configuration #####
+    deploy:
+      replicas: 1
+      ##### Service Labels #####
+      labels:
+        - "traefik.enable=true" # Enables Traefik service routing.
+        - "traefik.http.routers.lidarr.rule=Host(`lidarr`)" # Uses hostname-based routing—update as needed.
+        - "traefik.http.services.lidarr.loadbalancer.server.port=8686" # Specifies service port for Traefik load balancing.
+        - "traefik.http.routers.lidarr.entrypoints=web" # Uses HTTP entrypoint—consider enabling HTTPS for security.
+
+        # Homepage Dashboard Labels
+        - homepage.group=Media # Groups service under "Media" in the dashboard.
+        - homepage.name=Lidarr # Sets display name for easy identification.
+        - homepage.icon=lidarr.png # Assigns a recognizable icon.
+        - homepage.href=http://lidarr/ # Provides direct access via dashboard.
+        - homepage.description=Music # Short description for dashboard entry.
+        - homepage.weight=4 # Defines weight for ordering in dashboard.
+        - "shepherd.watch=true"
+
+        # Automated Updates
+        - com.centurylinklabs.watchtower.enable="true" # Enables automatic updates via Watchtower.
+
+    ##### Restart Policy #####
+      restart_policy:
+        condition: on-failure # Ensures service restarts only if it crashes.
+        delay: 5s # Waits 5 seconds before attempting a restart.
+        max_attempts: 3 # Limits restart attempts to prevent infinite loops.
+
+    ##### Resource Constraints #####
+      resources:
+        limits:
+          cpus: "0.50" # Limits CPU usage to prevent excessive resource consumption.
+          memory: "512M" # Restricts memory usage to 512MB per instance.
+        reservations:
+          cpus: "0.25" # Guarantees at least 25% CPU availability.
+          memory: "128M" # Ensures a baseline memory allocation for stability.
+
+volumes:
+  lidarr_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/lidarr
+  media:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/nfs
+##### Network Definitions #####
+networks:
+  traefik-public:
+    external: true # Uses an externally created Traefik network for reverse proxying and service communication.
