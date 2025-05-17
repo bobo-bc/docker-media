@@ -49,18 +49,31 @@ services:
 
     ##### Persistent Storage Configuration #####
     volumes:
-      - /mnt/docker-storage/pihole/pihole-data:/etc/pihole/ # Stores configuration and DNS blocklists persistently.
-      - /mnt/docker-storage/pihole/pihole-dnsmasq:/etc/dnsmasq.d/ # Stores DNS resolver settings.
+      - pihole-config:/etc/pihole/ # Stores configuration and DNS blocklists persistently.
+      - dnsmasq_config:/etc/dnsmasq.d/ # Stores DNS resolver settings.
 
     ##### DNS Configuration #####
     dns:
       - 127.0.0.1 # Forces Pi-hole to use itself as the primary DNS resolver.
-      - 9.9.9.9 # Uses Quad9 for secure DNS resolution—consider alternatives like Cloudflare (1.1.1.1) or Google (8.8.8.8).
+      - 1.1.1.1 # Uses cloudflare for secure DNS resolution
 
     ##### Network Configuration #####
     networks:
       - pihole # Defines an isolated network for DNS filtering.
       - traefik-public # Connects Pi-hole to the shared Traefik reverse proxy network.
+volumes:
+  pihole_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/pihole/pihole-data
+  dnsmasq_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/pihole/pihole-dnsmasq
 
 ##### Network Definitions #####
 networks:
