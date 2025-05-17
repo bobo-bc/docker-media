@@ -1,0 +1,166 @@
+version: "3.8"
+
+services:
+
+  ##### Traefik Reverse Proxy #####
+  traefik:
+    image: traefik:latest
+    command:
+      - "--providers.docker.swarmMode=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080" # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik_config:/etc/traefik
+    networks:
+      - traefik-public
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.traefik.rule=Host(`traefik.local`)"
+        - "traefik.http.routers.traefik.entrypoints=web"
+        - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+        - "homepage.group=Infra"
+        - "homepage.name=Traefik"
+        - "homepage.icon=traefik.png"
+        - "homepage.href=http://traefik.local/"
+        - "shepherd.watch=true"
+
+  ##### Shepherd (for watching images) #####
+  shepherd:
+    image: ghcr.io/shepherd-org/shepherd:latest
+    environment:
+      - DOCKER_API_VERSION=1.41
+      - SHEPHERD_LOG_LEVEL=info
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik-public
+    deploy:
+      mode: global
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.shepherd.rule=Host(`shepherd.local`)"
+        - "traefik.http.routers.shepherd.entrypoints=web"
+        - "traefik.http.services.shepherd.loadbalancer.server.port=8080"
+        - "homepage.group=Infra"
+        - "homepage.name=Shepherd"
+        - "homepage.icon=box.png"
+        - "homepage.href=http://shepherd.local/"
+        - "shepherd.watch=true"
+
+  ##### Dozzle - Container Logs UI #####
+  dozzle:
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik-public
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.dozzle.rule=Host(`dozzle.local`)"
+        - "traefik.http.services.dozzle.loadbalancer.server.port=8080"
+        - "traefik.http.routers.dozzle.entrypoints=web"
+        - "homepage.group=Infra"
+        - "homepage.name=Dozzle"
+        - "homepage.icon=log.png"
+        - "homepage.href=http://dozzle.local/"
+        - "homepage.description=Container Logs"
+        - "shepherd.watch=true"
+
+  ##### Portainer - Container Management #####
+  portainer:
+    image: portainer/portainer-ce:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_config:/data
+    networks:
+      - traefik-public
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.portainer.rule=Host(`portainer.local`)"
+        - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+        - "traefik.http.routers.portainer.entrypoints=web"
+        - "homepage.group=Infra"
+        - "homepage.name=Portainer"
+        - "homepage.icon=portainer.png"
+        - "homepage.href=http://portainer.local/"
+        - "shepherd.watch=true"
+
+  ##### Pi-hole DNS Blocker #####
+  pihole:
+    image: pihole/pihole:latest
+    environment:
+      - TZ=${TZ}
+      - WEBPASSWORD=${PIHOLE_PASSWORD}
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+    volumes:
+      - pihole_config:/etc/pihole
+      - pihole_dnsmasq:/etc/dnsmasq.d
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    networks:
+      - traefik-public
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.pihole.rule=Host(`pihole.local`)"
+        - "traefik.http.services.pihole.loadbalancer.server.port=80"
+        - "traefik.http.routers.pihole.entrypoints=web"
+        - "homepage.group=Infra"
+        - "homepage.name=Pi-hole"
+        - "homepage.icon=pihole.png"
+        - "homepage.href=http://pihole.local/"
+        - "shepherd.watch=true"
+
+volumes:
+  traefik_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/traefik
+  portainer_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/portainer
+  pihole_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/pihole
+  pihole_dnsmasq:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/pihole-dns
+
+networks:
+  traefik-public:
+    external: true
