@@ -54,7 +54,7 @@ services:
     ##### Storage and Docker Socket Access #####
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro # Read-only for better security (prevents unintended modifications).
-      - /mnt/docker-storage/cup/cup.json:/config/cup.json # Stores service configuration persistently.
+      - cup_config:/config/cup.json # Stores service configuration persistently.
 
     ##### Network Configuration #####
     networks:
@@ -62,6 +62,13 @@ services:
 
     ##### Temporary Root User (To Be Updated) #####
     user: "0:0" # Using root for now—update to a non-root user for improved security.
+volumes:
+  cup_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/cup/cup.json
 
 networks:
   ##### External Traefik Network #####
