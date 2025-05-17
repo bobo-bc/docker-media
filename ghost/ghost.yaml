@@ -33,7 +33,7 @@ services:
       MYSQL_ROOT_PASSWORD: psswrd
       MYSQL_DATABASE: ghost
       MYSQL_USER: ghost
-      MYSQL_PASSWORD:psswrd
+      MYSQL_PASSWORD: psswrd
 #      MYSQL_PASSWORD_FILE: /run/secrets/db_password
     volumes:
       - db_data_config:/var/lib/mysql
