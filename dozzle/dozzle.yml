@@ -12,7 +12,7 @@ services:
     ### Storage & Socket Access ###
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro # Read-only access to monitor container logs.
-      - ${config}/dozzle:/config:rw # Persistent configuration storage (ensure GlusterFS permissions).
+      - dozzle_config:/config:rw # Persistent configuration storage (ensure GlusterFS permissions).
 
     ### Port Mapping ###
     ports:
@@ -55,7 +55,13 @@ services:
       options:
         max-size: "10m" # Limits log size per container to **10MB** to prevent excessive disk usage.
         max-file: "3" # Retains the **last 3 log files** to avoid disk clutter.
-
+volumes:
+  dozzle_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/dozzle
 ### External Network Definition ###
 networks:
   traefik-public:
