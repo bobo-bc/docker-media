@@ -1,76 +1,63 @@
-version: "3.8" # Defines the Docker Compose file format.
+version: "3.8"
 
 services:
 
   ##### Define the Cup Service #####
   cup:
-    image: ghcr.io/sergi0g/cup:latest # Uses the latest available image from GitHub Container Registry.
+    image: ghcr.io/sergi0g/cup:latest
 
     ##### Deployment Configuration #####
     deploy:
-      # mode: replicated # Uncomment this line if scaling is needed.
-      replicas: 1 # Runs a single instance—adjust for high availability.
+      replicas: 1
       update_config:
-        parallelism: 1 # Updates containers one at a time to prevent service disruption.
-        delay: 10s # Waits 10 seconds between updates.
-      # failure_action: rollback # Uncomment to automatically roll back updates if they fail.
+        parallelism: 1
+        delay: 10s
       restart_policy:
-        condition: on-failure # Restarts the container only if it crashes.
-        delay: 5s # Waits 5 seconds before restarting.
-        max_attempts: 3 # Limits restart attempts to avoid crash loops.
-
-    ##### Resource Constraints #####
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
       resources:
         limits:
-          cpus: "0.50" # Caps CPU usage at 50% of a core—helps prevent resource exhaustion.
-          memory: "512M" # Restricts memory usage to 512MB.
+          cpus: "0.50"
+          memory: "512M"
         reservations:
-          cpus: "0.25" # Guarantees at least 25% of a CPU core for stable operation.
-          memory: "128M" # Ensures a minimum of 128MB is available for the container.
+          cpus: "0.25"
+          memory: "128M"
 
     ##### Service Labels #####
       labels:
-        # Traefik labels for reverse proxy routing
         - traefik.enable=true
-        - traefik.http.routers.cup.rule=Host(`cup`) # Defines hostname for accessing Cup internally.
-        - traefik.http.services.cup.loadbalancer.server.port=8000 # Specifies service port for load balancing.
-        - traefik.http.routers.cup.entrypoints=web # Uses the default web entrypoint.
+        - traefik.http.routers.cup.rule=Host(`cup`)
+        - traefik.http.services.cup.loadbalancer.server.port=8000
+        - traefik.http.routers.cup.entrypoints=web
 
-        # Homepage dashboard integration for visibility
-        - homepage.group=System Tools # Groups Cup under 'Utilities' in the dashboard.
-        - homepage.name=Cup # Sets display name in the dashboard.
-        - homepage.icon=https://cdn3.iconfinder.com/data/icons/kitchen-45/512/neonsign_kitchen06-1024.png # Uses recognizable Cup icon.
-        - homepage.href=http://cup/ # Provides direct access via the homepage dashboard.
-        - homepage.description=Checks for container updates # Description for dashboard entry.
+        - homepage.group=System Tools
+        - homepage.name=Cup
+        - homepage.icon=https://cdn3.iconfinder.com/data/icons/kitchen-45/512/neonsign_kitchen06-1024.png
+        - homepage.href=http://cup/
+        - homepage.description=Checks for container updates
         - "shepherd.watch=true"
-        
-    ##### Command to Start the Service #####
-    command: serve # Runs the primary service operation.
 
-    ##### Port Mapping #####
-    ports:
-      - "8001:8000" # Maps container port 8000 to host port 8001.
-
-    ##### Storage and Docker Socket Access #####
+    ##### Volume Mounts #####
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro # Read-only for better security (prevents unintended modifications).
-      - cup_config:/config/cup.json # Stores service configuration persistently.
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - cup_config:/config
 
     ##### Network Configuration #####
     networks:
-      - traefik-public # Uses Traefik’s external network for DNS resolution.
+      - traefik-public
 
-    ##### Temporary Root User (To Be Updated) #####
-    user: "0:0" # Using root for now—update to a non-root user for improved security.
+    ##### Use a Non-Root User (update UID:GID as needed) #####
+    user: "1000:1000" # Replace with actual UID:GID from host for better security
+
 volumes:
   cup_config:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /mnt/docker-storage/cup/cup.json
+      device: /mnt/docker-storage/cup # Mount the whole config directory
 
 networks:
-  ##### External Traefik Network #####
   traefik-public:
-    external: true # Connects the service to an externally defined Traefik network.
+    external: true
