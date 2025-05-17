@@ -13,9 +13,9 @@ services:
       database__connection__user: ghost
       database__connection__password_file: /run/secrets/db_password
       database__connection__database: ghost
-      url: https://ghost/
+      url: http://10.0.0.20:2368
     volumes:
-      - /mnt/docker-storage/ghost:/var/lib/ghost/content
+      - ghost_config:/var/lib/ghost/content
     secrets:
       - db_password
     networks:
@@ -33,7 +33,7 @@ services:
       MYSQL_USER: ghost
       MYSQL_PASSWORD_FILE: /run/secrets/db_password
     volumes:
-      - /mnt/docker-storage/ghost/db_data:/var/lib/mysql
+      - db_data_config:/var/lib/mysql
     secrets:
       - db_password
       - db_root_password
@@ -43,9 +43,20 @@ services:
       placement:
         constraints: [node.role == manager]
 
-#volumes:
-#  ghost_content:
-#  db_data:
+volumes:
+  ghost_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/ghost
+
+  db_data_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/ghost/db_data
 
 secrets:
   db_password:
