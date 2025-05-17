@@ -5,7 +5,7 @@ services:
   ##### Define the Cup Service #####
   cup:
     image: ghcr.io/sergi0g/cup:latest
-
+    command: serve
     ##### Deployment Configuration #####
     deploy:
       replicas: 1
@@ -16,13 +16,7 @@ services:
         condition: on-failure
         delay: 5s
         max_attempts: 3
-      resources:
-        limits:
-          cpus: "0.50"
-          memory: "512M"
-        reservations:
-          cpus: "0.25"
-          memory: "128M"
+
 
     ##### Service Labels #####
       labels:
@@ -48,7 +42,7 @@ services:
       - traefik-public
 
     ##### Use a Non-Root User (update UID:GID as needed) #####
-    user: "0:0" # Replace with actual UID:GID from host for better security
+    user: "1000:996" # Replace with actual UID:GID from host for better security
 
 
 networks:
