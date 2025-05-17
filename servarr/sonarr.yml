@@ -1,0 +1,71 @@
+version: "3.9" # Specifies the Docker Compose file format.
+
+services:
+
+  ##### Define the Sonarr TV Show Management Service #####
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest # Uses the latest Sonarr image—consider pinning to a specific version for stability.
+
+    ##### Environment Configuration #####
+
+    environment:
+      - PUID=${PUID} # Defines user ID to ensure proper file permissions.
+      - PGID=${PGID} # Sets group ID to maintain correct access control.
+      - TZ=${TZ} # Configures timezone settings for logging and scheduling consistency.
+
+    ##### Persistent Storage Configuration #####
+    volumes:
+      - /etc/localtime:/etc/localtime:ro # Ensures synchronization of system time between host and container.
+      - sonarr_config:/config
+      - media:/media
+
+    ##### Restart Policy #####
+    restart: unless-stopped # Ensures the service restarts unless explicitly stopped.
+
+    ##### Port Mapping #####
+    ports:
+      - "8989:8989" # Maps container port 8989 to host port 8989 for external access.
+
+    ##### Network Configuration #####
+    networks:
+      - traefik-public # Connects Sonarr to the Traefik reverse proxy for secure routing.
+
+    ##### Deployment Configuration #####
+    deploy:
+      ##### Reverse Proxy Labels for Traefik #####
+      replicas: 1
+      restart_policy:
+        condition: on-failure      
+      labels:
+        - "traefik.enable=true" # Enables Traefik service routing.
+        - "traefik.http.routers.sonarr.rule=Host(`sonarr`)" # Uses hostname-based routing—update as needed.
+        - "traefik.http.services.sonarr.loadbalancer.server.port=8989" # Specifies service port for Traefik load balancing.
+        - "traefik.http.routers.sonarr.entrypoints=web" # Uses HTTP entrypoint—consider enabling HTTPS for security.
+
+      ##### Homepage Dashboard Labels #####
+        - "homepage.group=Media" # Groups service under "Media" in the dashboard.
+        - "homepage.name=Sonarr" # Sets display name for easy identification.
+        - "homepage.icon=sonarr.png" # Assigns a recognizable icon.
+        - "homepage.href=http://sonarr/" # Provides direct access via the dashboard.
+        - "homepage.description=TV Shows" # Short description for dashboard entry.
+        - "homepage.weight=1" # Defines weight for ordering in the dashboard.
+        - "shepherd.watch=true"
+
+volumes:
+  sonarr_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/sonarr
+  media:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/nfs
+
+##### Network Definitions #####
+networks:
+  traefik-public:
+    external: true # Uses an externally created Traefik network for reverse proxy integration.
