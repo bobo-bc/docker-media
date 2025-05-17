@@ -11,13 +11,14 @@ services:
       database__client: mysql
       database__connection__host: ghost_db
       database__connection__user: ghost
-      database__connection__password_file: /run/secrets/db_password
+  #    database__connection__password_file: /run/secrets/db_password
+      database__connection__password: psswrd
       database__connection__database: ghost
       url: http://10.0.0.20:2368
     volumes:
       - ghost_config:/var/lib/ghost/content
-    secrets:
-      - db_password
+ #   secrets:
+ #     - db_password
     networks:
       - ghost_net
     labels:
@@ -28,15 +29,17 @@ services:
   ghost_db:
     image: mariadb:10.5
     environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+#      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_ROOT_PASSWORD: psswrd
       MYSQL_DATABASE: ghost
       MYSQL_USER: ghost
-      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      MYSQL_PASSWORD:psswrd
+#      MYSQL_PASSWORD_FILE: /run/secrets/db_password
     volumes:
       - db_data_config:/var/lib/mysql
-    secrets:
-      - db_password
-      - db_root_password
+#    secrets:
+#      - db_password
+#      - db_root_password
     networks:
       - ghost_net
     deploy:
@@ -58,11 +61,11 @@ volumes:
       o: bind
       device: /mnt/docker-storage/ghost/db_data
 
-secrets:
-  db_password:
-    external: true
-  db_root_password:
-    external: true
+#secrets:
+#  db_password:
+#    external: true
+#  db_root_password:
+#    external: true
 
 networks:
   ghost_net:
