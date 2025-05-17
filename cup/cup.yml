@@ -68,7 +68,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /mnt/docker-storage/cup/cup.json
+      device: /mnt/docker-storage/cup
 
 networks:
   ##### External Traefik Network #####
