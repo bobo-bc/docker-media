@@ -50,12 +50,18 @@ services:
 
     ##### Persistent Storage Configuration #####
     volumes:
-      - /mnt/docker-storage/drawio:/data:rw # Ensures data is retained across restarts.
+      - drawio_config:/data:rw # Ensures data is retained across restarts.
 
     ##### Network Configuration #####
     networks:
       - traefik-public # Connects the service to Traefik for reverse proxy and routing.
-
+volumes:
+  drawio_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/drawio
 networks:
   ##### External Traefik Network #####
   traefik-public:
