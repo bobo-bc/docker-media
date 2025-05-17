@@ -41,7 +41,7 @@ services:
     ##### Volume Mounts #####
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - cup_config:/config
+      - /mnt/docker-storage/cup/cup.json:/cup.jason
 
     ##### Network Configuration #####
     networks:
@@ -50,13 +50,6 @@ services:
     ##### Use a Non-Root User (update UID:GID as needed) #####
     user: "0:0" # Replace with actual UID:GID from host for better security
 
-volumes:
-  cup_config:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /mnt/docker-storage/cup # Mount the whole config directory
 
 networks:
   traefik-public:
