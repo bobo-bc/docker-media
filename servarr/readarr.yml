@@ -1,0 +1,54 @@
+version: "3.9" # Specifies the Docker Compose file format.
+
+services:
+
+  ##### Define the Readarr Service #####
+  readarr:
+    image: lscr.io/linuxserver/readarr:develop # Uses the latest Readarr development image—consider pinning to a stable version.
+
+    ##### Environment Configuration #####
+    environment:
+      - PUID=${PUID} # Sets the user ID for file permissions.
+      - PGID=${PGID} # Defines the group ID to maintain proper access.
+      - TZ=${TZ} # Configures timezone settings for logging and scheduling consistency.
+
+    ##### Persistent Storage Configuration #####
+    volumes:
+      - /etc/localtime:/etc/localtime:ro # Ensures synchronization of system time between host and container.
+      - ${config}/readarr:/config:rw # Stores configuration files persistently for data retention.
+      - ${media}/books:/books:rw # (Optional) Mounts book library—ensure proper permissions.
+      - ${data}:/data:rw # General persistent storage volume.
+
+    ##### Restart Policy #####
+    restart: unless-stopped # Ensures the service restarts unless explicitly stopped.
+
+    ##### Port Mapping #####
+    ports:
+      - "8787:8787" # Maps container port 8787 to host port 8787 for external access.
+
+    ##### Network Configuration #####
+    networks:
+      - traefik-public # Connects Readarr to the Traefik reverse proxy for secure routing.
+
+    ##### Deployment Configuration #####
+    deploy:
+      ##### Reverse Proxy Labels for Traefik #####
+      labels:
+        - "traefik.enable=true" # Enables Traefik service routing.
+        - "traefik.http.routers.readarr.rule=Host(`readarr`)" # Uses hostname-based routing—update as needed.
+        - "traefik.http.services.readarr.loadbalancer.server.port=8787" # Specifies service port for Traefik load balancing.
+        - "traefik.http.routers.readarr.entrypoints=web" # Uses HTTP entrypoint—consider enabling HTTPS for security.
+
+      ##### Homepage Dashboard Labels #####
+        - "homepage.group=Media" # Groups service under "Media" in the dashboard.
+        - "homepage.name=Readarr" # Sets display name for easy identification.
+        - "homepage.icon=readarr.png" # Assigns a recognizable icon.
+        - "homepage.href=http://readarr/" # Provides direct access via the dashboard.
+        - "homepage.description=Books" # Short description for dashboard entry.
+        - "homepage.weight=3" # Defines weight for ordering in the dashboard
+        - "shepherd.watch=true"
+
+##### Network Definitions #####
+networks:
+  traefik-public:
+    external: true # Uses an externally created Traefik network for reverse proxy management.
