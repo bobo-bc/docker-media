@@ -12,8 +12,8 @@ services:
 
     ##### Persistent Storage Configuration #####
     volumes:
-      - /mnt/docker-storage/homepage:/app/config # Stores configuration data persistently.
-      - /mnt/nfs/data:/data # Mounts additional storage for shared access.
+      - homepage_config:/app/config # Stores configuration data persistently.
+      - media:/data # Mounts additional storage for shared access.
       - /var/run/docker.sock:/var/run/docker.sock:ro # Read-only access for automated container discovery.
 
     ##### Network Configuration #####
@@ -40,6 +40,20 @@ services:
         - traefik.http.services.homepage.loadbalancer.server.port=3000 # Specifies the internal service port.
 
 ##### Network Definitions #####
+
+volumes:
+  homepage_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/docker-storage/homepage
+  media:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /mnt/nfs
 networks:
   traefik-public:
     external: true # Uses an externally created Traefik network for reverse proxy.
