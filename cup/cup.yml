@@ -48,7 +48,7 @@ services:
       - traefik-public
 
     ##### Use a Non-Root User (update UID:GID as needed) #####
-    user: "1000:1000" # Replace with actual UID:GID from host for better security
+    user: "0:0" # Replace with actual UID:GID from host for better security
 
 volumes:
   cup_config:
