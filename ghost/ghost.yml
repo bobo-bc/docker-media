@@ -5,16 +5,12 @@ services:
   ghost-db:
     image: mariadb:10.11
     environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_ROOT_PASSWORD: ghostrootpass
       MYSQL_DATABASE: ghost
       MYSQL_USER: ghostuser
-      MYSQL_PASSWORD_file: /run/secrets/db_password
-
-    secrets:
-      - db_root_password # References externally stored root password secret.
-      - db_password  
+      MYSQL_PASSWORD: ghostpass
     volumes:
-      - ghost_db_data:/var/lib/mysql
+      - /mnt/docker-storage/ghost/db-data:/var/lib/mysql
     networks:
       - ghost-net
     deploy:
@@ -28,15 +24,12 @@ services:
       database__client: mysql
       database__connection__host: ghost-db
       database__connection__user: ghostuser
-      database__connection__password__file: /run/secrets/db_password
+      database__connection__password: ghostpass
       database__connection__database: ghost
     depends_on:
       - ghost-db
-    
-    secrets:
-      - db_password
     volumes:
-      - ghost_content:/var/lib/ghost/content
+      - /mnt/docker-storage/ghost:/var/lib/ghost/content
     networks:
       - ghost-net
     ports:
@@ -50,26 +43,12 @@ services:
       restart_policy:
         condition: on-failure
 
-volumes:
-  ghost_db_data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /mnt/docker-storage/ghost/db-data
-  
-  ghost_content:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /mnt/docker-storage/ghost
+#volumes:
+#  ghost_db_data:
+#    driver: local
+#  ghost_content:
+#    driver: local
 
-secrets:
-  db_password:
-    external: true # Retrieves the database password from an external secret manager.
-  db_root_password:
-    external: true 
 networks:
   ghost-net:
     driver: overlay
