@@ -28,8 +28,7 @@ services:
       database__client: mysql
       database__connection__host: ghost-db
       database__connection__user: ghostuser
-  #    database__connection__password_file: /run/secrets/db_password
-      DATABASE__CONNECTION__PASSWORD__FILE: /run/secrets/db_password
+      database__connection__password__file: /run/secrets/db_password
       database__connection__database: ghost
     depends_on:
       - ghost-db
